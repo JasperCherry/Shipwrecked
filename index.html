@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+canvas {
+    border:1px solid #d3d3d3;
+    background-color: #f1f1f1;
+}
+</style>
+</head>
+<body onload="startGame()">
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script>
+var myGamePiece;
+var counterData=0;
+var receivedData;
+
+var socket = io();
+
+var posX2=100;
+var posY2=100;
+
+socket.on('data1', function(msg1){
+  receivedData=msg1;
+});
+
+
+
+function updateGameArea() {
+    myGameArea.clear();
+    myGamePiece.update();
+
+    // second box
+    ctx = myGameArea.context;
+    ctx.save();
+    ctx.translate(posX2, posY2);
+    ctx.fillStyle = "blue";
+    ctx.fillRect(30 / -2, 30 / -2, 30, 30);
+    ctx.restore();
+
+    counterData++;
+    if(counterData==1){
+      counterData=0;
+      var data={"id":myGamePiece.id,"posX":myGamePiece.x,"posY":myGamePiece.y};
+      socket.emit('data1', data);
+    }
+
+    if(receivedData!=null&&receivedData.id!=myGamePiece.id){
+      posX2=receivedData.posX;
+      posY2=receivedData.posY;
+    }
+
+
+}
+
+
+
+function component( x, y) {
+
+    this.id=Math.floor(Math.random()*100);
+    this.speed = 0;
+    this.speed2 = 0;
+    this.x = x;
+    this.y = y;
+
+    this.update = function() {
+        this.speed = 0;
+        this.speed2 = 0;
+        if (myGameArea.keys && myGameArea.keys[40]) {this.speed2= 1; }
+        if (myGameArea.keys && myGameArea.keys[38]) {this.speed2= -1; }
+        if (myGameArea.keys && myGameArea.keys[39]) {this.speed= 1; }
+        if (myGameArea.keys && myGameArea.keys[37]) {this.speed= -1; }
+
+        ctx = myGameArea.context;
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.fillStyle = "red";
+        ctx.fillRect(30 / -2, 30 / -2, 30, 30);
+        ctx.restore();
+
+        this.x += this.speed;
+        this.y += this.speed2;
+    }
+}
+
+
+function startGame() {
+    myGamePiece = new component(100, 100);
+    myGameArea.start();
+}
+
+
+var myGameArea = {
+    canvas : document.createElement("canvas"),
+    start : function() {
+        this.canvas.width = 200;
+        this.canvas.height = 200;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.frameNo = 0;
+        this.interval = setInterval(updateGameArea, 20);
+        window.addEventListener('keydown', function (e) {
+            e.preventDefault();
+            myGameArea.keys = (myGameArea.keys || []);
+            myGameArea.keys[e.keyCode] = (e.type == "keydown");
+        })
+        window.addEventListener('keyup', function (e) {
+            myGameArea.keys[e.keyCode] = (e.type == "keydown");
+        })
+    },
+    stop : function() {
+        clearInterval(this.interval);
+    },
+    clear : function() {
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+}
+
+</script>
+
+
+
+
+
+
+</body>
+</html>
