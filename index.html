@@ -12,51 +12,77 @@ canvas {
 <body onload="startGame()">
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script>
-var myGamePiece;
+var socket = io();
+
+var myGamePiece = new Component(200, 200);
+var pieces=new Array();
+
 var counterData=0;
 var receivedData;
 
-var socket = io();
-
-var posX2=100;
-var posY2=100;
 
 socket.on('data1', function(msg1){
   receivedData=msg1;
 });
 
 
+// interval function to gather data
+function intData() {
+setInterval(function(){
+  if(receivedData!=null&&receivedData.id!=myGamePiece.id){
+
+    var newPiece=true;
+
+    for(var x=0; x<pieces.length; x++){
+      if(pieces[x].id==receivedData.id){
+        pieces[x].update(receivedData.posX, receivedData.posY);
+        newPiece=false;
+      }
+    }
+
+    if(newPiece){
+      pieces.push(new Component2(receivedData.posX, receivedData.posY, receivedData.id));
+    }
+
+  }
+}, 1);
+}
+
+intData();
 
 function updateGameArea() {
     myGameArea.clear();
     myGamePiece.update();
 
-    // second box
-    ctx = myGameArea.context;
-    ctx.save();
-    ctx.translate(posX2, posY2);
-    ctx.fillStyle = "blue";
-    ctx.fillRect(30 / -2, 30 / -2, 30, 30);
-    ctx.restore();
-
+    // sending your position
     counterData++;
-    if(counterData==1){
+    if(counterData==3){
       counterData=0;
       var data={"id":myGamePiece.id,"posX":myGamePiece.x,"posY":myGamePiece.y};
       socket.emit('data1', data);
     }
 
-    if(receivedData!=null&&receivedData.id!=myGamePiece.id){
-      posX2=receivedData.posX;
-      posY2=receivedData.posY;
+
+
+
+
+    for(var x=0; x<pieces.length; x++){
+        pieces[x].show();
+        if(pieces[x].timer<=0){
+          pieces.splice(x,1);
+        }
     }
 
 
-}
 
 
 
-function component( x, y) {
+
+}// end of game update
+
+
+
+function Component( x, y) {
 
     this.id=Math.floor(Math.random()*100);
     this.speed = 0;
@@ -84,9 +110,66 @@ function component( x, y) {
     }
 }
 
+function Component2( x, y, id) {
+
+    this.x = x;
+    this.y = y;
+    this.id=id;
+    this.timer=100;
+
+    this.update = function(newX, newY) {
+
+        this.x = newX;
+        this.y = newY;
+        this.timer=100;
+    }
+
+    this.show = function() {
+
+        ctx = myGameArea.context;
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.fillStyle = "blue";
+        ctx.fillRect(30 / -2, 30 / -2, 30, 30);
+        ctx.restore();
+
+        this.timer--;
+
+    }
+}
+
+
+
+// note
+// extra interval function to distribiute data?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function startGame() {
-    myGamePiece = new component(100, 100);
     myGameArea.start();
 }
 
@@ -94,8 +177,8 @@ function startGame() {
 var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.width = 200;
-        this.canvas.height = 200;
+        this.canvas.width = 400;
+        this.canvas.height = 400;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
