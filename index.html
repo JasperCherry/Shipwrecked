@@ -48,12 +48,9 @@ setInterval(function(){
 }, 1);
 }
 
+/// to modify?
 intData();
-intData();
-intData();
-intData();
-intData();
-intData();
+
 
 
 function updateGameArea() {
@@ -120,26 +117,42 @@ function Component2( x, y, id) {
 
     this.x = x;
     this.y = y;
+    this.targetX=x;
+    this.targetY=y;
     this.id=id;
     this.timer=100;
 
     this.update = function(newX, newY) {
 
-        this.x = newX;
-        this.y = newY;
+        this.targetX = newX;
+        this.targetY = newY;
         this.timer=100;
+
     }
 
     this.show = function() {
 
-        ctx = myGameArea.context;
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.fillStyle = "blue";
-        ctx.fillRect(30 / -2, 30 / -2, 30, 30);
-        ctx.restore();
+      if(this.targetX>this.x){
+        this.x+=1;
+      }
+      if(this.targetX<this.x){
+        this.x-=1;
+      }
+      if(this.targetY>this.y){
+        this.y+=1;
+      }
+      if(this.targetY<this.y){
+        this.y-=1;
+      }
 
-        this.timer--;
+      ctx = myGameArea.context;
+      ctx.save();
+      ctx.translate(this.x, this.y);
+      ctx.fillStyle = "blue";
+      ctx.fillRect(30 / -2, 30 / -2, 30, 30);
+      ctx.restore();
+
+      this.timer--;
 
     }
 }
