@@ -35,13 +35,13 @@ setInterval(function(){
 
     for(var x=0; x<pieces.length; x++){
       if(pieces[x].id==receivedData.id){
-        pieces[x].update(receivedData.posX, receivedData.posY);
+        pieces[x].update(receivedData.posX, receivedData.posY, receivedData.posA);
         newPiece=false;
       }
     }
 
     if(newPiece){
-      pieces.push(new Component2(receivedData.posX, receivedData.posY, receivedData.id));
+      pieces.push(new Component2(receivedData.posX, receivedData.posY, receivedData.posA, receivedData.id));
     }
 
   }
@@ -61,7 +61,7 @@ function updateGameArea() {
     counterData++;
     if(counterData==3){
       counterData=0;
-      var data={"id":myGamePiece.id,"posX":myGamePiece.x,"posY":myGamePiece.y};
+      var data={"id":myGamePiece.id,"posX":myGamePiece.x,"posY":myGamePiece.y,"posA":myGamePiece.angle};
       socket.emit('data1', data);
     }
 
@@ -88,44 +88,59 @@ function updateGameArea() {
 function Component( x, y) {
 
     this.id=Math.floor(Math.random()*100);
+
     this.speed = 0;
-    this.speed2 = 0;
+    this.angle = 0;
+    this.moveAngle = 0;
+
     this.x = x;
     this.y = y;
 
     this.update = function() {
+
         this.speed = 0;
-        this.speed2 = 0;
-        if (myGameArea.keys && myGameArea.keys[40]) {this.speed2= 1; }
-        if (myGameArea.keys && myGameArea.keys[38]) {this.speed2= -1; }
-        if (myGameArea.keys && myGameArea.keys[39]) {this.speed= 1; }
-        if (myGameArea.keys && myGameArea.keys[37]) {this.speed= -1; }
+        this.moveAngle = 0;
+
+        if (myGameArea.keys && myGameArea.keys[40]) {this.speed= 1; }
+        if (myGameArea.keys && myGameArea.keys[38]) {this.speed= -1; }
+        if (myGameArea.keys && myGameArea.keys[37] ) {this.moveAngle = -1; }
+        if (myGameArea.keys && myGameArea.keys[39] ) {this.moveAngle = 1; }
 
         ctx = myGameArea.context;
         ctx.save();
         ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
         ctx.fillStyle = "red";
-        ctx.fillRect(30 / -2, 30 / -2, 30, 30);
+        ctx.fillRect(30 / -2, 60 / -2, 30, 60);
         ctx.restore();
 
-        this.x += this.speed;
-        this.y += this.speed2;
+        this.angle += this.moveAngle * Math.PI / 180;
+        this.x -= this.speed * Math.sin(this.angle);
+        this.y += this.speed * Math.cos(this.angle);
     }
 }
 
-function Component2( x, y, id) {
+
+function Component2( x, y, a, id) {
+
+    this.id=id;
+
+    this.speed = 0;
+    this.angle = a;
+    this.moveAngle = 0;
 
     this.x = x;
     this.y = y;
     this.targetX=x;
     this.targetY=y;
-    this.id=id;
+
     this.timer=100;
 
-    this.update = function(newX, newY) {
+    this.update = function(newX, newY, newA) {
 
         this.targetX = newX;
         this.targetY = newY;
+        this.targetA = newA;
         this.timer=100;
 
     }
@@ -145,11 +160,26 @@ function Component2( x, y, id) {
         this.y-=1;
       }
 
+
+      if(this.targetA>this.angle){
+        this.moveAngle=1;
+      }
+      if(this.targetA<this.angle){
+        this.moveAngle=-1;
+      }
+      if(Math.abs(this.targetA-this.angle)<0.05){
+        this.moveAngle=0;
+      }
+
+
+      this.angle += this.moveAngle * Math.PI / 180;
+
       ctx = myGameArea.context;
       ctx.save();
       ctx.translate(this.x, this.y);
+      ctx.rotate(this.angle);
       ctx.fillStyle = "blue";
-      ctx.fillRect(30 / -2, 30 / -2, 30, 30);
+      ctx.fillRect(30 / -2, 60 / -2, 30, 60);
       ctx.restore();
 
       this.timer--;
