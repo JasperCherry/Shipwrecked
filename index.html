@@ -38,6 +38,8 @@ socket.on('data1', function(msg1){
 // interval function to gather data
 function intData() {
 setInterval(function(){
+
+  // receiving positions
   if(receivedData!=null&&receivedData.id!=myGamePiece.id){
 
     var newPiece=true;
@@ -55,7 +57,13 @@ setInterval(function(){
     }
 
   }
-}, 50);
+
+  // sending your position
+  var data={"id":myGamePiece.id,"posX":myGamePiece.x,"posY":myGamePiece.y,
+  "posA":myGamePiece.angle,"name":myGamePiece.name};
+  socket.emit('data1', data);
+
+}, 100);
 }
 
 // running function to collect data
@@ -72,15 +80,6 @@ function updateGameArea() {
 
 
     myGamePiece.update();
-
-    // sending your position
-    counterData++;
-    if(counterData==3){
-      counterData=0;
-      var data={"id":myGamePiece.id,"posX":myGamePiece.x,"posY":myGamePiece.y,
-      "posA":myGamePiece.angle,"name":myGamePiece.name};
-      socket.emit('data1', data);
-    }
 
     // showing other objects
     if(pieces.length>0){
