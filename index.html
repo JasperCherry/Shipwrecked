@@ -34,9 +34,15 @@ socket.on('data1', function(msg1){
   receivedData=msg1;
 });
 
+// rounding numbers
+function round(n, k)
+{
+    var factor = Math.pow(10, k);
+    return Math.round(n*factor)/factor;
+}
 
 // interval function to gather data
-function intData() {
+function intData1() {
 setInterval(function(){
 
   // receiving positions
@@ -58,17 +64,26 @@ setInterval(function(){
 
   }
 
+
+
+}, 10);
+}
+
+
+function intData2() {
+setInterval(function(){
+  
   // sending your position
-  var data={"id":myGamePiece.id,"posX":myGamePiece.x,"posY":myGamePiece.y,
-  "posA":myGamePiece.angle,"name":myGamePiece.name};
+  var data={"id":myGamePiece.id,"posX":round(myGamePiece.x, 2),"posY":round(myGamePiece.y, 2),
+  "posA":round(myGamePiece.angle, 2),"name":myGamePiece.name};
   socket.emit('data1', data);
 
 }, 100);
 }
 
-// running function to collect data
-intData();
-
+// running functions to collect and send data
+intData1();
+intData2();
 
 
 function updateGameArea() {
