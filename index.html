@@ -9,18 +9,27 @@ canvas {
 }
 </style>
 </head>
+
 <body onload="startGame()">
+
+<img src="pirate.png" id="pirate" style="display: none;">
+<img src="water.jpg" id="water" style="display: none;">
+
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script>
+
+var person = prompt("Please enter your name");
+
+
 var socket = io();
 
-var myGamePiece = new Component(200, 200);
+var myGamePiece = new Component(500, 300, person);
 var pieces=new Array();
 
 var counterData=0;
 var receivedData;
 
-
+// node js connection to data from server
 socket.on('data1', function(msg1){
   receivedData=msg1;
 });
@@ -41,42 +50,47 @@ setInterval(function(){
     }
 
     if(newPiece){
-      pieces.push(new Component2(receivedData.posX, receivedData.posY, receivedData.posA, receivedData.id));
+      pieces.push(new Component2(receivedData.posX, receivedData.posY,
+      receivedData.posA, receivedData.id, receivedData.name));
     }
 
   }
 }, 1);
 }
 
-/// to modify?
+// running function to collect data
 intData();
 
 
 
 function updateGameArea() {
     myGameArea.clear();
+
+    var ctx = myGameArea.context;
+    ctx.drawImage(water, 0, 0);
+
+
+
     myGamePiece.update();
 
     // sending your position
     counterData++;
     if(counterData==3){
       counterData=0;
-      var data={"id":myGamePiece.id,"posX":myGamePiece.x,"posY":myGamePiece.y,"posA":myGamePiece.angle};
+      var data={"id":myGamePiece.id,"posX":myGamePiece.x,"posY":myGamePiece.y,
+      "posA":myGamePiece.angle,"name":myGamePiece.name};
       socket.emit('data1', data);
     }
 
-
-
-
-
-    for(var x=0; x<pieces.length; x++){
-        pieces[x].show();
-        if(pieces[x].timer<=0){
-          pieces.splice(x,1);
-        }
+    // showing other objects
+    if(pieces.length>0){
+      for(var x=0; x<pieces.length; x++){
+          pieces[x].show();
+          if(pieces[x].timer<=0){
+            pieces.splice(x,1);
+          }
+      }
     }
-
-
 
 
 
@@ -85,9 +99,10 @@ function updateGameArea() {
 
 
 
-function Component( x, y) {
+function Component( x, y, name) {
 
     this.id=Math.floor(Math.random()*100);
+    this.name=name;
 
     this.speed = 0;
     this.angle = 0;
@@ -110,9 +125,14 @@ function Component( x, y) {
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.angle);
-        ctx.fillStyle = "red";
-        ctx.fillRect(30 / -2, 60 / -2, 30, 60);
+        ctx.drawImage(pirate, -50, -50);
+        //ctx.fillStyle = "red";
+        //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
         ctx.restore();
+
+        ctx.font = "bold 20px Courier New";
+        ctx.fillStyle = "white";
+        ctx.fillText(this.name,this.x-30,this.y-50);
 
         this.angle += this.moveAngle * Math.PI / 180;
         this.x -= this.speed * Math.sin(this.angle);
@@ -121,9 +141,13 @@ function Component( x, y) {
 }
 
 
-function Component2( x, y, a, id) {
+
+
+
+function Component2( x, y, a, id, name) {
 
     this.id=id;
+    this.name=name;
 
     this.speed = 0;
     this.angle = a;
@@ -178,9 +202,14 @@ function Component2( x, y, a, id) {
       ctx.save();
       ctx.translate(this.x, this.y);
       ctx.rotate(this.angle);
-      ctx.fillStyle = "blue";
-      ctx.fillRect(30 / -2, 60 / -2, 30, 60);
+      ctx.drawImage(pirate, -50, -50);
+      //ctx.fillStyle = "blue";
+      //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
       ctx.restore();
+
+      ctx.font = "bold 20px Courier New";
+      ctx.fillStyle = "white";
+      ctx.fillText(this.name,this.x-30,this.y-50);
 
       this.timer--;
 
@@ -189,8 +218,6 @@ function Component2( x, y, a, id) {
 
 
 
-// note
-// extra interval function to distribiute data?
 
 
 
@@ -210,13 +237,7 @@ function Component2( x, y, a, id) {
 
 
 
-
-
-
-
-
-
-
+//// MAIN GAME CANVAS INTERVAL FUNCTION
 
 function startGame() {
     myGameArea.start();
@@ -226,8 +247,8 @@ function startGame() {
 var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.width = 400;
-        this.canvas.height = 400;
+        this.canvas.width = 1000;
+        this.canvas.height = 600;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
