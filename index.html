@@ -4,27 +4,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
 canvas {
-    border:1px solid #d3d3d3;
-    background-color: #f1f1f1;
+    background-color: black;
+}
+html, body {
+    overflow: hidden;
+}
+body {
+  background: black;
 }
 </style>
 </head>
 
 <body onload="startGame()">
 
-<img src="pirate.png" id="pirate" style="display: none;">
-<img src="water.jpg" id="water" style="display: none;">
+<img src="pic/pirate.png" id="pirate" style="display: none;">
+<img src="pic/water.jpg" id="water" style="display: none;">
+<img src="pic/water2.jpg" id="water2" style="display: none;">
 
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script>
 
 var person = prompt("Please enter your name");
-
+//var person = "ship";
 
 var socket = io();
 
-var myGamePiece = new Component(500, 300, person);
-var pieces=new Array();
+var myGamePiece = new myShip(100, 100, person);
+var otherShips=new Array();
 
 var counterData=0;
 var receivedData;
@@ -34,74 +40,76 @@ socket.on('data1', function(msg1){
   receivedData=msg1;
 });
 
-// rounding numbers
-function round(n, k)
-{
+
+
+// rounding numbers function
+function round(n, k){
     var factor = Math.pow(10, k);
     return Math.round(n*factor)/factor;
 }
 
-// interval function to gather data
-function intData1() {
+
+
+// interval for data receiving
+function dataS1() {
 setInterval(function(){
 
   // receiving positions
   if(receivedData!=null&&receivedData.id!=myGamePiece.id){
 
+    // checking if the ship is allready on the map
     var newPiece=true;
 
-    for(var x=0; x<pieces.length; x++){
-      if(pieces[x].id==receivedData.id){
-        pieces[x].update(receivedData.posX, receivedData.posY, receivedData.posA);
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==receivedData.id){
+        otherShips[x].update(receivedData.posX, receivedData.posY, receivedData.posA);
         newPiece=false;
       }
     }
 
     if(newPiece){
-      pieces.push(new Component2(receivedData.posX, receivedData.posY,
+      otherShips.push(new otherShip(receivedData.posX, receivedData.posY,
       receivedData.posA, receivedData.id, receivedData.name));
     }
 
   }
-
-
-
 }, 10);
 }
 
-
-function intData2() {
+// interval for data sending
+function dataR1() {
 setInterval(function(){
-  
+
   // sending your position
-  var data={"id":myGamePiece.id,"posX":round(myGamePiece.x, 2),"posY":round(myGamePiece.y, 2),
-  "posA":round(myGamePiece.angle, 2),"name":myGamePiece.name};
+  var data={"id":myGamePiece.id,"posX":round(myGamePiece.x, 0),"posY":round(myGamePiece.y, 0),
+  "posA":round(myGamePiece.angle, 3),"name":myGamePiece.name};
   socket.emit('data1', data);
 
 }, 100);
 }
 
 // running functions to collect and send data
-intData1();
-intData2();
+dataS1();
+dataR1();
+
+
 
 
 function updateGameArea() {
     myGameArea.clear();
 
     var ctx = myGameArea.context;
-    ctx.drawImage(water, 0, 0);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y);
 
-
-
+    // user ship update
     myGamePiece.update();
 
-    // showing other objects
-    if(pieces.length>0){
-      for(var x=0; x<pieces.length; x++){
-          pieces[x].show();
-          if(pieces[x].timer<=0){
-            pieces.splice(x,1);
+    // showing other ships
+    if(otherShips.length>0){
+      for(var x=0; x<otherShips.length; x++){
+          otherShips[x].show();
+          if(otherShips[x].timer<=0){
+            otherShips.splice(x,1);
           }
       }
     }
@@ -113,7 +121,7 @@ function updateGameArea() {
 
 
 
-function Component( x, y, name) {
+function myShip( x, y, name) {
 
     this.id=Math.floor(Math.random()*100);
     this.name=name;
@@ -130,14 +138,22 @@ function Component( x, y, name) {
         this.speed = 0;
         this.moveAngle = 0;
 
-        if (myGameArea.keys && myGameArea.keys[40]) {this.speed= 1; }
-        if (myGameArea.keys && myGameArea.keys[38]) {this.speed= -1; }
-        if (myGameArea.keys && myGameArea.keys[37] ) {this.moveAngle = -1; }
-        if (myGameArea.keys && myGameArea.keys[39] ) {this.moveAngle = 1; }
+        if(myGameArea.keys && myGameArea.keys[40]){
+          this.speed= 1;
+        }
+        if(myGameArea.keys && myGameArea.keys[38]){
+          this.speed= -1;
+        }
+        if(myGameArea.keys && myGameArea.keys[37] ){
+          this.moveAngle = -1;
+        }
+        if(myGameArea.keys && myGameArea.keys[39] ){
+          this.moveAngle = 1;
+        }
 
         ctx = myGameArea.context;
         ctx.save();
-        ctx.translate(this.x, this.y);
+        ctx.translate(window.innerWidth/2, window.innerHeight/2);
         ctx.rotate(this.angle);
         ctx.drawImage(pirate, -50, -50);
         //ctx.fillStyle = "red";
@@ -146,7 +162,7 @@ function Component( x, y, name) {
 
         ctx.font = "bold 20px Courier New";
         ctx.fillStyle = "white";
-        ctx.fillText(this.name,this.x-30,this.y-50);
+        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-50);
 
         this.angle += this.moveAngle * Math.PI / 180;
         this.x -= this.speed * Math.sin(this.angle);
@@ -158,7 +174,7 @@ function Component( x, y, name) {
 
 
 
-function Component2( x, y, a, id, name) {
+function otherShip( x, y, a, id, name) {
 
     this.id=id;
     this.name=name;
@@ -172,16 +188,31 @@ function Component2( x, y, a, id, name) {
     this.targetX=x;
     this.targetY=y;
 
-    this.timer=100;
+    // two seconds before object will be removed
+    this.timer=50;
+
 
     this.update = function(newX, newY, newA) {
 
-        this.targetX = newX;
-        this.targetY = newY;
-        this.targetA = newA;
-        this.timer=100;
 
+      this.targetX = newX;
+      this.targetY = newY;
+      this.targetA = newA;
+
+      // if the ship is far away from its target move it directly
+      if(Math.abs(newX-this.x)>20||Math.abs(newY-this.y)>20){
+        this.x = newX;
+        this.y = newY;
+      }
+
+      // if ship angle is very different to target angle for more then 0.5 radian change it directly
+      if(Math.abs(newA-this.angle)>0.5){
+        this.angle = newA;
+      }
+
+        this.timer=50;
     }
+
 
     this.show = function() {
 
@@ -214,7 +245,7 @@ function Component2( x, y, a, id, name) {
 
       ctx = myGameArea.context;
       ctx.save();
-      ctx.translate(this.x, this.y);
+      ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
       ctx.rotate(this.angle);
       ctx.drawImage(pirate, -50, -50);
       //ctx.fillStyle = "blue";
@@ -223,7 +254,7 @@ function Component2( x, y, a, id, name) {
 
       ctx.font = "bold 20px Courier New";
       ctx.fillStyle = "white";
-      ctx.fillText(this.name,this.x-30,this.y-50);
+      ctx.fillText(this.name,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-50);
 
       this.timer--;
 
@@ -251,7 +282,7 @@ function Component2( x, y, a, id, name) {
 
 
 
-//// MAIN GAME CANVAS INTERVAL FUNCTION
+//// MAIN GAME INTERVAL FUNCTION FOR CANVAS
 
 function startGame() {
     myGameArea.start();
@@ -261,8 +292,8 @@ function startGame() {
 var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.width = 1000;
-        this.canvas.height = 600;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.frameNo = 0;
