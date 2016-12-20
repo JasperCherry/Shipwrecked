@@ -31,13 +31,20 @@ var socket = io();
 
 var myGamePiece = new myShip(100, 100, person);
 var otherShips=new Array();
+var balls=new Array();
 
 var counterData=0;
-var receivedData;
+var receivedData1;
+var receivedData2;
 
 // node js connection to data from server
+// ships
 socket.on('data1', function(msg1){
-  receivedData=msg1;
+  receivedData1=msg1;
+});
+// bullets
+socket.on('data2', function(msg2){
+  receivedData2=msg2;
 });
 
 
@@ -55,25 +62,29 @@ function dataS1() {
 setInterval(function(){
 
   // receiving positions
-  if(receivedData!=null&&receivedData.id!=myGamePiece.id){
-
+  if(receivedData1!=null&&receivedData1.id!=myGamePiece.id){
     // checking if the ship is allready on the map
     var newPiece=true;
-
     for(var x=0; x<otherShips.length; x++){
-      if(otherShips[x].id==receivedData.id){
-        otherShips[x].update(receivedData.posX, receivedData.posY, receivedData.posA);
+      if(otherShips[x].id==receivedData1.id){
+        otherShips[x].update(receivedData1.posX, receivedData1.posY, receivedData1.posA);
         newPiece=false;
       }
     }
-
     if(newPiece){
-      otherShips.push(new otherShip(receivedData.posX, receivedData.posY,
-      receivedData.posA, receivedData.id, receivedData.name));
+      otherShips.push(new otherShip(receivedData1.posX, receivedData1.posY,
+      receivedData1.posA, receivedData1.id, receivedData1.name));
     }
-
+    receivedData1=null;
   }
-}, 10);
+
+
+  if(receivedData2!=null){
+    balls.push(new ball(receivedData2.posX, receivedData2.posY, receivedData2.posA));
+    receivedData2=null;
+  }
+
+}, 1);
 }
 
 // interval for data sending
@@ -88,8 +99,12 @@ setInterval(function(){
 }, 100);
 }
 
-// running functions to collect and send data
-dataS1();
+// running functions to collect data
+for(var l=0; l<1; l++){
+  dataS1();
+}
+
+// running functions to send data
 dataR1();
 
 
@@ -115,6 +130,22 @@ function updateGameArea() {
     }
 
 
+    // showing balls
+    if(balls.length>0){
+      for(var x=0; x<balls.length; x++){
+          balls[x].show();
+      }
+    }
+    // deleting balls
+    if(balls.length>0){
+      for(var x=0; x<balls.length; x++){
+          if(balls[x].timer<=0){
+            balls.splice(x,1);
+          }
+      }
+    }
+
+
 
 
 }// end of game update
@@ -133,10 +164,27 @@ function myShip( x, y, name) {
     this.x = x;
     this.y = y;
 
+    // shooting
+    this.timerS=20;
+    this.shot;
+
     this.update = function() {
 
         this.speed = 0;
         this.moveAngle = 0;
+
+        // shooting and sending data
+        if(myGameArea.keys && myGameArea.keys[32]&&this.timerS==0){
+          this.shot={"posX":round(this.x, 0),"posY":round(this.y, 0),"posA":round(this.angle, 5)};
+          socket.emit('data2', this.shot);
+          this.timerS=20;
+        }
+
+        if(this.timerS>0){
+          this.timerS--;
+        }
+
+
 
         if(myGameArea.keys && myGameArea.keys[40]){
           this.speed= 1;
@@ -151,6 +199,11 @@ function myShip( x, y, name) {
           this.moveAngle = 1;
         }
 
+        // changing position
+        this.angle += this.moveAngle * Math.PI / 180;
+        this.x -= this.speed * Math.sin(this.angle);
+        this.y += this.speed * Math.cos(this.angle);
+
         ctx = myGameArea.context;
         ctx.save();
         ctx.translate(window.innerWidth/2, window.innerHeight/2);
@@ -164,9 +217,6 @@ function myShip( x, y, name) {
         ctx.fillStyle = "white";
         ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-50);
 
-        this.angle += this.moveAngle * Math.PI / 180;
-        this.x -= this.speed * Math.sin(this.angle);
-        this.y += this.speed * Math.cos(this.angle);
     }
 }
 
@@ -188,7 +238,8 @@ function otherShip( x, y, a, id, name) {
     this.targetX=x;
     this.targetY=y;
 
-    // two seconds before object will be removed
+
+    // time before object will be removed
     this.timer=50;
 
 
@@ -200,7 +251,7 @@ function otherShip( x, y, a, id, name) {
       this.targetA = newA;
 
       // if the ship is far away from its target move it directly
-      if(Math.abs(newX-this.x)>20||Math.abs(newY-this.y)>20){
+      if(Math.abs(newX-this.x)>50||Math.abs(newY-this.y)>50){
         this.x = newX;
         this.y = newY;
       }
@@ -262,6 +313,41 @@ function otherShip( x, y, a, id, name) {
 }
 
 
+
+
+
+
+function ball( x, y, a) {
+
+    this.speed = 5;
+    this.angle = a;
+    this.timer=70;
+    this.x = x;
+    this.y = y;
+
+
+    this.show = function() {
+
+      this.x += this.speed * Math.sin(this.angle);
+      this.y -= this.speed * Math.cos(this.angle);
+
+      ctx = myGameArea.context;
+      ctx.save();
+      ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
+      ctx.rotate(this.angle);
+      ctx.beginPath();
+      ctx.translate(0, 0);
+      ctx.fillStyle = "black";
+      ctx.arc(0, 0, 4, 0, 2*Math.PI);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+
+      this.timer--;
+
+    }
+}
 
 
 
