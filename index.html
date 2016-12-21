@@ -56,6 +56,12 @@ socket.on('id1', function(ship1){
 socket.on('id2', function(ship2){
   receivedShip2=ship2;
 });
+socket.on('id3', function(ship3){
+  receivedShip3=ship3;
+});
+socket.on('id4', function(ship4){
+  receivedShip4=ship4;
+});
 
 
 
@@ -176,12 +182,12 @@ setInterval(function(){
   if(myGamePiece.id==3){
     var ship3={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
     "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
-    socket.emit('id2', ship3);
+    socket.emit('id3', ship3);
   }
   if(myGamePiece.id==4){
     var ship4={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
     "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
-    socket.emit('id2', ship4);
+    socket.emit('id4', ship4);
   }
 
 
@@ -209,12 +215,20 @@ function updateGameArea() {
     var ctx = myGameArea.context;
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y);
 
+
+
+
+    // connecting player and setting id
     if(firstConnection){
-    // give time to gather data about existing players
-      setTimeout(function(){ firstConnection=false; }, 2000);
+    // give time to gather data about existing players, delay time 1-2 seconds random
+      setTimeout(function(){
+         firstConnection=false;
+      }, (Math.floor(Math.random() * 1000)+1000));
     }else{
     // adjusting id to ship, 4 ships allowed
     if(myGamePiece.id>4){
+
+      // if there are other ships in the game set tempId different then the ones present
       if(otherShips.length>0){
         var proposition=1;
         for(var g=0; g<4; g++){
@@ -232,12 +246,25 @@ function updateGameArea() {
             break;
           }
         }
+      // if player is the only ship in the game, give id=1
       }else{
         myGamePiece.id=1;
         tempId=1;
       }
      }
     }
+    // if player has the same if like other ship, give some time by changing
+    // firstConnection variable
+    if(otherShips.length>0){
+      for(var z=0; z<otherShips.length; z++){
+        if(otherShips[z].id==myGamePiece.id){
+          firstConnection=true;
+        }
+      }
+    }
+
+
+
 
     // user ship update
     myGamePiece.update();
