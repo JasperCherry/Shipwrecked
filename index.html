@@ -29,11 +29,11 @@ var person = prompt("Please enter your name");
 
 var socket = io();
 
-var myGamePiece = new myShip(100, 100, person);
+var myGamePiece = new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025), person);
 var otherShips=new Array();
 var balls=new Array();
 
-var counterData=0;
+
 var receivedData1;
 var receivedData2;
 
@@ -42,11 +42,10 @@ var receivedData2;
 socket.on('data1', function(msg1){
   receivedData1=msg1;
 });
-// bullets
+// creating balls
 socket.on('data2', function(msg2){
   receivedData2=msg2;
 });
-
 
 
 // rounding numbers function
@@ -67,13 +66,13 @@ setInterval(function(){
     var newPiece=true;
     for(var x=0; x<otherShips.length; x++){
       if(otherShips[x].id==receivedData1.id){
-        otherShips[x].update(receivedData1.posX, receivedData1.posY, receivedData1.posA);
+        otherShips[x].update(receivedData1.posX, receivedData1.posY, receivedData1.posA, receivedData1.hp);
         newPiece=false;
       }
     }
     if(newPiece){
       otherShips.push(new otherShip(receivedData1.posX, receivedData1.posY,
-      receivedData1.posA, receivedData1.id, receivedData1.name));
+      receivedData1.posA, receivedData1.id, receivedData1.name, receivedData1.hp));
     }
     receivedData1=null;
   }
@@ -93,7 +92,7 @@ setInterval(function(){
 
   // sending your position
   var data={"id":myGamePiece.id,"posX":round(myGamePiece.x, 0),"posY":round(myGamePiece.y, 0),
-  "posA":round(myGamePiece.angle, 3),"name":myGamePiece.name};
+  "posA":round(myGamePiece.angle, 3),"name":myGamePiece.name,"hp":myGamePiece.hp};
   socket.emit('data1', data);
 
 }, 100);
@@ -136,7 +135,7 @@ function updateGameArea() {
           balls[x].show();
       }
     }
-    // deleting balls
+    // deleting balls when timer is zero
     if(balls.length>0){
       for(var x=0; x<balls.length; x++){
           if(balls[x].timer<=0){
@@ -144,6 +143,39 @@ function updateGameArea() {
           }
       }
     }
+
+    // checking if player was hit
+    if(balls.length>0){
+      for(var x=0; x<balls.length; x++){
+          if(Math.abs(balls[x].x-myGamePiece.x)<20 && Math.abs(balls[x].y-myGamePiece.y)<20 && balls[x].active){
+            myGamePiece.hp-=20;
+            balls.splice(x,1);
+          }
+      }
+    }
+
+    // checking if other ship was hit
+    if(balls.length>0&&otherShips.length>0){
+      for(var z=0; z<otherShips.length; z++){
+        for(var x=0; x<balls.length; x++){
+          if(Math.abs(balls[x].x-otherShips[z].x)<20 && Math.abs(balls[x].y-otherShips[z].y)<20 && balls[x].active){
+            balls.splice(x,1);
+            if(otherShips[z].hp==20){
+              otherShips.splice(z,1);
+            }
+          }
+        }
+      }
+    }
+
+
+    // checking if player died
+    if(myGamePiece.hp<=0){
+      myGamePiece = new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025), person);
+    }
+
+
+
 
 
 
@@ -156,6 +188,7 @@ function myShip( x, y, name) {
 
     this.id=Math.floor(Math.random()*100);
     this.name=name;
+    this.hp=100;
 
     this.speed = 0;
     this.angle = 0;
@@ -165,7 +198,7 @@ function myShip( x, y, name) {
     this.y = y;
 
     // shooting
-    this.timerS=20;
+    this.timerS=0;
     this.shot;
 
     this.update = function() {
@@ -175,15 +208,15 @@ function myShip( x, y, name) {
 
         // shooting and sending data
         if(myGameArea.keys && myGameArea.keys[32]&&this.timerS==0){
-          this.shot={"posX":round(this.x, 0),"posY":round(this.y, 0),"posA":round(this.angle, 5)};
+          this.shot={"posX":round(this.x, 0),"posY":round(this.y, 0),
+          "posA":round(this.angle+( (Math.round(Math.random() * (20)) - 10) * Math.PI / 180), 5)};
           socket.emit('data2', this.shot);
-          this.timerS=20;
+          this.timerS=30;
         }
 
         if(this.timerS>0){
           this.timerS--;
         }
-
 
 
         if(myGameArea.keys && myGameArea.keys[40]){
@@ -198,6 +231,22 @@ function myShip( x, y, name) {
         if(myGameArea.keys && myGameArea.keys[39] ){
           this.moveAngle = 1;
         }
+
+        // map border detection
+        if(myGamePiece.x<0){
+          myGamePiece.x=0;
+        }
+        if(myGamePiece.x>1024){
+          myGamePiece.x=1024;
+        }
+        if(myGamePiece.y<0){
+          myGamePiece.y=0;
+        }
+        if(myGamePiece.y>1024){
+          myGamePiece.y=1024;
+        }
+
+
 
         // changing position
         this.angle += this.moveAngle * Math.PI / 180;
@@ -215,7 +264,8 @@ function myShip( x, y, name) {
 
         ctx.font = "bold 20px Courier New";
         ctx.fillStyle = "white";
-        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-50);
+        ctx.fillText("HP:"+this.hp,window.innerWidth/2-30,window.innerHeight/2-50);
+        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-80);
 
     }
 }
@@ -224,10 +274,11 @@ function myShip( x, y, name) {
 
 
 
-function otherShip( x, y, a, id, name) {
+function otherShip( x, y, a, id, name, hp) {
 
     this.id=id;
     this.name=name;
+    this.hp=hp;
 
     this.speed = 0;
     this.angle = a;
@@ -243,12 +294,12 @@ function otherShip( x, y, a, id, name) {
     this.timer=50;
 
 
-    this.update = function(newX, newY, newA) {
-
+    this.update = function(newX, newY, newA, newHp) {
 
       this.targetX = newX;
       this.targetY = newY;
       this.targetA = newA;
+      this.hp=newHp;
 
       // if the ship is far away from its target move it directly
       if(Math.abs(newX-this.x)>50||Math.abs(newY-this.y)>50){
@@ -305,7 +356,8 @@ function otherShip( x, y, a, id, name) {
 
       ctx.font = "bold 20px Courier New";
       ctx.fillStyle = "white";
-      ctx.fillText(this.name,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-50);
+      ctx.fillText("HP:"+this.hp,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-50);
+      ctx.fillText(this.name,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
 
       this.timer--;
 
@@ -325,6 +377,8 @@ function ball( x, y, a) {
     this.x = x;
     this.y = y;
 
+    this.active=false;
+
 
     this.show = function() {
 
@@ -337,7 +391,14 @@ function ball( x, y, a) {
       ctx.rotate(this.angle);
       ctx.beginPath();
       ctx.translate(0, 0);
+
       ctx.fillStyle = "black";
+      // make ball active to hurt other units
+      if(this.timer<60){
+        this.active=true;
+        //ctx.fillStyle = "red";
+      }
+
       ctx.arc(0, 0, 4, 0, 2*Math.PI);
       ctx.closePath();
       ctx.fill();
