@@ -13,12 +13,38 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   // ships socket
-  socket.on('data1', function(msg1){
+  // ship1
+  socket.on('id1', function(ship1){
     setTimeout(function () {
-      io.emit('data1', msg1);
+      io.emit('id1', ship1);
     }, 0)
-    //console.log(msg1);
+    //console.log(ship1);
   });
+  // ship2
+  socket.on('id2', function(ship2){
+    setTimeout(function () {
+      io.emit('id2', ship2);
+    }, 0)
+    //console.log(ship2);
+  });
+  // ship3
+  socket.on('id3', function(ship3){
+    setTimeout(function () {
+      io.emit('id3', ship3);
+    }, 0)
+    //console.log(ship3);
+  });
+  // ship4
+  socket.on('id4', function(ship4){
+    setTimeout(function () {
+      io.emit('id4', ship4);
+    }, 0)
+    //console.log(ship4);
+  });
+
+
+
+
   // balls creating socket
   socket.on('data2', function(msg2){
     setTimeout(function () {

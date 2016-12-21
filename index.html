@@ -24,28 +24,44 @@ body {
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script>
 
-var person = prompt("Please enter your name");
-var personId=Math.floor(Math.random()*100);
-//var person = "ship";
+//var person = prompt("Please enter your name");
+var person = "ship";
 
 var socket = io();
 
-var myGamePiece = new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025), person);
+var tempId=100;
+var myGamePiece = new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025),
+person, tempId);
+
+
 var otherShips=new Array();
 var balls=new Array();
 
+var firstConnection=true;
 
-var receivedData1;
-var receivedData2;
+// ships data
+var receivedShip1;
+var receivedShip2;
+var receivedShip3;
+var receivedShip4;
+
+// balls data
+var receivedBall;
 
 // node js connection to data from server
-// ships
-socket.on('data1', function(msg1){
-  receivedData1=msg1;
+// ships sockets
+socket.on('id1', function(ship1){
+  receivedShip1=ship1;
 });
+socket.on('id2', function(ship2){
+  receivedShip2=ship2;
+});
+
+
+
 // creating balls
 socket.on('data2', function(msg2){
-  receivedData2=msg2;
+  receivedBall=msg2;
 });
 
 
@@ -62,41 +78,115 @@ function dataS1() {
 setInterval(function(){
 
   // receiving positions
-  if(receivedData1!=null&&receivedData1.id!=myGamePiece.id){
+
+  // ship1
+  if(receivedShip1!=null&&receivedShip1.id!=myGamePiece.id){
     // checking if the ship is allready on the map
     var newPiece=true;
     for(var x=0; x<otherShips.length; x++){
-      if(otherShips[x].id==receivedData1.id){
-        otherShips[x].update(receivedData1.x, receivedData1.y, receivedData1.a, receivedData1.hp);
+      if(otherShips[x].id==receivedShip1.id){
+        otherShips[x].update(receivedShip1.x, receivedShip1.y, receivedShip1.a, receivedShip1.hp);
         newPiece=false;
       }
     }
     if(newPiece){
-      otherShips.push(new otherShip(receivedData1.x, receivedData1.y,
-      receivedData1.a, receivedData1.id, receivedData1.n, receivedData1.hp));
+      otherShips.push(new otherShip(receivedShip1.x, receivedShip1.y,
+      receivedShip1.a, receivedShip1.id, receivedShip1.n, receivedShip1.hp));
     }
-    receivedData1=null;
+    receivedShip1=null;
+  }
+
+  // ship2
+  if(receivedShip2!=null&&receivedShip2.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==receivedShip2.id){
+        otherShips[x].update(receivedShip2.x, receivedShip2.y, receivedShip2.a, receivedShip2.hp);
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(receivedShip2.x, receivedShip2.y,
+      receivedShip2.a, receivedShip2.id, receivedShip2.n, receivedShip2.hp));
+    }
+    receivedShip2=null;
+  }
+
+  // ship3
+  if(receivedShip3!=null&&receivedShip3.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==receivedShip3.id){
+        otherShips[x].update(receivedShip3.x, receivedShip3.y, receivedShip3.a, receivedShip3.hp);
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(receivedShip3.x, receivedShip3.y,
+      receivedShip3.a, receivedShip3.id, receivedShip3.n, receivedShip3.hp));
+    }
+    receivedShip3=null;
+  }
+
+  // ship4
+  if(receivedShip4!=null&&receivedShip4.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==receivedShip4.id){
+        otherShips[x].update(receivedShip4.x, receivedShip4.y, receivedShip4.a, receivedShip4.hp);
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(receivedShip4.x, receivedShip4.y,
+      receivedShip4.a, receivedShip4.id, receivedShip4.n, receivedShip4.hp));
+    }
+    receivedShip4=null;
   }
 
 
-  if(receivedData2!=null){
-    balls.push(new ball(receivedData2.x, receivedData2.y, receivedData2.a));
-    receivedData2=null;
+  // receiving balls
+  if(receivedBall!=null){
+    balls.push(new ball(receivedBall.x, receivedBall.y, receivedBall.a));
+    receivedBall=null;
   }
 
-}, 1);
+}, 10);
 }
 
 // interval for data sending
 function dataR1() {
 setInterval(function(){
 
-  // sending your position
-  var data={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-  "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
-  socket.emit('data1', data);
 
-}, 50);
+  // sending your position
+  if(myGamePiece.id==1){
+    var ship1={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+    "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
+    socket.emit('id1', ship1);
+  }
+  if(myGamePiece.id==2){
+    var ship2={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+    "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
+    socket.emit('id2', ship2);
+  }
+  if(myGamePiece.id==3){
+    var ship3={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+    "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
+    socket.emit('id2', ship3);
+  }
+  if(myGamePiece.id==4){
+    var ship4={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+    "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
+    socket.emit('id2', ship4);
+  }
+
+
+
+}, 100);
 }
 
 // running functions to collect data
@@ -109,13 +199,45 @@ dataR1();
 
 
 
-
+///////////////////////////////////// MAIN CANVAS INTERVAL FUNCTION
 function updateGameArea() {
+
+
 
     myGameArea.clear();
 
     var ctx = myGameArea.context;
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y);
+
+    if(firstConnection){
+    // give time to gather data about existing players
+      setTimeout(function(){ firstConnection=false; }, 2000);
+    }else{
+    // adjusting id to ship, 4 ships allowed
+    if(myGamePiece.id>4){
+      if(otherShips.length>0){
+        var proposition=1;
+        for(var g=0; g<4; g++){
+          var ifProp=true;
+          for(var z=0; z<otherShips.length; z++){
+            if(otherShips[z].id==proposition){
+              ifProp=false;
+            }
+          }
+          if(ifProp==false){
+            proposition++;
+          }else{
+            myGamePiece.id=proposition;
+            tempId=proposition;
+            break;
+          }
+        }
+      }else{
+        myGamePiece.id=1;
+        tempId=1;
+      }
+     }
+    }
 
     // user ship update
     myGamePiece.update();
@@ -170,7 +292,7 @@ function updateGameArea() {
 
     // checking if player died
     if(myGamePiece.hp<=0){
-      myGamePiece = new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025), person);
+      myGamePiece = new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025), person, tempId);
     }
 
 
@@ -180,9 +302,9 @@ function updateGameArea() {
 
 
 
-function myShip( x, y, name) {
+function myShip( x, y, name, id) {
 
-    this.id=personId;
+    this.id=id;
     this.name=name;
     this.hp=100;
 
@@ -261,7 +383,7 @@ function myShip( x, y, name) {
         ctx.font = "bold 20px Courier New";
         ctx.fillStyle = "white";
         ctx.fillText("HP:"+this.hp,window.innerWidth/2-30,window.innerHeight/2-50);
-        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-80);
+        ctx.fillText(this.id,window.innerWidth/2-30,window.innerHeight/2-80);
 
     }
 }
@@ -287,7 +409,7 @@ function otherShip( x, y, a, id, name, hp) {
 
 
     // time before object will be removed
-    this.timer=50;
+    this.timer=150;
 
 
     this.update = function(newX, newY, newA, newHp) {
@@ -308,7 +430,7 @@ function otherShip( x, y, a, id, name, hp) {
         this.angle = newA;
       }
 
-        this.timer=50;
+        this.timer=150;
     }
 
 
@@ -353,7 +475,7 @@ function otherShip( x, y, a, id, name, hp) {
       ctx.font = "bold 20px Courier New";
       ctx.fillStyle = "white";
       ctx.fillText("HP:"+this.hp,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-50);
-      ctx.fillText(this.name,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
+      ctx.fillText(this.id,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
 
       this.timer--;
 
