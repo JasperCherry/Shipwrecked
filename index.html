@@ -46,7 +46,10 @@ var receivedShip3;
 var receivedShip4;
 
 // balls data
-var receivedBall;
+var receivedBall1;
+var receivedBall2;
+var receivedBall3;
+var receivedBall4;
 
 // node js connection to data from server
 // ships sockets
@@ -66,8 +69,21 @@ socket.on('id4', function(ship4){
 
 
 // creating balls
-socket.on('data2', function(msg2){
-  receivedBall=msg2;
+// ship1
+socket.on('data1', function(ball1){
+  receivedBall1=ball1;
+});
+// ship2
+socket.on('data2', function(ball2){
+  receivedBall2=ball2;
+});
+// ship3
+socket.on('data3', function(ball3){
+  receivedBall3=ball3;
+});
+// ship4
+socket.on('data4', function(ball4){
+  receivedBall4=ball4;
 });
 
 
@@ -155,9 +171,21 @@ setInterval(function(){
 
 
   // receiving balls
-  if(receivedBall!=null){
-    balls.push(new ball(receivedBall.x, receivedBall.y, receivedBall.a));
-    receivedBall=null;
+  if(receivedBall1!=null){
+    balls.push(new ball(receivedBall1.x, receivedBall1.y, receivedBall1.a));
+    receivedBall1=null;
+  }
+  if(receivedBall2!=null){
+    balls.push(new ball(receivedBall2.x, receivedBall2.y, receivedBall2.a));
+    receivedBall2=null;
+  }
+  if(receivedBall3!=null){
+    balls.push(new ball(receivedBall3.x, receivedBall3.y, receivedBall3.a));
+    receivedBall3=null;
+  }
+  if(receivedBall4!=null){
+    balls.push(new ball(receivedBall4.x, receivedBall4.y, receivedBall4.a));
+    receivedBall4=null;
   }
 
 }, 10);
@@ -241,13 +269,20 @@ function updateGameArea() {
           if(ifProp==false){
             proposition++;
           }else{
+            myGamePiece=new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025),
+            person, tempId);
             myGamePiece.id=proposition;
             tempId=proposition;
             break;
           }
         }
+        if(myGamePiece.id==100){
+          myGamePiece.id=200;
+        }
       // if player is the only ship in the game, give id=1
       }else{
+        myGamePiece=new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025),
+        person, tempId);
         myGamePiece.id=1;
         tempId=1;
       }
@@ -296,10 +331,10 @@ function updateGameArea() {
     }
 
     // checking if player was hit
-    if(balls.length>0){
+    if(balls.length>0&&myGamePiece.inGame){
       for(var x=0; x<balls.length; x++){
           if(Math.abs(balls[x].x-myGamePiece.x)<20 && Math.abs(balls[x].y-myGamePiece.y)<20 && balls[x].active){
-            myGamePiece.hp-=20;
+            myGamePiece.hp-=10;
             balls.splice(x,1);
           }
       }
@@ -324,7 +359,6 @@ function updateGameArea() {
 
 
 
-
 }// end of game update
 
 
@@ -334,6 +368,7 @@ function myShip( x, y, name, id) {
     this.id=id;
     this.name=name;
     this.hp=100;
+    this.inGame=false;
 
     this.speed = 0;
     this.angle = 0;
@@ -348,22 +383,45 @@ function myShip( x, y, name, id) {
 
     this.update = function() {
 
+        // for 4 ships only
+        if(this.id<=4){
+          this.inGame=true;
+        }
+
         this.speed = 0;
         this.moveAngle = 0;
 
         // shooting and sending data
+        if(this.inGame){
+        // if in game
         if(myGameArea.keys && myGameArea.keys[32]&&this.timerS==0){
           this.shot={"x":round(this.x, 0),"y":round(this.y, 0),
-          "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10) * Math.PI / 180), 4)};
-          socket.emit('data2', this.shot);
-          this.timerS=30;
+          "a":round(this.angle+( (Math.round(Math.random() * (30)) - 15) * Math.PI / 180), 4)};
+
+          this.timerS=10;
+
+          if(this.id==1){
+            socket.emit('data1', this.shot);
+          }
+          if(this.id==2){
+            socket.emit('data2', this.shot);
+          }
+          if(this.id==3){
+            socket.emit('data3', this.shot);
+          }
+          if(this.id==4){
+            socket.emit('data4', this.shot);
+          }
+        }
+
         }
 
         if(this.timerS>0){
           this.timerS--;
         }
 
-
+        if(this.inGame){
+        // if in game
         if(myGameArea.keys && myGameArea.keys[40]){
           this.speed= 1;
         }
@@ -375,6 +433,24 @@ function myShip( x, y, name, id) {
         }
         if(myGameArea.keys && myGameArea.keys[39] ){
           this.moveAngle = 1;
+        }
+
+        }
+
+        // moving as spectator
+        if(this.id==200){
+          if(myGameArea.keys && myGameArea.keys[40]){
+            this.y++;
+          }
+          if(myGameArea.keys && myGameArea.keys[38]){
+            this.y--;
+          }
+          if(myGameArea.keys && myGameArea.keys[37] ){
+            this.x--;
+          }
+          if(myGameArea.keys && myGameArea.keys[39] ){
+            this.x++;
+          }
         }
 
         // map border detection
@@ -391,7 +467,7 @@ function myShip( x, y, name, id) {
           myGamePiece.y=1024;
         }
 
-
+        if(this.inGame){
 
         // changing position
         this.angle += this.moveAngle * Math.PI / 180;
@@ -411,6 +487,20 @@ function myShip( x, y, name, id) {
         ctx.fillStyle = "white";
         ctx.fillText("HP:"+this.hp,window.innerWidth/2-30,window.innerHeight/2-50);
         ctx.fillText(this.id,window.innerWidth/2-30,window.innerHeight/2-80);
+
+        }
+
+        if(!this.inGame){
+          var info = "Connecting to game...";
+          if(this.id==200){
+            info = "Maximum players in game. You are spectator";
+          }
+          ctx = myGameArea.context;
+          ctx.font = "bold 30px Courier New";
+          ctx.fillStyle = "red";
+          ctx.fillText(info,window.innerWidth/2-400,window.innerHeight/2-200);
+
+        }
 
     }
 }
