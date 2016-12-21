@@ -14,12 +14,16 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
   // ships socket
   socket.on('data1', function(msg1){
-    io.emit('data1', msg1);
+    setTimeout(function () {
+      io.emit('data1', msg1);
+    }, 0)
     //console.log(msg1);
   });
   // balls creating socket
   socket.on('data2', function(msg2){
-    io.emit('data2', msg2);
+    setTimeout(function () {
+      io.emit('data2', msg2);
+    }, 0)
     //console.log(msg2);
   });
 });

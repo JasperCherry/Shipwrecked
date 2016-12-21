@@ -25,6 +25,7 @@ body {
 <script>
 
 var person = prompt("Please enter your name");
+var personId=Math.floor(Math.random()*100);
 //var person = "ship";
 
 var socket = io();
@@ -66,20 +67,20 @@ setInterval(function(){
     var newPiece=true;
     for(var x=0; x<otherShips.length; x++){
       if(otherShips[x].id==receivedData1.id){
-        otherShips[x].update(receivedData1.posX, receivedData1.posY, receivedData1.posA, receivedData1.hp);
+        otherShips[x].update(receivedData1.x, receivedData1.y, receivedData1.a, receivedData1.hp);
         newPiece=false;
       }
     }
     if(newPiece){
-      otherShips.push(new otherShip(receivedData1.posX, receivedData1.posY,
-      receivedData1.posA, receivedData1.id, receivedData1.name, receivedData1.hp));
+      otherShips.push(new otherShip(receivedData1.x, receivedData1.y,
+      receivedData1.a, receivedData1.id, receivedData1.n, receivedData1.hp));
     }
     receivedData1=null;
   }
 
 
   if(receivedData2!=null){
-    balls.push(new ball(receivedData2.posX, receivedData2.posY, receivedData2.posA));
+    balls.push(new ball(receivedData2.x, receivedData2.y, receivedData2.a));
     receivedData2=null;
   }
 
@@ -91,11 +92,11 @@ function dataR1() {
 setInterval(function(){
 
   // sending your position
-  var data={"id":myGamePiece.id,"posX":round(myGamePiece.x, 0),"posY":round(myGamePiece.y, 0),
-  "posA":round(myGamePiece.angle, 3),"name":myGamePiece.name,"hp":myGamePiece.hp};
+  var data={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+  "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
   socket.emit('data1', data);
 
-}, 200);
+}, 50);
 }
 
 // running functions to collect data
@@ -110,6 +111,7 @@ dataR1();
 
 
 function updateGameArea() {
+
     myGameArea.clear();
 
     var ctx = myGameArea.context;
@@ -174,16 +176,13 @@ function updateGameArea() {
 
 
 
-
-
-
 }// end of game update
 
 
 
 function myShip( x, y, name) {
 
-    this.id=Math.floor(Math.random()*100);
+    this.id=personId;
     this.name=name;
     this.hp=100;
 
@@ -205,8 +204,8 @@ function myShip( x, y, name) {
 
         // shooting and sending data
         if(myGameArea.keys && myGameArea.keys[32]&&this.timerS==0){
-          this.shot={"posX":round(this.x, 0),"posY":round(this.y, 0),
-          "posA":round(this.angle+( (Math.round(Math.random() * (20)) - 10) * Math.PI / 180), 4)};
+          this.shot={"x":round(this.x, 0),"y":round(this.y, 0),
+          "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10) * Math.PI / 180), 4)};
           socket.emit('data2', this.shot);
           this.timerS=30;
         }
