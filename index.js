@@ -15,10 +15,12 @@ io.on('connection', function(socket){
   // ships socket
   socket.on('data1', function(msg1){
     io.emit('data1', msg1);
+    //console.log(msg1);
   });
   // balls creating socket
   socket.on('data2', function(msg2){
     io.emit('data2', msg2);
+    //console.log(msg2);
   });
 });
 

@@ -95,7 +95,7 @@ setInterval(function(){
   "posA":round(myGamePiece.angle, 3),"name":myGamePiece.name,"hp":myGamePiece.hp};
   socket.emit('data1', data);
 
-}, 100);
+}, 200);
 }
 
 // running functions to collect data
@@ -160,9 +160,6 @@ function updateGameArea() {
         for(var x=0; x<balls.length; x++){
           if(Math.abs(balls[x].x-otherShips[z].x)<20 && Math.abs(balls[x].y-otherShips[z].y)<20 && balls[x].active){
             balls.splice(x,1);
-            if(otherShips[z].hp==20){
-              otherShips.splice(z,1);
-            }
           }
         }
       }
@@ -209,7 +206,7 @@ function myShip( x, y, name) {
         // shooting and sending data
         if(myGameArea.keys && myGameArea.keys[32]&&this.timerS==0){
           this.shot={"posX":round(this.x, 0),"posY":round(this.y, 0),
-          "posA":round(this.angle+( (Math.round(Math.random() * (20)) - 10) * Math.PI / 180), 5)};
+          "posA":round(this.angle+( (Math.round(Math.random() * (20)) - 10) * Math.PI / 180), 4)};
           socket.emit('data2', this.shot);
           this.timerS=30;
         }
