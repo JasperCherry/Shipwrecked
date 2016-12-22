@@ -27,6 +27,8 @@ body {
 //var person = prompt("Please enter your name");
 var person = "ship";
 
+var numberOfPlayers=4;
+
 var socket = io();
 
 var tempId=100;
@@ -172,19 +174,19 @@ setInterval(function(){
 
   // receiving balls
   if(receivedBall1!=null){
-    balls.push(new ball(receivedBall1.x, receivedBall1.y, receivedBall1.a));
+    balls.push(new ball(receivedBall1.x, receivedBall1.y, receivedBall1.a, 1));
     receivedBall1=null;
   }
   if(receivedBall2!=null){
-    balls.push(new ball(receivedBall2.x, receivedBall2.y, receivedBall2.a));
+    balls.push(new ball(receivedBall2.x, receivedBall2.y, receivedBall2.a, 2));
     receivedBall2=null;
   }
   if(receivedBall3!=null){
-    balls.push(new ball(receivedBall3.x, receivedBall3.y, receivedBall3.a));
+    balls.push(new ball(receivedBall3.x, receivedBall3.y, receivedBall3.a, 3));
     receivedBall3=null;
   }
   if(receivedBall4!=null){
-    balls.push(new ball(receivedBall4.x, receivedBall4.y, receivedBall4.a));
+    balls.push(new ball(receivedBall4.x, receivedBall4.y, receivedBall4.a, 4));
     receivedBall4=null;
   }
 
@@ -254,12 +256,12 @@ function updateGameArea() {
       }, (Math.floor(Math.random() * 1000)+1000));
     }else{
     // adjusting id to ship, 4 ships allowed
-    if(myGamePiece.id>4){
+    if(myGamePiece.id>numberOfPlayers){
 
       // if there are other ships in the game set tempId different then the ones present
       if(otherShips.length>0){
         var proposition=1;
-        for(var g=0; g<4; g++){
+        for(var g=0; g<numberOfPlayers; g++){
           var ifProp=true;
           for(var z=0; z<otherShips.length; z++){
             if(otherShips[z].id==proposition){
@@ -276,6 +278,8 @@ function updateGameArea() {
             break;
           }
         }
+        // id=100 means player is connecting
+        // id=200 means player is waiting for its place in the game
         if(myGamePiece.id==100){
           myGamePiece.id=200;
         }
@@ -333,8 +337,8 @@ function updateGameArea() {
     // checking if player was hit
     if(balls.length>0&&myGamePiece.inGame){
       for(var x=0; x<balls.length; x++){
-          if(Math.abs(balls[x].x-myGamePiece.x)<20 && Math.abs(balls[x].y-myGamePiece.y)<20 && balls[x].active){
-            myGamePiece.hp-=10;
+          if(Math.abs(balls[x].x-myGamePiece.x)<20 && Math.abs(balls[x].y-myGamePiece.y)<20&&balls[x].id!=myGamePiece.id){
+            myGamePiece.hp-=5;
             balls.splice(x,1);
           }
       }
@@ -344,7 +348,7 @@ function updateGameArea() {
     if(balls.length>0&&otherShips.length>0){
       for(var z=0; z<otherShips.length; z++){
         for(var x=0; x<balls.length; x++){
-          if(Math.abs(balls[x].x-otherShips[z].x)<20 && Math.abs(balls[x].y-otherShips[z].y)<20 && balls[x].active){
+          if(Math.abs(balls[x].x-otherShips[z].x)<20 && Math.abs(balls[x].y-otherShips[z].y)<20&&balls[x].id!=otherShips[z].id){
             balls.splice(x,1);
           }
         }
@@ -384,8 +388,10 @@ function myShip( x, y, name, id) {
     this.update = function() {
 
         // for 4 ships only
-        if(this.id<=4){
+        if(this.id<=numberOfPlayers){
           this.inGame=true;
+        }else{
+          this.inGame=false;
         }
 
         this.speed = 0;
@@ -440,16 +446,16 @@ function myShip( x, y, name, id) {
         // moving as spectator
         if(this.id==200){
           if(myGameArea.keys && myGameArea.keys[40]){
-            this.y++;
+            this.y+=3;
           }
           if(myGameArea.keys && myGameArea.keys[38]){
-            this.y--;
+            this.y-=3;
           }
           if(myGameArea.keys && myGameArea.keys[37] ){
-            this.x--;
+            this.x-=3;
           }
           if(myGameArea.keys && myGameArea.keys[39] ){
-            this.x++;
+            this.x+=3;
           }
         }
 
@@ -486,7 +492,8 @@ function myShip( x, y, name, id) {
         ctx.font = "bold 20px Courier New";
         ctx.fillStyle = "white";
         ctx.fillText("HP:"+this.hp,window.innerWidth/2-30,window.innerHeight/2-50);
-        ctx.fillText(this.id,window.innerWidth/2-30,window.innerHeight/2-80);
+        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-80);
+        ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-110);
 
         }
 
@@ -592,7 +599,8 @@ function otherShip( x, y, a, id, name, hp) {
       ctx.font = "bold 20px Courier New";
       ctx.fillStyle = "white";
       ctx.fillText("HP:"+this.hp,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-50);
-      ctx.fillText(this.id,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
+      ctx.fillText(this.name,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
+      ctx.fillText("ID:"+this.id,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-110);
 
       this.timer--;
 
@@ -604,15 +612,14 @@ function otherShip( x, y, a, id, name, hp) {
 
 
 
-function ball( x, y, a) {
+function ball( x, y, a, id) {
 
+    this.id=id;
     this.speed = 5;
     this.angle = a;
-    this.timer=70;
+    this.timer=80
     this.x = x;
     this.y = y;
-
-    this.active=false;
 
 
     this.show = function() {
@@ -628,13 +635,8 @@ function ball( x, y, a) {
       ctx.translate(0, 0);
 
       ctx.fillStyle = "black";
-      // make ball active to hurt other units
-      if(this.timer<60){
-        this.active=true;
-        //ctx.fillStyle = "red";
-      }
 
-      ctx.arc(0, 0, 4, 0, 2*Math.PI);
+      ctx.arc(0, 0, 3, 0, 2*Math.PI);
       ctx.closePath();
       ctx.fill();
       ctx.restore();
