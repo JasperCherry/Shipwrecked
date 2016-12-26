@@ -11,13 +11,40 @@ app.get('/', function(req, res){
 });
 
 
+var ship1a=false;
+var ship1b=false;
+
+var ship2a=false;
+var ship2b=false;
+
+var ship3a=false;
+var ship3b=false;
+
+var ship4a=false;
+var ship4b=false;
+
+checkFreeId();
+
 io.on('connection', function(socket){
   // ships sockets and their balls
+
+  // setting id
+  socket.on('setId', function(msg1){
+    // assign free id or 200 to play as spectator
+    msg1.status=checkId();
+    // emit new id
+    setTimeout(function () {
+      io.emit('setId', msg1);
+    }, 0)
+    //console.log(msg1);
+  });
 
   // ship1
   socket.on('id1', function(ship1){
     setTimeout(function () {
       io.emit('id1', ship1);
+      ship1a=true;
+      ship1b=true;
     }, 0)
     //console.log(ship1);
   });
@@ -32,6 +59,8 @@ io.on('connection', function(socket){
   socket.on('id2', function(ship2){
     setTimeout(function () {
       io.emit('id2', ship2);
+      ship2a=true;
+      ship2b=true;
     }, 0)
     //console.log(ship2);
   });
@@ -46,6 +75,8 @@ io.on('connection', function(socket){
   socket.on('id3', function(ship3){
     setTimeout(function () {
       io.emit('id3', ship3);
+      ship3a=true;
+      ship3b=true;
     }, 0)
     //console.log(ship3);
   });
@@ -60,6 +91,8 @@ io.on('connection', function(socket){
   socket.on('id4', function(ship4){
     setTimeout(function () {
       io.emit('id4', ship4);
+      ship4a=true;
+      ship4b=true;
     }, 0)
     //console.log(ship4);
   });
@@ -71,7 +104,6 @@ io.on('connection', function(socket){
   });
 
 
-
 });
 
 
@@ -79,3 +111,78 @@ io.on('connection', function(socket){
 http.listen(port, function(){
   console.log('listening on *:'+port);
 });
+
+
+// function that checks if id is taken:
+function checkId() {
+  if(!ship1a&&!ship1b){
+    return 1;
+  }
+  if(!ship2a&&!ship2b){
+    return 2;
+  }
+  if(!ship3a&&!ship3b){
+    return 3;
+  }
+  if(!ship4a&&!ship4b){
+    return 4;
+  }
+  return 200;
+}
+
+
+function checkFreeId() {
+setInterval(function(){
+/*
+  console.log(ship1a);
+  console.log(ship1b);
+  console.log(ship2a);
+  console.log(ship2b);
+  console.log(ship3a);
+  console.log(ship3b);
+  console.log(ship4a);
+  console.log(ship4b);
+  console.log("");
+*/
+  // checking ship1
+  if(ship1b==true&&ship1a==false){
+    ship1b=false;
+  }
+  if(ship1a==true){
+    ship1a=false;
+  }
+
+  // checking ship2
+  if(ship2b==true&&ship2a==false){
+    ship2b=false;
+  }
+  if(ship2a==true){
+    ship2a=false;
+  }
+
+  // checking ship3
+  if(ship3b==true&&ship3a==false){
+    ship3b=false;
+  }
+  if(ship3a==true){
+    ship3a=false;
+  }
+
+  // checking ship4
+  if(ship4b==true&&ship4a==false){
+    ship4b=false;
+  }
+  if(ship4a==true){
+    ship4a=false;
+  }
+
+}, 2000);
+}
+
+
+
+
+
+
+
+// end

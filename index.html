@@ -39,7 +39,6 @@ person, tempId);
 var otherShips=new Array();
 var balls=new Array();
 
-var firstConnection=true;
 
 // ships data
 var receivedShip1;
@@ -53,7 +52,33 @@ var receivedBall2;
 var receivedBall3;
 var receivedBall4;
 
+// fist id variable to recognise user that asks server for id
+var firstId=Math.floor(Math.random()*1000000);
+
 // node js connection to data from server
+// setting id
+socket.on('setId', function(msg1){
+  if(msg1.firstId==firstId){
+    if(msg1.status!=tempId){
+      tempId=msg1.status;
+      myGamePiece=new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025),
+      person, tempId);
+    }
+  }
+});
+
+// asking for id interval function
+function askId() {
+setInterval(function(){
+    if(myGamePiece.id==100||myGamePiece.id==200){
+      var msg1={"firstId":firstId,"status":tempId};
+      socket.emit('setId', msg1);
+    }
+}, 2000);
+}
+
+askId();
+
 // ships sockets
 socket.on('id1', function(ship1){
   receivedShip1=ship1;
@@ -67,8 +92,6 @@ socket.on('id3', function(ship3){
 socket.on('id4', function(ship4){
   receivedShip4=ship4;
 });
-
-
 
 // creating balls
 // ship1
@@ -96,9 +119,8 @@ function round(n, k){
 }
 
 
-
 // interval for data receiving
-function dataS1() {
+function dataR1() {
 setInterval(function(){
 
   // receiving positions
@@ -194,9 +216,8 @@ setInterval(function(){
 }
 
 // interval for data sending
-function dataR1() {
+function dataS1() {
 setInterval(function(){
-
 
   // sending your position
   if(myGamePiece.id==1){
@@ -225,14 +246,11 @@ setInterval(function(){
 }, 100);
 }
 
-// running functions to collect data
-for(var l=0; l<1; l++){
-  dataS1();
-}
-
 // running functions to send data
-dataR1();
+dataS1();
 
+// running function to collect data
+dataR1();
 
 
 ///////////////////////////////////// MAIN CANVAS INTERVAL FUNCTION
@@ -244,66 +262,6 @@ function updateGameArea() {
 
     var ctx = myGameArea.context;
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y);
-
-
-
-
-    // connecting player and setting id
-    if(firstConnection){
-    // give time to gather data about existing players, delay time 1-2 seconds random
-      setTimeout(function(){
-         firstConnection=false;
-      }, (Math.floor(Math.random() * 1000)+1000));
-    }else{
-    // adjusting id to ship, 4 ships allowed
-    if(myGamePiece.id>numberOfPlayers){
-
-      // if there are other ships in the game set tempId different then the ones present
-      if(otherShips.length>0){
-        var proposition=1;
-        for(var g=0; g<numberOfPlayers; g++){
-          var ifProp=true;
-          for(var z=0; z<otherShips.length; z++){
-            if(otherShips[z].id==proposition){
-              ifProp=false;
-            }
-          }
-          if(ifProp==false){
-            proposition++;
-          }else{
-            myGamePiece=new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025),
-            person, tempId);
-            myGamePiece.id=proposition;
-            tempId=proposition;
-            break;
-          }
-        }
-        // id=100 means player is connecting
-        // id=200 means player is waiting for its place in the game
-        if(myGamePiece.id==100){
-          myGamePiece.id=200;
-        }
-      // if player is the only ship in the game, give id=1
-      }else{
-        myGamePiece=new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025),
-        person, tempId);
-        myGamePiece.id=1;
-        tempId=1;
-      }
-     }
-    }
-    // if player has the same if like other ship, give some time by changing
-    // firstConnection variable
-    if(otherShips.length>0){
-      for(var z=0; z<otherShips.length; z++){
-        if(otherShips[z].id==myGamePiece.id){
-          firstConnection=true;
-        }
-      }
-    }
-
-
-
 
     // user ship update
     myGamePiece.update();
