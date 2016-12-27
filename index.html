@@ -75,7 +75,7 @@ setInterval(function(){
       var msg1={"firstId":firstId,"status":tempId};
       socket.emit('setId', msg1);
     }
-}, 20); // FIX to 2000
+}, 1000);
 }
 
 askId();
@@ -366,33 +366,32 @@ function myShip( x, y, name, id) {
         // shooting both sides
         if(myGameArea.keys && myGameArea.keys[79] && this.timerS==0){
 
-
-
           if(this.shootBoth && this.rightAmmo>0){
             this.shootBoth=false;
             this.rightAmmo--;
             var shootingHole=Math.floor(Math.random()*5);
             if(shootingHole==0){
-              this.shot={"x":round(this.x, 0)+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)),
-              "y":round(this.y, 0)-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)),
-              "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  + 90) * Math.PI / 180), 4)};
+              this.shot={"x":round(this.x+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+              "y":round(this.y-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
             }else if(shootingHole==1){
-              this.shot={"x":round(this.x, 0)+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)),
-              "y":round(this.y, 0)-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)),
-              "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  + 90) * Math.PI / 180), 4)};
+              this.shot={"x":round(this.x+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+              "y":round(this.y-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
             }else if(shootingHole==2){
-              this.shot={"x":round(this.x, 0)+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)),
-              "y":round(this.y, 0)-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)),
-              "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  + 90) * Math.PI / 180), 4)};
+              this.shot={"x":round(this.x+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+              "y":round(this.y-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
             }else if(shootingHole==3){
-              this.shot={"x":round(this.x, 0)+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)),
-              "y":round(this.y, 0)-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)),
-              "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  + 90) * Math.PI / 180), 4)};
+              this.shot={"x":round(this.x+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+              "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
             }else if(shootingHole==4){
-              this.shot={"x":round(this.x, 0)+(-20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)),
-              "y":round(this.y, 0)-(-20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)),
-              "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  + 90) * Math.PI / 180), 4)};
+              this.shot={"x":round(this.x+(-20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+              "y":round(this.y-(-20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
             }
+
             this.timerS=10;
 
             if(this.id==1){
@@ -413,26 +412,27 @@ function myShip( x, y, name, id) {
             this.leftAmmo--;
             var shootingHole=Math.floor(Math.random()*5);
             if(shootingHole==0){
-              this.shot={"x":round(this.x, 0)+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)),
-              "y":round(this.y, 0)-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)),
-              "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  - 90) * Math.PI / 180), 4)};
+              this.shot={"x":round(this.x+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+              "y":round(this.y-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
             }else if(shootingHole==1){
-              this.shot={"x":round(this.x, 0)+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)),
-              "y":round(this.y, 0)-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)),
-              "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  - 90) * Math.PI / 180), 4)};
+              this.shot={"x":round(this.x+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+              "y":round(this.y-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
             }else if(shootingHole==2){
-              this.shot={"x":round(this.x, 0)+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)),
-              "y":round(this.y, 0)-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)),
-              "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  - 90) * Math.PI / 180), 4)};
+              this.shot={"x":round(this.x+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+              "y":round(this.y-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
             }else if(shootingHole==3){
-              this.shot={"x":round(this.x, 0)+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)),
-              "y":round(this.y, 0)-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)),
-              "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  - 90) * Math.PI / 180), 4)};
+              this.shot={"x":round(this.x+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+              "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
             }else if(shootingHole==4){
-              this.shot={"x":round(this.x, 0)+(-20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)),
-              "y":round(this.y, 0)-(-20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)),
-              "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  - 90) * Math.PI / 180), 4)};
+              this.shot={"x":round(this.x+(-20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+              "y":round(this.y-(-20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
             }
+
             this.timerS=10;
 
             if(this.id==1){
@@ -450,8 +450,6 @@ function myShip( x, y, name, id) {
 
           }
 
-
-
         }
 
         // shooting right side
@@ -459,25 +457,25 @@ function myShip( x, y, name, id) {
           this.rightAmmo--;
           var shootingHole=Math.floor(Math.random()*5);
           if(shootingHole==0){
-            this.shot={"x":round(this.x, 0)+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)),
-            "y":round(this.y, 0)-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)),
-            "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  + 90) * Math.PI / 180), 4)};
+            this.shot={"x":round(this.x+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+            "y":round(this.y-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
           }else if(shootingHole==1){
-            this.shot={"x":round(this.x, 0)+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)),
-            "y":round(this.y, 0)-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)),
-            "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  + 90) * Math.PI / 180), 4)};
+            this.shot={"x":round(this.x+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+            "y":round(this.y-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
           }else if(shootingHole==2){
-            this.shot={"x":round(this.x, 0)+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)),
-            "y":round(this.y, 0)-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)),
-            "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  + 90) * Math.PI / 180), 4)};
+            this.shot={"x":round(this.x+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+            "y":round(this.y-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
           }else if(shootingHole==3){
-            this.shot={"x":round(this.x, 0)+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)),
-            "y":round(this.y, 0)-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)),
-            "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  + 90) * Math.PI / 180), 4)};
+            this.shot={"x":round(this.x+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+            "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
           }else if(shootingHole==4){
-            this.shot={"x":round(this.x, 0)+(-20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)),
-            "y":round(this.y, 0)-(-20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)),
-            "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  + 90) * Math.PI / 180), 4)};
+            this.shot={"x":round(this.x+(-20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+            "y":round(this.y-(-20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
           }
 
           this.timerS=10;
@@ -501,25 +499,25 @@ function myShip( x, y, name, id) {
           this.leftAmmo--;
           var shootingHole=Math.floor(Math.random()*5);
           if(shootingHole==0){
-            this.shot={"x":round(this.x, 0)+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)),
-            "y":round(this.y, 0)-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)),
-            "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  - 90) * Math.PI / 180), 4)};
+            this.shot={"x":round(this.x+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+            "y":round(this.y-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
           }else if(shootingHole==1){
-            this.shot={"x":round(this.x, 0)+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)),
-            "y":round(this.y, 0)-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)),
-            "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  - 90) * Math.PI / 180), 4)};
+            this.shot={"x":round(this.x+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+            "y":round(this.y-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
           }else if(shootingHole==2){
-            this.shot={"x":round(this.x, 0)+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)),
-            "y":round(this.y, 0)-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)),
-            "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  - 90) * Math.PI / 180), 4)};
+            this.shot={"x":round(this.x+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+            "y":round(this.y-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
           }else if(shootingHole==3){
-            this.shot={"x":round(this.x, 0)+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)),
-            "y":round(this.y, 0)-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)),
-            "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  - 90) * Math.PI / 180), 4)};
+            this.shot={"x":round(this.x+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+            "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
           }else if(shootingHole==4){
-            this.shot={"x":round(this.x, 0)+(-20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)),
-            "y":round(this.y, 0)-(-20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)),
-            "a":round(this.angle+( (Math.round(Math.random() * (10)) - 5  - 90) * Math.PI / 180), 4)};
+            this.shot={"x":round(this.x+(-20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+            "y":round(this.y-(-20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
           }
 
           this.timerS=10;
@@ -626,21 +624,37 @@ function myShip( x, y, name, id) {
         //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
         ctx.restore();
 
-        ctx.font = "bold 20px Courier New";
+        ctx.font = "bold 18px Courier New";
         ctx.fillStyle = "white";
-        ctx.fillText("HP:"+this.hp,window.innerWidth/2-30,window.innerHeight/2-60);
-        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-90);
-        ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-120);
+        ctx.fillText("HP:"+this.hp,window.innerWidth/2-30,window.innerHeight/2-90);
+        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-120);
+        ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-150);
         ctx.font = "bold 15px Courier New";
-        ctx.fillText("L:"+this.leftAmmo,window.innerWidth/2-90,window.innerHeight/2+30);
-        ctx.fillText("R:"+this.rightAmmo,window.innerWidth/2+55,window.innerHeight/2+30);
+
+        ctx.save();
+        ctx.translate(window.innerWidth/2,window.innerHeight/2);
+        ctx.rotate(this.angle);
+
+        ctx.save();
+        ctx.translate(-60,0);
+        ctx.rotate(-this.angle);
+        ctx.fillText(this.leftAmmo,0,0);
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(60,0);
+        ctx.rotate(-this.angle);
+        ctx.fillText(this.rightAmmo,0,0);
+        ctx.restore();
+
+        ctx.restore();
 
         // instructions
         if(insTime>0){
           insTime--;
           ctx.font = "bold 20px Courier New";
           ctx.fillStyle = "red";
-          ctx.fillText("Moving : WAD, SHOOT: IOP",window.innerWidth/2-130,window.innerHeight-260);
+          ctx.fillText("MOVE : WAD  SHOOT: IOP",window.innerWidth/2-130,window.innerHeight-260);
         }
 
         }
@@ -745,7 +759,7 @@ function otherShip( x, y, a, id, name, hp) {
       //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
       ctx.restore();
 
-      ctx.font = "bold 20px Courier New";
+      ctx.font = "bold 18px Courier New";
       ctx.fillStyle = "white";
       ctx.fillText("HP:"+this.hp,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-50);
       ctx.fillText(this.name,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
