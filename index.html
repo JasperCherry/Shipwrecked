@@ -18,6 +18,9 @@ body {
 <body onload="startGame()">
 
 <img src="pic/pirate.png" id="pirate" style="display: none;">
+<img src="pic/ship1.png" id="ship1" style="display: none;">
+<img src="pic/ship2.png" id="ship2" style="display: none;">
+
 <img src="pic/water.jpg" id="water" style="display: none;">
 <img src="pic/water2.jpg" id="water2" style="display: none;">
 
@@ -75,7 +78,7 @@ setInterval(function(){
       var msg1={"firstId":firstId,"status":tempId};
       socket.emit('setId', msg1);
     }
-}, 1000);
+}, 10); // to fix
 }
 
 askId();
@@ -289,7 +292,18 @@ function updateGameArea() {
       }
     }
 
+
+
     // checking if player was hit
+    /*
+    ctx = myGameArea.context;
+    ctx.save();
+    ctx.fillStyle = "red";
+    ctx.translate(window.innerWidth/2, window.innerHeight/2);
+    ctx.fillRect(-10, -10, 20, 20);
+    ctx.restore();
+    */
+
     if(balls.length>0&&myGamePiece.inGame){
       for(var x=0; x<balls.length; x++){
           if(Math.abs(balls[x].x-myGamePiece.x)<20 && Math.abs(balls[x].y-myGamePiece.y)<20&&balls[x].id!=myGamePiece.id){
@@ -345,6 +359,8 @@ function myShip( x, y, name, id) {
     this.rightAmmo=10;
     this.leftLoad=100;
     this.rightLoad=100;
+
+    this.scale=0.3;
 
 
     this.update = function() {
@@ -619,7 +635,13 @@ function myShip( x, y, name, id) {
         ctx.save();
         ctx.translate(window.innerWidth/2, window.innerHeight/2);
         ctx.rotate(this.angle);
-        ctx.drawImage(pirate, -50, -50);
+        if(this.speed!=0){
+          ctx.drawImage(ship2, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        }else{
+          ctx.drawImage(ship1, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        }
+
+
         //ctx.fillStyle = "red";
         //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
         ctx.restore();
@@ -654,7 +676,7 @@ function myShip( x, y, name, id) {
           insTime--;
           ctx.font = "bold 20px Courier New";
           ctx.fillStyle = "red";
-          ctx.fillText("MOVE : WAD  SHOOT: IOP",window.innerWidth/2-130,window.innerHeight-260);
+          ctx.fillText("MOVE : WAD  SHOOT: IOP",window.innerWidth/2-130,window.innerHeight-200);
         }
 
         }
@@ -685,7 +707,6 @@ function otherShip( x, y, a, id, name, hp) {
     this.name=name;
     this.hp=hp;
 
-    this.speed = 0;
     this.angle = a;
     this.moveAngle = 0;
 
@@ -694,6 +715,14 @@ function otherShip( x, y, a, id, name, hp) {
     this.targetX=x;
     this.targetY=y;
 
+    this.prevX=x;
+    this.prevY=y;
+    this.prevX2=x;
+    this.prevY2=y;
+    this.moveTimer=0;
+    this.onMove=false;
+
+    this.scale=0.3;
 
     // time before object will be removed
     this.timer=150;
@@ -723,6 +752,17 @@ function otherShip( x, y, a, id, name, hp) {
 
     this.show = function() {
 
+      // way of detecting move
+      if(this.moveTimer<10){
+        this.moveTimer++;
+      }else{
+        this.moveTimer=0;
+        this.prevX2=this.prevX;
+        this.prevY2=this.prevY;
+      }
+      this.prevX=this.x;
+      this.prevY=this.y;
+
       if(this.targetX>this.x){
         this.x+=1;
       }
@@ -736,6 +776,12 @@ function otherShip( x, y, a, id, name, hp) {
         this.y-=1;
       }
 
+      // checking if ship is on move
+      if(this.x!=this.prevX2||this.y!=this.prevY2){
+        this.onMove=true;
+      }else{
+        this.onMove=false;
+      }
 
       if(this.targetA>this.angle){
         this.moveAngle=1;
@@ -754,7 +800,11 @@ function otherShip( x, y, a, id, name, hp) {
       ctx.save();
       ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
       ctx.rotate(this.angle);
-      ctx.drawImage(pirate, -50, -50);
+      if(this.onMove){
+        ctx.drawImage(ship2, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else{
+        ctx.drawImage(ship1, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }
       //ctx.fillStyle = "blue";
       //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
       ctx.restore();
