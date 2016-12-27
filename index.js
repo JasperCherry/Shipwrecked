@@ -127,7 +127,7 @@ function checkId() {
   if(!ship4a&&!ship4b){
     return 4;
   }
-  return 200;
+  return 100;
 }
 
 
