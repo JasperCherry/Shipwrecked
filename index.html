@@ -19,7 +19,6 @@ body {
 
 <img src="pic/ships/pirate.png" id="pirate" style="display: none;">
 <img src="pic/ships/ship1.png" id="ship1" style="display: none;">
-<img src="pic/ships/ship2.png" id="ship2" style="display: none;">
 
 <img src="pic/texture/water.jpg" id="water" style="display: none;">
 <img src="pic/texture/water2.jpg" id="water2" style="display: none;">
@@ -106,6 +105,7 @@ person, tempId);
 var otherShips=new Array();
 var balls=new Array();
 var exps=new Array();
+var hits=new Array();
 
 // ships data
 var receivedShip1;
@@ -333,6 +333,22 @@ function updateGameArea() {
     var ctx = myGameArea.context;
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y);
 
+    // showing hits
+    if(hits.length>0){
+      for(var i = 0; i < hits.length; i++) {
+        hits[i].update();
+      }
+    }
+
+    // deleting hits
+    if(hits.length>0){
+      for(var i = 0; i < hits.length; i++) {
+        if(hits[i].time==0){
+          hits.splice(i,1);
+        }
+      }
+    }
+
     // showing other ships
     if(otherShips.length>0){
       for(var x=0; x<otherShips.length; x++){
@@ -343,7 +359,7 @@ function updateGameArea() {
       }
     }
 
-    // user ship update
+    // showing user ship
     myGamePiece.update();
 
     // showing balls
@@ -379,39 +395,47 @@ function updateGameArea() {
 
 
     // checking if player was hit
-    /*
+/*
     ctx = myGameArea.context;
     ctx.fillStyle = "red";
 
     ctx.fillRect(-15+window.innerWidth/2, -15+window.innerHeight/2, 30, 30);
 
     ctx.fillRect(-15 + window.innerWidth/2+round((-30 * Math.sin(myGamePiece.angle)), 0),
-      -15 + window.innerHeight/2+round((+30 * Math.cos(myGamePiece.angle)), 0),30,30);
+      -15 + window.innerHeight/2+round((30 * Math.cos(myGamePiece.angle)), 0),30,30);
 
     ctx.fillRect(-15 + window.innerWidth/2+round((30 * Math.sin(myGamePiece.angle)), 0),
       -15 + window.innerHeight/2+round((-30 * Math.cos(myGamePiece.angle)), 0),30,30);
-    */
+*/
 
     // checking 3 squares
     if(balls.length>0&&myGamePiece.inGame){
       for(var x=0; x<balls.length; x++){
           if(Math.abs(balls[x].x-myGamePiece.x)<15 && Math.abs(balls[x].y-myGamePiece.y)<15
           &&balls[x].id!=myGamePiece.id){
-            myGamePiece.hp-=5;
+            myGamePiece.hp-=1;
+            for(var q=0; q<5; q++){
+              hits.push(new Piece(balls[x].x,balls[x].y));
+            }
             balls.splice(x,1);
           }
-
           if(Math.abs(balls[x].x-(myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0)))<15
            && Math.abs(balls[x].y-(myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0)))<15
           &&balls[x].id!=myGamePiece.id){
-            myGamePiece.hp-=5;
+            myGamePiece.hp-=1;
+            for(var q=0; q<5; q++){
+              hits.push(new Piece(balls[x].x,balls[x].y));
+            }
             balls.splice(x,1);
           }
 
           if(Math.abs(balls[x].x-(myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0)))<15
            && Math.abs(balls[x].y-(myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0)))<15
           &&balls[x].id!=myGamePiece.id){
-            myGamePiece.hp-=5;
+            myGamePiece.hp-=1;
+            for(var q=0; q<5; q++){
+              hits.push(new Piece(balls[x].x,balls[x].y));
+            }
             balls.splice(x,1);
           }
       }
@@ -422,22 +446,93 @@ function updateGameArea() {
     if(balls.length>0&&otherShips.length>0){
       for(var z=0; z<otherShips.length; z++){
         for(var x=0; x<balls.length; x++){
-          if(Math.abs(balls[x].x-(otherShips[z].x))<20
-          && Math.abs(balls[x].y-(otherShips[z].y))<20
+          if(Math.abs(balls[x].x-(otherShips[z].x))<15
+          && Math.abs(balls[x].y-(otherShips[z].y))<15
           &&balls[x].id!=otherShips[z].id){
+            for(var q=0; q<5; q++){
+              hits.push(new Piece(balls[x].x,balls[x].y));
+            }
             balls.splice(x,1);
           }
-          if(Math.abs(balls[x].x-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs(balls[x].y-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
+          if(Math.abs(balls[x].x-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
+          && Math.abs(balls[x].y-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
           &&balls[x].id!=otherShips[z].id){
+            for(var q=0; q<5; q++){
+              hits.push(new Piece(balls[x].x,balls[x].y));
+            }
             balls.splice(x,1);
           }
-          if(Math.abs(balls[x].x-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs(balls[x].y-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
+          if(Math.abs(balls[x].x-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
+          && Math.abs(balls[x].y-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
           &&balls[x].id!=otherShips[z].id){
+            for(var q=0; q<5; q++){
+              hits.push(new Piece(balls[x].x,balls[x].y));
+            }
             balls.splice(x,1);
           }
         }
+      }
+    }
+
+    // ships collision detection
+    if(otherShips.length>0){
+      for(var z=0; z<otherShips.length; z++){
+
+          // first square
+          if(Math.abs(myGamePiece.x-(otherShips[z].x))<20
+          && Math.abs(myGamePiece.y-(otherShips[z].y))<20
+          ){
+            myGamePiece.hp--;
+          }
+          if(Math.abs(myGamePiece.x-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
+          && Math.abs(myGamePiece.y-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
+          ){
+            myGamePiece.hp--;
+          }
+          if(Math.abs(myGamePiece.x-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
+          && Math.abs(myGamePiece.y-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
+          ){
+            myGamePiece.hp--;
+          }
+
+          // second square
+          if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<20
+          && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<20
+          ){
+            myGamePiece.hp--;
+          }
+          if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))
+          -(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
+          && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))
+          -(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
+          ){
+            myGamePiece.hp--;
+          }
+          if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))
+          -(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
+          && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))
+          -(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
+          ){
+            myGamePiece.hp--;
+          }
+
+          // third square
+          if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<20
+          && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<20
+          ){
+            myGamePiece.hp--;
+          }
+          if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
+          && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
+          ){
+            myGamePiece.hp--;
+          }
+          if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
+          && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
+          ){
+            myGamePiece.hp--;
+          }
+
       }
     }
 
@@ -485,12 +580,11 @@ function myShip( x, y, name, id) {
 
     // shooting
     this.timerS=0;
-    this.timerSB=0;
     this.shot;
     this.shootBoth=false;
 
-    this.leftAmmo=10;
-    this.rightAmmo=10;
+    this.leftAmmo=20;
+    this.rightAmmo=20;
     this.leftLoad=100;
     this.rightLoad=100;
 
@@ -514,7 +608,7 @@ function myShip( x, y, name, id) {
         // if in game
 
         // shooting both sides
-        if(myGameArea.keys && myGameArea.keys[79] && this.timerSB==0){
+        if(myGameArea.keys && myGameArea.keys[79] && this.timerS==0){
 
           if(this.shootBoth && this.rightAmmo>0){
             this.shootBoth=false;
@@ -542,8 +636,7 @@ function myShip( x, y, name, id) {
               "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
             }
 
-            this.timerS=6;
-            this.timerSB=3;
+            this.timerS=10;
 
             if(this.id==1){
               socket.emit('data1', this.shot);
@@ -584,8 +677,7 @@ function myShip( x, y, name, id) {
               "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
             }
 
-            this.timerS=6;
-            this.timerSB=3;
+            this.timerS=10;
 
             if(this.id==1){
               socket.emit('data1', this.shot);
@@ -630,7 +722,7 @@ function myShip( x, y, name, id) {
             "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
           }
 
-          this.timerS=6;
+          this.timerS=10;
 
           if(this.id==1){
             socket.emit('data1', this.shot);
@@ -672,7 +764,7 @@ function myShip( x, y, name, id) {
             "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
           }
 
-          this.timerS=6;
+          this.timerS=10;
 
           if(this.id==1){
             socket.emit('data1', this.shot);
@@ -689,7 +781,7 @@ function myShip( x, y, name, id) {
         }
 
         // loading guns
-        if(this.leftAmmo<10){
+        if(this.leftAmmo<20){
           this.leftLoad--;
           if(this.leftLoad==0){
             this.leftAmmo++;
@@ -697,7 +789,7 @@ function myShip( x, y, name, id) {
           }
         }
 
-        if(this.rightAmmo<10){
+        if(this.rightAmmo<20){
           this.rightLoad--;
           if(this.rightLoad==0){
             this.rightAmmo++;
@@ -709,9 +801,6 @@ function myShip( x, y, name, id) {
 
         if(this.timerS>0){
           this.timerS--;
-        }
-        if(this.timerSB>0){
-          this.timerSB--;
         }
 
         if(this.inGame){
@@ -774,12 +863,7 @@ function myShip( x, y, name, id) {
         ctx.save();
         ctx.translate(window.innerWidth/2, window.innerHeight/2);
         ctx.rotate(this.angle);
-        if(this.speed!=0){
-          ctx.drawImage(ship2, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-        }else{
-          ctx.drawImage(ship1, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-        }
-
+        ctx.drawImage(ship1, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
 
         //ctx.fillStyle = "red";
         //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
@@ -799,13 +883,13 @@ function myShip( x, y, name, id) {
         ctx.save();
         ctx.translate(-60,0);
         ctx.rotate(-this.angle);
-        ctx.fillText(this.leftAmmo,0,0);
+        ctx.fillText("I"+this.leftAmmo,0,0);
         ctx.restore();
 
         ctx.save();
         ctx.translate(60,0);
         ctx.rotate(-this.angle);
-        ctx.fillText(this.rightAmmo,0,0);
+        ctx.fillText("P"+this.rightAmmo,0,0);
         ctx.restore();
 
         ctx.restore();
@@ -939,11 +1023,7 @@ function otherShip( x, y, a, id, name, hp) {
       ctx.save();
       ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
       ctx.rotate(this.angle);
-      if(this.onMove){
-        ctx.drawImage(ship2, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-      }else{
-        ctx.drawImage(ship1, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-      }
+      ctx.drawImage(ship1, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
       //ctx.fillStyle = "blue";
       //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
       ctx.restore();
@@ -1004,7 +1084,7 @@ function exp( x, y, a) {
     this.y = y;
     this.delayTime=0;
     this.exLoop=1;
-    this.scale=1;
+    this.scale=0.6;
 
     this.show = function() {
 
@@ -1030,7 +1110,82 @@ function exp( x, y, a) {
 }
 
 
+function Piece(x, y) {
 
+    this.x = x;
+    this.y = y;
+    this.pause = 50;
+    this.time = 110
+    this.angle = ((Math.round(Math.random() * (360)) - 0) * Math.PI / 180);
+    this.speed=(Math.random()*10)+4;
+    this.size=2;
+
+    this.r=255;
+    this.g=0;
+    this.gControl=256;
+    this.b=0;
+    this.a=1;
+    this.a2=0;
+
+    this.hide=false;
+
+        this.update = function() {
+
+          this.g=Math.floor(Math.random()*this.gControl);
+          // first ball
+          if(this.a2<0.99&&!this.hide){
+          ctx = myGameArea.context;
+          ctx.save();
+          ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
+          ctx.fillStyle = "rgba("+this.r+", "+this.g+", "+this.b+", "+this.a+")";
+          ctx.beginPath();
+          ctx.arc(0, 0, this.size, 0, 2*Math.PI);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+          }
+          // covering first ball with second ball
+          if(this.speed==0){
+            if(this.a2<1&&!this.hide){
+              this.a2+=0.05;
+            }
+            ctx = myGameArea.context;
+            ctx.save();
+            ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
+            ctx.fillStyle = "rgba(0, 0, 0, "+this.a2+")";
+            ctx.beginPath();
+            ctx.arc(0, 0, this.size, 0, 2*Math.PI);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+          }
+
+          if(this.a2>0.99&&this.pause>0){
+            this.pause--;
+          }
+
+          if(this.pause==0){
+            this.hide=true;
+            this.time--;
+            if(this.a2-0.01>0){
+              this.a2=this.a2-0.01;
+            }else{
+              this.a2=0.00;
+            }
+          }
+
+          // speed
+          if((this.speed-0.1)>0){
+            this.speed-=0.5;
+          }else{
+            this.speed=0;
+          }
+          // vector movement
+          this.x += this.speed * Math.sin(this.angle);
+          this.y -= this.speed * Math.cos(this.angle);
+        }
+
+}
 
 
 
