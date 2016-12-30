@@ -17,8 +17,11 @@ body {
 
 <body onload="startGame()">
 
-<img src="pic/ships/pirate.png" id="pirate" style="display: none;">
-<img src="pic/ships/ship1.png" id="ship1" style="display: none;">
+<img src="pic/ships/ship1a.png" id="ship1a" style="display: none;">
+<img src="pic/ships/ship1b.png" id="ship1b" style="display: none;">
+<img src="pic/ships/ship1c.png" id="ship1c" style="display: none;">
+<img src="pic/ships/ship1d.png" id="ship1d" style="display: none;">
+<img src="pic/ships/ship1e.png" id="ship1e" style="display: none;">
 
 <img src="pic/texture/water.jpg" id="water" style="display: none;">
 <img src="pic/texture/water2.jpg" id="water2" style="display: none;">
@@ -87,6 +90,60 @@ body {
 <img src="pic/exp/ex62.png" id="ex62" style="display: none;">
 <img src="pic/exp/ex63.png" id="ex63" style="display: none;">
 <img src="pic/exp/ex64.png" id="ex64" style="display: none;">
+
+<img src="pic/hit/hit1.png" id="hit1" style="display: none;">
+<img src="pic/hit/hit2.png" id="hit2" style="display: none;">
+<img src="pic/hit/hit3.png" id="hit3" style="display: none;">
+<img src="pic/hit/hit4.png" id="hit4" style="display: none;">
+<img src="pic/hit/hit5.png" id="hit5" style="display: none;">
+<img src="pic/hit/hit6.png" id="hit6" style="display: none;">
+<img src="pic/hit/hit7.png" id="hit7" style="display: none;">
+<img src="pic/hit/hit8.png" id="hit8" style="display: none;">
+<img src="pic/hit/hit9.png" id="hit9" style="display: none;">
+<img src="pic/hit/hit10.png" id="hit10" style="display: none;">
+
+<img src="pic/hit/hit11.png" id="hit11" style="display: none;">
+<img src="pic/hit/hit12.png" id="hit12" style="display: none;">
+<img src="pic/hit/hit13.png" id="hit13" style="display: none;">
+<img src="pic/hit/hit14.png" id="hit14" style="display: none;">
+<img src="pic/hit/hit15.png" id="hit15" style="display: none;">
+<img src="pic/hit/hit16.png" id="hit16" style="display: none;">
+<img src="pic/hit/hit17.png" id="hit17" style="display: none;">
+<img src="pic/hit/hit18.png" id="hit18" style="display: none;">
+<img src="pic/hit/hit19.png" id="hit19" style="display: none;">
+<img src="pic/hit/hit20.png" id="hit20" style="display: none;">
+
+<img src="pic/hit/hit21.png" id="hit21" style="display: none;">
+<img src="pic/hit/hit22.png" id="hit22" style="display: none;">
+<img src="pic/hit/hit23.png" id="hit23" style="display: none;">
+<img src="pic/hit/hit24.png" id="hit24" style="display: none;">
+<img src="pic/hit/hit25.png" id="hit25" style="display: none;">
+<img src="pic/hit/hit26.png" id="hit26" style="display: none;">
+<img src="pic/hit/hit27.png" id="hit27" style="display: none;">
+<img src="pic/hit/hit28.png" id="hit28" style="display: none;">
+<img src="pic/hit/hit29.png" id="hit29" style="display: none;">
+<img src="pic/hit/hit30.png" id="hit30" style="display: none;">
+
+<img src="pic/hit/hit31.png" id="hit31" style="display: none;">
+<img src="pic/hit/hit32.png" id="hit32" style="display: none;">
+<img src="pic/hit/hit33.png" id="hit33" style="display: none;">
+<img src="pic/hit/hit34.png" id="hit34" style="display: none;">
+<img src="pic/hit/hit35.png" id="hit35" style="display: none;">
+<img src="pic/hit/hit36.png" id="hit36" style="display: none;">
+<img src="pic/hit/hit37.png" id="hit37" style="display: none;">
+<img src="pic/hit/hit38.png" id="hit38" style="display: none;">
+<img src="pic/hit/hit39.png" id="hit39" style="display: none;">
+<img src="pic/hit/hit40.png" id="hit40" style="display: none;">
+
+<img src="pic/hit/hit41.png" id="hit41" style="display: none;">
+<img src="pic/hit/hit42.png" id="hit42" style="display: none;">
+<img src="pic/hit/hit43.png" id="hit43" style="display: none;">
+<img src="pic/hit/hit44.png" id="hit44" style="display: none;">
+<img src="pic/hit/hit45.png" id="hit45" style="display: none;">
+<img src="pic/hit/hit46.png" id="hit46" style="display: none;">
+<img src="pic/hit/hit47.png" id="hit47" style="display: none;">
+<img src="pic/hit/hit48.png" id="hit48" style="display: none;">
+
 
 <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 <script>
@@ -333,22 +390,6 @@ function updateGameArea() {
     var ctx = myGameArea.context;
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y);
 
-    // showing hits
-    if(hits.length>0){
-      for(var i = 0; i < hits.length; i++) {
-        hits[i].update();
-      }
-    }
-
-    // deleting hits
-    if(hits.length>0){
-      for(var i = 0; i < hits.length; i++) {
-        if(hits[i].time==0){
-          hits.splice(i,1);
-        }
-      }
-    }
-
     // showing other ships
     if(otherShips.length>0){
       for(var x=0; x<otherShips.length; x++){
@@ -392,6 +433,21 @@ function updateGameArea() {
       }
     }
 
+    // showing hits
+    if(hits.length>0){
+      for(var x=0; x<hits.length; x++){
+          hits[x].show();
+      }
+    }
+    // deleting hits when timer is zero
+    if(hits.length>0){
+      for(var x=0; x<hits.length; x++){
+          if(hits[x].exLoop>48){
+            hits.splice(x,1);
+          }
+      }
+    }
+
 
 
     // checking if player was hit
@@ -413,29 +469,23 @@ function updateGameArea() {
       for(var x=0; x<balls.length; x++){
           if(Math.abs(balls[x].x-myGamePiece.x)<15 && Math.abs(balls[x].y-myGamePiece.y)<15
           &&balls[x].id!=myGamePiece.id){
-            myGamePiece.hp-=1;
-            for(var q=0; q<5; q++){
-              hits.push(new Piece(balls[x].x,balls[x].y));
-            }
+            myGamePiece.hp-=3;
+            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
           }
           if(Math.abs(balls[x].x-(myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0)))<15
            && Math.abs(balls[x].y-(myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0)))<15
           &&balls[x].id!=myGamePiece.id){
-            myGamePiece.hp-=1;
-            for(var q=0; q<5; q++){
-              hits.push(new Piece(balls[x].x,balls[x].y));
-            }
+            myGamePiece.hp-=3;
+            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
           }
 
           if(Math.abs(balls[x].x-(myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0)))<15
            && Math.abs(balls[x].y-(myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0)))<15
           &&balls[x].id!=myGamePiece.id){
-            myGamePiece.hp-=1;
-            for(var q=0; q<5; q++){
-              hits.push(new Piece(balls[x].x,balls[x].y));
-            }
+            myGamePiece.hp-=3;
+            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
           }
       }
@@ -449,25 +499,19 @@ function updateGameArea() {
           if(Math.abs(balls[x].x-(otherShips[z].x))<15
           && Math.abs(balls[x].y-(otherShips[z].y))<15
           &&balls[x].id!=otherShips[z].id){
-            for(var q=0; q<5; q++){
-              hits.push(new Piece(balls[x].x,balls[x].y));
-            }
+            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
           }
           if(Math.abs(balls[x].x-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
           && Math.abs(balls[x].y-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
           &&balls[x].id!=otherShips[z].id){
-            for(var q=0; q<5; q++){
-              hits.push(new Piece(balls[x].x,balls[x].y));
-            }
+            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
           }
           if(Math.abs(balls[x].x-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
           && Math.abs(balls[x].y-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
           &&balls[x].id!=otherShips[z].id){
-            for(var q=0; q<5; q++){
-              hits.push(new Piece(balls[x].x,balls[x].y));
-            }
+            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
           }
         }
@@ -583,8 +627,8 @@ function myShip( x, y, name, id) {
     this.shot;
     this.shootBoth=false;
 
-    this.leftAmmo=20;
-    this.rightAmmo=20;
+    this.leftAmmo=10;
+    this.rightAmmo=10;
     this.leftLoad=100;
     this.rightLoad=100;
 
@@ -781,7 +825,7 @@ function myShip( x, y, name, id) {
         }
 
         // loading guns
-        if(this.leftAmmo<20){
+        if(this.leftAmmo<10){
           this.leftLoad--;
           if(this.leftLoad==0){
             this.leftAmmo++;
@@ -789,7 +833,7 @@ function myShip( x, y, name, id) {
           }
         }
 
-        if(this.rightAmmo<20){
+        if(this.rightAmmo<10){
           this.rightLoad--;
           if(this.rightLoad==0){
             this.rightAmmo++;
@@ -863,7 +907,19 @@ function myShip( x, y, name, id) {
         ctx.save();
         ctx.translate(window.innerWidth/2, window.innerHeight/2);
         ctx.rotate(this.angle);
-        ctx.drawImage(ship1, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+
+        // drawing the ship image
+        if(this.hp>80){
+          ctx.drawImage(ship1a, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        }else if(this.hp>60){
+          ctx.drawImage(ship1b, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        }else if(this.hp>40){
+          ctx.drawImage(ship1c, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        }else if(this.hp>20){
+          ctx.drawImage(ship1d, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        }else if(this.hp>0){
+          ctx.drawImage(ship1e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        }
 
         //ctx.fillStyle = "red";
         //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
@@ -1023,7 +1079,20 @@ function otherShip( x, y, a, id, name, hp) {
       ctx.save();
       ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
       ctx.rotate(this.angle);
-      ctx.drawImage(ship1, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+
+      // drawing the ship image
+      if(this.hp>80){
+        ctx.drawImage(ship1a, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.hp>60){
+        ctx.drawImage(ship1b, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.hp>40){
+        ctx.drawImage(ship1c, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.hp>20){
+        ctx.drawImage(ship1d, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.hp>0){
+        ctx.drawImage(ship1e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }
+
       //ctx.fillStyle = "blue";
       //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
       ctx.restore();
@@ -1077,6 +1146,8 @@ function ball( x, y, a, id) {
 }
 
 
+
+
 function exp( x, y, a) {
 
     this.angle = a;
@@ -1110,83 +1181,38 @@ function exp( x, y, a) {
 }
 
 
-function Piece(x, y) {
 
+function hit( x, y, a) {
+
+    this.angle = a;
     this.x = x;
     this.y = y;
-    this.pause = 50;
-    this.time = 110
-    this.angle = ((Math.round(Math.random() * (360)) - 0) * Math.PI / 180);
-    this.speed=(Math.random()*10)+4;
-    this.size=2;
+    this.delayTime=0;
+    this.exLoop=1;
+    this.scale=0.1;
 
-    this.r=255;
-    this.g=0;
-    this.gControl=256;
-    this.b=0;
-    this.a=1;
-    this.a2=0;
+    this.show = function() {
 
-    this.hide=false;
-
-        this.update = function() {
-
-          this.g=Math.floor(Math.random()*this.gControl);
-          // first ball
-          if(this.a2<0.99&&!this.hide){
-          ctx = myGameArea.context;
-          ctx.save();
-          ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
-          ctx.fillStyle = "rgba("+this.r+", "+this.g+", "+this.b+", "+this.a+")";
-          ctx.beginPath();
-          ctx.arc(0, 0, this.size, 0, 2*Math.PI);
-          ctx.closePath();
-          ctx.fill();
-          ctx.restore();
-          }
-          // covering first ball with second ball
-          if(this.speed==0){
-            if(this.a2<1&&!this.hide){
-              this.a2+=0.05;
-            }
-            ctx = myGameArea.context;
-            ctx.save();
-            ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
-            ctx.fillStyle = "rgba(0, 0, 0, "+this.a2+")";
-            ctx.beginPath();
-            ctx.arc(0, 0, this.size, 0, 2*Math.PI);
-            ctx.closePath();
-            ctx.fill();
-            ctx.restore();
-          }
-
-          if(this.a2>0.99&&this.pause>0){
-            this.pause--;
-          }
-
-          if(this.pause==0){
-            this.hide=true;
-            this.time--;
-            if(this.a2-0.01>0){
-              this.a2=this.a2-0.01;
-            }else{
-              this.a2=0.00;
-            }
-          }
-
-          // speed
-          if((this.speed-0.1)>0){
-            this.speed-=0.5;
-          }else{
-            this.speed=0;
-          }
-          // vector movement
-          this.x += this.speed * Math.sin(this.angle);
-          this.y -= this.speed * Math.cos(this.angle);
+      ctx = myGameArea.context;
+      ctx.save();
+      ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
+      ctx.rotate(this.angle);
+      this.delayTime++;
+      if(this.exLoop<49){
+        ctx.drawImage(document.getElementById("hit"+this.exLoop), -128*this.scale, -128*this.scale,
+        256*this.scale, 256*this.scale);
+        if(this.delayTime==1){
+          this.exLoop+=2;
+          this.delayTime=0;
         }
+      }
+      ctx.restore();
 
+
+      this.timer--;
+
+    }
 }
-
 
 
 
