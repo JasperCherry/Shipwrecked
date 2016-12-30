@@ -147,6 +147,8 @@ body {
 //var person = prompt("Please enter your name");
 var person = "ship";
 
+var kills=0;
+
 var numberOfPlayers=4;
 
 var socket = io();
@@ -254,7 +256,14 @@ setInterval(function(){
     var newPiece=true;
     for(var x=0; x<otherShips.length; x++){
       if(otherShips[x].id==receivedShip1.id){
-        otherShips[x].update(receivedShip1.x, receivedShip1.y, receivedShip1.a, receivedShip1.hp);
+        if(receivedShip1.hp.toString().substring(0, 1)=="D"){
+          if(receivedShip1.hp.substring(1, receivedShip1.hp.length)==myGamePiece.id){
+            kills++;
+          }
+          otherShips[x].update(receivedShip1.x, receivedShip1.y, receivedShip1.a, 0, receivedShip1.k);
+        }else{
+          otherShips[x].update(receivedShip1.x, receivedShip1.y, receivedShip1.a, receivedShip1.hp, receivedShip1.k);
+        }
         newPiece=false;
       }
     }
@@ -271,7 +280,14 @@ setInterval(function(){
     var newPiece=true;
     for(var x=0; x<otherShips.length; x++){
       if(otherShips[x].id==receivedShip2.id){
-        otherShips[x].update(receivedShip2.x, receivedShip2.y, receivedShip2.a, receivedShip2.hp);
+        if(receivedShip2.hp.toString().substring(0, 1)=="D"){
+          if(receivedShip2.hp.substring(1, receivedShip2.hp.length)==myGamePiece.id){
+            kills++;
+          }
+          otherShips[x].update(receivedShip2.x, receivedShip2.y, receivedShip2.a, 0, receivedShip2.k);
+        }else{
+          otherShips[x].update(receivedShip2.x, receivedShip2.y, receivedShip2.a, receivedShip2.hp, receivedShip2.k);
+        }
         newPiece=false;
       }
     }
@@ -288,7 +304,14 @@ setInterval(function(){
     var newPiece=true;
     for(var x=0; x<otherShips.length; x++){
       if(otherShips[x].id==receivedShip3.id){
-        otherShips[x].update(receivedShip3.x, receivedShip3.y, receivedShip3.a, receivedShip3.hp);
+        if(receivedShip3.hp.toString().substring(0, 1)=="D"){
+          if(receivedShip3.hp.substring(1, receivedShip3.hp.length)==myGamePiece.id){
+            kills++;
+          }
+          otherShips[x].update(receivedShip3.x, receivedShip3.y, receivedShip3.a, 0, receivedShip3.k);
+        }else{
+          otherShips[x].update(receivedShip3.x, receivedShip3.y, receivedShip3.a, receivedShip3.hp, receivedShip3.k);
+        }
         newPiece=false;
       }
     }
@@ -305,7 +328,14 @@ setInterval(function(){
     var newPiece=true;
     for(var x=0; x<otherShips.length; x++){
       if(otherShips[x].id==receivedShip4.id){
-        otherShips[x].update(receivedShip4.x, receivedShip4.y, receivedShip4.a, receivedShip4.hp);
+        if(receivedShip4.hp.toString().substring(0, 1)=="D"){
+          if(receivedShip4.hp.substring(1, receivedShip4.hp.length)==myGamePiece.id){
+            kills++;
+          }
+          otherShips[x].update(receivedShip4.x, receivedShip4.y, receivedShip4.a, 0, receivedShip4.k);
+        }else{
+          otherShips[x].update(receivedShip4.x, receivedShip4.y, receivedShip4.a, receivedShip4.hp, receivedShip4.k);
+        }
         newPiece=false;
       }
     }
@@ -348,24 +378,52 @@ setInterval(function(){
 
   // sending your position
   if(myGamePiece.id==1){
-    var ship1={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-    "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
-    socket.emit('id1', ship1);
+    if(myGamePiece.hp==0&&myGamePiece.lastInfo){
+      myGamePiece.lastInfo=false;
+      var ship1={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills};
+      socket.emit('id1', ship1);
+    }else{
+      var ship1={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills};
+      socket.emit('id1', ship1);
+    }
   }
   if(myGamePiece.id==2){
-    var ship2={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-    "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
-    socket.emit('id2', ship2);
+    if(myGamePiece.hp==0&&myGamePiece.lastInfo){
+      myGamePiece.lastInfo=false;
+      var ship2={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills};
+      socket.emit('id2', ship2);
+    }else{
+      var ship2={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills};
+      socket.emit('id2', ship2);
+    }
   }
   if(myGamePiece.id==3){
-    var ship3={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-    "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
-    socket.emit('id3', ship3);
+    if(myGamePiece.hp==0&&myGamePiece.lastInfo){
+      myGamePiece.lastInfo=false;
+      var ship3={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills};
+      socket.emit('id3', ship3);
+    }else{
+      var ship3={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills};
+      socket.emit('id3', ship3);
+    }
   }
   if(myGamePiece.id==4){
-    var ship4={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-    "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp};
-    socket.emit('id4', ship4);
+    if(myGamePiece.hp==0&&myGamePiece.lastInfo){
+      myGamePiece.lastInfo=false;
+      var ship4={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills};
+      socket.emit('id4', ship4);
+    }else{
+      var ship4={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills};
+      socket.emit('id4', ship4);
+    }
   }
 
 }, 100);
@@ -461,10 +519,13 @@ function updateGameArea() {
 */
 
     // checking 3 squares
-    if(balls.length>0&&myGamePiece.inGame){
+    if(balls.length>0&&myGamePiece.inGame&&myGamePiece.hp>0){
       for(var x=0; x<balls.length; x++){
           if(Math.abs(balls[x].x-myGamePiece.x)<15 && Math.abs(balls[x].y-myGamePiece.y)<15
           &&balls[x].id!=myGamePiece.id){
+            if(myGamePiece.hp<=3){
+              myGamePiece.lastHit=balls[x].id;
+            }
             myGamePiece.hp-=3;
             hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
@@ -472,6 +533,9 @@ function updateGameArea() {
           if(Math.abs(balls[x].x-(myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0)))<15
            && Math.abs(balls[x].y-(myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0)))<15
           &&balls[x].id!=myGamePiece.id){
+            if(myGamePiece.hp<=3){
+              myGamePiece.lastHit=balls[x].id;
+            }
             myGamePiece.hp-=3;
             hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
@@ -479,6 +543,9 @@ function updateGameArea() {
           if(Math.abs(balls[x].x-(myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0)))<15
            && Math.abs(balls[x].y-(myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0)))<15
           &&balls[x].id!=myGamePiece.id){
+            if(myGamePiece.hp<=3){
+              myGamePiece.lastHit=balls[x].id;
+            }
             myGamePiece.hp-=3;
             hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
@@ -490,6 +557,7 @@ function updateGameArea() {
     // checking 3 squares
     if(balls.length>0&&otherShips.length>0){
       for(var z=0; z<otherShips.length; z++){
+        if(otherShips[z].hp>0){
         for(var x=0; x<balls.length; x++){
           if(Math.abs(balls[x].x-(otherShips[z].x))<15
           && Math.abs(balls[x].y-(otherShips[z].y))<15
@@ -510,27 +578,37 @@ function updateGameArea() {
             balls.splice(x,1);
           }
         }
+        }
       }
     }
 
     // ships collision detection
     if(otherShips.length>0){
       for(var z=0; z<otherShips.length; z++){
-
+        if(otherShips[z].hp>0){
           // first square
           if(Math.abs(myGamePiece.x-(otherShips[z].x))<20
           && Math.abs(myGamePiece.y-(otherShips[z].y))<20
           ){
+            if(myGamePiece.hp<=1){
+              myGamePiece.lastHit=otherShips[z].id;
+            }
             myGamePiece.hp--;
           }else
           if(Math.abs(myGamePiece.x-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
           && Math.abs(myGamePiece.y-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
           ){
+            if(myGamePiece.hp<=1){
+              myGamePiece.lastHit=otherShips[z].id;
+            }
             myGamePiece.hp--;
           }else
           if(Math.abs(myGamePiece.x-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
           && Math.abs(myGamePiece.y-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
           ){
+            if(myGamePiece.hp<=1){
+              myGamePiece.lastHit=otherShips[z].id;
+            }
             myGamePiece.hp--;
           }else
 
@@ -538,6 +616,9 @@ function updateGameArea() {
           if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<20
           && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<20
           ){
+            if(myGamePiece.hp<=1){
+              myGamePiece.lastHit=otherShips[z].id;
+            }
             myGamePiece.hp--;
           }else
           if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))
@@ -545,6 +626,9 @@ function updateGameArea() {
           && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))
           -(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
           ){
+            if(myGamePiece.hp<=1){
+              myGamePiece.lastHit=otherShips[z].id;
+            }
             myGamePiece.hp--;
           }else
           if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))
@@ -552,6 +636,9 @@ function updateGameArea() {
           && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))
           -(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
           ){
+            if(myGamePiece.hp<=1){
+              myGamePiece.lastHit=otherShips[z].id;
+            }
             myGamePiece.hp--;
           }else
 
@@ -559,19 +646,28 @@ function updateGameArea() {
           if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<20
           && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<20
           ){
+            if(myGamePiece.hp<=1){
+              myGamePiece.lastHit=otherShips[z].id;
+            }
             myGamePiece.hp--;
           }else
           if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
           && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
           ){
+            if(myGamePiece.hp<=1){
+              myGamePiece.lastHit=otherShips[z].id;
+            }
             myGamePiece.hp--;
           }else
           if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
           && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
           ){
+            if(myGamePiece.hp<=1){
+              myGamePiece.lastHit=otherShips[z].id;
+            }
             myGamePiece.hp--;
           }
-
+        }
       }
     }
 
@@ -580,20 +676,11 @@ function updateGameArea() {
     if(myGamePiece.hp<=0){
       myGamePiece.hp=0;
       myGamePiece.deadTimer--;
-
       if(myGamePiece.deadTimer==0){
         myGamePiece = new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025), person, tempId);
       }
     }
 
-    // checking if otherShip died
-    if(otherShips.length>0){
-      for(var z=0; z<otherShips.length; z++){
-        if(otherShips[z].hp<=0){
-          otherShips[z].deadTimer--;
-        }
-      }
-    }
 
 
 
@@ -623,6 +710,9 @@ function myShip( x, y, name, id) {
     this.name=name;
     this.hp=100;
     this.inGame=false;
+    this.alive=true;
+    this.lastInfo=true;
+    this.lastHit;
     this.deadTimer=250;
 
     this.speed = 0;
@@ -647,19 +737,27 @@ function myShip( x, y, name, id) {
 
     this.update = function() {
 
-        // for 4 ships only
+        // checking if ship should be able to take part in action
         if(this.id!=100){
           this.inGame=true;
         }else{
           this.inGame=false;
         }
 
+        // checking if ship is alive
+        if(this.hp>0){
+          this.alive=true;
+        }else{
+          this.alive=false;
+        }
+
+
         this.speed = 0;
         this.moveAngle = 0;
 
         // shooting and sending data
-        if(this.inGame){
-        // if in game
+        if(this.inGame&&this.alive){
+        // if in game and alive
 
         // shooting both sides
         if(myGameArea.keys && myGameArea.keys[79] && this.timerS==0){
@@ -851,14 +949,14 @@ function myShip( x, y, name, id) {
           }
         }
 
-        }// if in game
+      }// if in game and alive
 
         if(this.timerS>0){
           this.timerS--;
         }
 
-        if(this.inGame&&this.hp>0){
-        // if in game
+        if(this.inGame&&this.alive){
+        // if in game and alive
         if(myGameArea.keys && myGameArea.keys[87]){
           this.speed= -1;
         }
@@ -874,7 +972,7 @@ function myShip( x, y, name, id) {
           this.moveAngle = 1;
         }
 
-        } // if in game
+      } // if in game and alive
 
         // moving as spectator
         if(this.id==100){
@@ -942,7 +1040,8 @@ function myShip( x, y, name, id) {
         ctx.fillStyle = "white";
         ctx.fillText("HP:"+this.hp,window.innerWidth/2-30,window.innerHeight/2-90);
         ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-120);
-        ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-150);
+        ctx.fillText("Kills:"+kills,window.innerWidth/2-30,window.innerHeight/2-150);
+        ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-180);
         ctx.font = "bold 15px Courier New";
 
         ctx.save();
@@ -999,6 +1098,7 @@ function otherShip( x, y, a, id, name, hp) {
     this.name=name;
     this.hp=hp;
     this.deadTimer=250;
+    this.kills=0;
 
     this.angle = a;
     this.moveAngle = 0;
@@ -1021,12 +1121,13 @@ function otherShip( x, y, a, id, name, hp) {
     this.timer=150;
 
 
-    this.update = function(newX, newY, newA, newHp) {
+    this.update = function(newX, newY, newA, newHp, newK) {
 
       this.targetX = newX;
       this.targetY = newY;
       this.targetA = newA;
       this.hp=newHp;
+      this.kills=newK;
 
       // if the ship is far away from its target move it directly
       if(Math.abs(newX-this.x)>50||Math.abs(newY-this.y)>50){
@@ -1094,6 +1195,10 @@ function otherShip( x, y, a, id, name, hp) {
       ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
       ctx.rotate(this.angle);
 
+      if(this.hp==0){
+        this.deadTimer--;
+      }
+
       // drawing the ship image
       if(this.hp>80){
         ctx.drawImage(ship1a, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
@@ -1118,7 +1223,8 @@ function otherShip( x, y, a, id, name, hp) {
       ctx.fillStyle = "white";
       ctx.fillText("HP:"+this.hp,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-50);
       ctx.fillText(this.name,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
-      ctx.fillText("ID:"+this.id,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-110);
+      ctx.fillText("Kills:"+this.kills,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-110);
+      ctx.fillText("ID:"+this.id,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-140);
 
       this.timer--;
 
