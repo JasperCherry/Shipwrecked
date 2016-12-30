@@ -1195,7 +1195,7 @@ function otherShip( x, y, a, id, name, hp) {
       ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
       ctx.rotate(this.angle);
 
-      if(this.hp==0){
+      if(this.hp==0&&this.deadTimer>0){
         this.deadTimer--;
       }
 
