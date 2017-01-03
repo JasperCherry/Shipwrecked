@@ -149,7 +149,6 @@ var person = "ship";
 
 var kills=0;
 
-var numberOfPlayers=4;
 
 var socket = io();
 
@@ -162,23 +161,18 @@ var balls=new Array();
 var exps=new Array();
 var hits=new Array();
 
-// ships data
-var receivedShip1;
-var receivedShip2;
-var receivedShip3;
-var receivedShip4;
-
-// balls data
-var receivedBall1;
-var receivedBall2;
-var receivedBall3;
-var receivedBall4;
-
 // fist id variable to recognise user that asks server for id
 var firstId=Math.floor(Math.random()*1000000);
 
 // instructions
 var insTime=300;
+
+// rounding numbers function
+function round(n, k){
+    var factor = Math.pow(10, k);
+    return Math.round(n*factor)/factor;
+}
+
 
 // node js connection to data from server
 // setting id
@@ -204,175 +198,128 @@ setInterval(function(){
 
 askId();
 
+
 // ships sockets
 socket.on('id1', function(ship1){
-  receivedShip1=ship1;
+  if(ship1.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==ship1.id){
+        if(ship1.hp.toString().substring(0, 1)=="D"){
+          if(ship1.hp.substring(1, ship1.hp.length)==myGamePiece.id){
+            kills++;
+          }
+          otherShips[x].update(ship1.x, ship1.y, ship1.a, 0, ship1.k);
+        }else{
+          otherShips[x].update(ship1.x, ship1.y, ship1.a, ship1.hp, ship1.k);
+        }
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(ship1.x, ship1.y,
+      ship1.a, ship1.id, ship1.n, ship1.hp));
+    }
+  }
 });
 socket.on('id2', function(ship2){
-  receivedShip2=ship2;
+  if(ship2.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==ship2.id){
+        if(ship2.hp.toString().substring(0, 1)=="D"){
+          if(ship2.hp.substring(1, ship2.hp.length)==myGamePiece.id){
+            kills++;
+          }
+          otherShips[x].update(ship2.x, ship2.y, ship2.a, 0, ship2.k);
+        }else{
+          otherShips[x].update(ship2.x, ship2.y, ship2.a, ship2.hp, ship2.k);
+        }
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(ship2.x, ship2.y,
+      ship2.a, ship2.id, ship2.n, ship2.hp));
+    }
+  }
 });
 socket.on('id3', function(ship3){
-  receivedShip3=ship3;
+  if(ship3.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==ship3.id){
+        if(ship3.hp.toString().substring(0, 1)=="D"){
+          if(ship3.hp.substring(1, ship3.hp.length)==myGamePiece.id){
+            kills++;
+          }
+          otherShips[x].update(ship3.x, ship3.y, ship3.a, 0, ship3.k);
+        }else{
+          otherShips[x].update(ship3.x, ship3.y, ship3.a, ship3.hp, ship3.k);
+        }
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(ship3.x, ship3.y,
+      ship3.a, ship3.id, ship3.n, ship3.hp));
+    }
+  }
 });
 socket.on('id4', function(ship4){
-  receivedShip4=ship4;
+  if(ship4.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==ship4.id){
+        if(ship4.hp.toString().substring(0, 1)=="D"){
+          if(ship4.hp.substring(1, ship4.hp.length)==myGamePiece.id){
+            kills++;
+          }
+          otherShips[x].update(ship4.x, ship4.y, ship4.a, 0, ship4.k);
+        }else{
+          otherShips[x].update(ship4.x, ship4.y, ship4.a, ship4.hp, ship4.k);
+        }
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(ship4.x, ship4.y,
+      ship4.a, ship4.id, ship4.n, ship4.hp));
+    }
+  }
 });
 
-// creating balls
+
+// receiving data and creating balls
+
 // ship1
 socket.on('data1', function(ball1){
-  receivedBall1=ball1;
+    balls.push(new ball(ball1.x, ball1.y, ball1.a, 1));
+    exps.push(new exp(ball1.x, ball1.y, ball1.a));
 });
 // ship2
 socket.on('data2', function(ball2){
-  receivedBall2=ball2;
+  balls.push(new ball(ball2.x, ball2.y, ball2.a, 2));
+  exps.push(new exp(ball2.x, ball2.y, ball2.a));
 });
 // ship3
 socket.on('data3', function(ball3){
-  receivedBall3=ball3;
+  balls.push(new ball(ball3.x, ball3.y, ball3.a, 3));
+  exps.push(new exp(ball3.x, ball3.y, ball3.a));
 });
 // ship4
 socket.on('data4', function(ball4){
-  receivedBall4=ball4;
+  balls.push(new ball(ball4.x, ball4.y, ball4.a, 4));
+  exps.push(new exp(ball4.x, ball4.y, ball4.a));
 });
 
 
-// rounding numbers function
-function round(n, k){
-    var factor = Math.pow(10, k);
-    return Math.round(n*factor)/factor;
-}
-
-
-// interval for data receiving
-function dataR1() {
-setInterval(function(){
-
-  // receiving positions
-
-  // ship1
-  if(receivedShip1!=null&&receivedShip1.id!=myGamePiece.id){
-    // checking if the ship is allready on the map
-    var newPiece=true;
-    for(var x=0; x<otherShips.length; x++){
-      if(otherShips[x].id==receivedShip1.id){
-        if(receivedShip1.hp.toString().substring(0, 1)=="D"){
-          if(receivedShip1.hp.substring(1, receivedShip1.hp.length)==myGamePiece.id){
-            kills++;
-          }
-          otherShips[x].update(receivedShip1.x, receivedShip1.y, receivedShip1.a, 0, receivedShip1.k);
-        }else{
-          otherShips[x].update(receivedShip1.x, receivedShip1.y, receivedShip1.a, receivedShip1.hp, receivedShip1.k);
-        }
-        newPiece=false;
-      }
-    }
-    if(newPiece){
-      otherShips.push(new otherShip(receivedShip1.x, receivedShip1.y,
-      receivedShip1.a, receivedShip1.id, receivedShip1.n, receivedShip1.hp));
-    }
-    receivedShip1=null;
-  }
-
-  // ship2
-  if(receivedShip2!=null&&receivedShip2.id!=myGamePiece.id){
-    // checking if the ship is allready on the map
-    var newPiece=true;
-    for(var x=0; x<otherShips.length; x++){
-      if(otherShips[x].id==receivedShip2.id){
-        if(receivedShip2.hp.toString().substring(0, 1)=="D"){
-          if(receivedShip2.hp.substring(1, receivedShip2.hp.length)==myGamePiece.id){
-            kills++;
-          }
-          otherShips[x].update(receivedShip2.x, receivedShip2.y, receivedShip2.a, 0, receivedShip2.k);
-        }else{
-          otherShips[x].update(receivedShip2.x, receivedShip2.y, receivedShip2.a, receivedShip2.hp, receivedShip2.k);
-        }
-        newPiece=false;
-      }
-    }
-    if(newPiece){
-      otherShips.push(new otherShip(receivedShip2.x, receivedShip2.y,
-      receivedShip2.a, receivedShip2.id, receivedShip2.n, receivedShip2.hp));
-    }
-    receivedShip2=null;
-  }
-
-  // ship3
-  if(receivedShip3!=null&&receivedShip3.id!=myGamePiece.id){
-    // checking if the ship is allready on the map
-    var newPiece=true;
-    for(var x=0; x<otherShips.length; x++){
-      if(otherShips[x].id==receivedShip3.id){
-        if(receivedShip3.hp.toString().substring(0, 1)=="D"){
-          if(receivedShip3.hp.substring(1, receivedShip3.hp.length)==myGamePiece.id){
-            kills++;
-          }
-          otherShips[x].update(receivedShip3.x, receivedShip3.y, receivedShip3.a, 0, receivedShip3.k);
-        }else{
-          otherShips[x].update(receivedShip3.x, receivedShip3.y, receivedShip3.a, receivedShip3.hp, receivedShip3.k);
-        }
-        newPiece=false;
-      }
-    }
-    if(newPiece){
-      otherShips.push(new otherShip(receivedShip3.x, receivedShip3.y,
-      receivedShip3.a, receivedShip3.id, receivedShip3.n, receivedShip3.hp));
-    }
-    receivedShip3=null;
-  }
-
-  // ship4
-  if(receivedShip4!=null&&receivedShip4.id!=myGamePiece.id){
-    // checking if the ship is allready on the map
-    var newPiece=true;
-    for(var x=0; x<otherShips.length; x++){
-      if(otherShips[x].id==receivedShip4.id){
-        if(receivedShip4.hp.toString().substring(0, 1)=="D"){
-          if(receivedShip4.hp.substring(1, receivedShip4.hp.length)==myGamePiece.id){
-            kills++;
-          }
-          otherShips[x].update(receivedShip4.x, receivedShip4.y, receivedShip4.a, 0, receivedShip4.k);
-        }else{
-          otherShips[x].update(receivedShip4.x, receivedShip4.y, receivedShip4.a, receivedShip4.hp, receivedShip4.k);
-        }
-        newPiece=false;
-      }
-    }
-    if(newPiece){
-      otherShips.push(new otherShip(receivedShip4.x, receivedShip4.y,
-      receivedShip4.a, receivedShip4.id, receivedShip4.n, receivedShip4.hp));
-    }
-    receivedShip4=null;
-  }
-
-
-  // receiving balls
-  if(receivedBall1!=null){
-    balls.push(new ball(receivedBall1.x, receivedBall1.y, receivedBall1.a, 1));
-    exps.push(new exp(receivedBall1.x, receivedBall1.y, receivedBall1.a));
-    receivedBall1=null;
-  }
-  if(receivedBall2!=null){
-    balls.push(new ball(receivedBall2.x, receivedBall2.y, receivedBall2.a, 2));
-    exps.push(new exp(receivedBall2.x, receivedBall2.y, receivedBall2.a));
-    receivedBall2=null;
-  }
-  if(receivedBall3!=null){
-    balls.push(new ball(receivedBall3.x, receivedBall3.y, receivedBall3.a, 3));
-    exps.push(new exp(receivedBall3.x, receivedBall3.y, receivedBall3.a));
-    receivedBall3=null;
-  }
-  if(receivedBall4!=null){
-    balls.push(new ball(receivedBall4.x, receivedBall4.y, receivedBall4.a, 4));
-    exps.push(new exp(receivedBall4.x, receivedBall4.y, receivedBall4.a));
-    receivedBall4=null;
-  }
-
-}, 10);
-}
-
 // interval for data sending
+// sending ship data, position and hp
 function dataS1() {
 setInterval(function(){
 
@@ -429,11 +376,8 @@ setInterval(function(){
 }, 100);
 }
 
-// running functions to send data
+// running interval functions to send data
 dataS1();
-
-// running function to collect data
-dataR1();
 
 
 ///////////////////////////////////// MAIN CANVAS INTERVAL FUNCTION
@@ -724,6 +668,7 @@ function myShip( x, y, name, id) {
 
     // shooting
     this.timerS=0;
+    this.timerSB=0;
     this.shot;
     this.shootBoth=false;
 
@@ -760,7 +705,7 @@ function myShip( x, y, name, id) {
         // if in game and alive
 
         // shooting both sides
-        if(myGameArea.keys && myGameArea.keys[79] && this.timerS==0){
+        if(myGameArea.keys && myGameArea.keys[79] && this.timerSB==0){
 
           if(this.shootBoth && this.rightAmmo>0){
             this.shootBoth=false;
@@ -788,6 +733,7 @@ function myShip( x, y, name, id) {
               "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
             }
 
+            this.timerSB=5;
             this.timerS=10;
 
             if(this.id==1){
@@ -829,6 +775,7 @@ function myShip( x, y, name, id) {
               "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
             }
 
+            this.timerSB=5;
             this.timerS=10;
 
             if(this.id==1){
@@ -953,6 +900,10 @@ function myShip( x, y, name, id) {
 
         if(this.timerS>0){
           this.timerS--;
+        }
+
+        if(this.timerSB>0){
+          this.timerSB--;
         }
 
         if(this.inGame&&this.alive){
