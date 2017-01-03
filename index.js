@@ -116,15 +116,23 @@ http.listen(port, function(){
 // function that checks if id is taken:
 function checkId() {
   if(!ship1a&&!ship1b){
+    ship1a=true;
+    ship1b=true;
     return 1;
   }
   if(!ship2a&&!ship2b){
+    ship2a=true;
+    ship2b=true;
     return 2;
   }
   if(!ship3a&&!ship3b){
+    ship3a=true;
+    ship3b=true;
     return 3;
   }
   if(!ship4a&&!ship4b){
+    ship4a=true;
+    ship4b=true;
     return 4;
   }
   return 100;
