@@ -180,8 +180,35 @@ socket.on('setId', function(msg1){
   if(msg1.firstId==firstId){
     if(msg1.status!=tempId){
       tempId=msg1.status;
-      myGamePiece=new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025),
-      person, tempId);
+
+      // system for avoiding collision with previous position and other ships
+      var newPosX;
+      var newPosY;
+      var newPosXisOK;
+      var newPosYisOK;
+      do{
+        var newPosXisOK=true;
+        var newPosYisOK=true;
+        newPosX=Math.floor(Math.random()*1025)
+        newPosY=Math.floor(Math.random()*1025);
+        // checking distance from position of being killed
+        if(Math.abs(newPosX-myGamePiece.x)<200){
+          newPosXisOK=false;
+        }
+        if(Math.abs(newPosY-myGamePiece.y)<200){
+          newPosYisOK=false;
+        }
+        // checking distance from other ships
+        for(var z=0; z<otherShips.length; z++){
+          if(Math.abs(newPosX-otherShips[z].x)<200){
+            newPosXisOK=false;
+          }
+          if(Math.abs(newPosY-otherShips[z].y)<200){
+            newPosYisOK=false;
+          }
+        }
+      }while(!newPosXisOK&&!newPosYisOK);
+      myGamePiece = new myShip(newPosX, newPosY, person, tempId);
     }
   }
 });
@@ -625,18 +652,13 @@ function updateGameArea() {
         // system for avoiding collision with previous position and other ships
         var newPosX;
         var newPosY;
-
         var newPosXisOK;
         var newPosYisOK;
-
         do{
-
           var newPosXisOK=true;
           var newPosYisOK=true;
-
           newPosX=Math.floor(Math.random()*1025)
           newPosY=Math.floor(Math.random()*1025);
-
           // checking distance from position of being killed
           if(Math.abs(newPosX-myGamePiece.x)<200){
             newPosXisOK=false;
@@ -644,7 +666,6 @@ function updateGameArea() {
           if(Math.abs(newPosY-myGamePiece.y)<200){
             newPosYisOK=false;
           }
-
           // checking distance from other ships
           for(var z=0; z<otherShips.length; z++){
             if(Math.abs(newPosX-otherShips[z].x)<200){
@@ -654,9 +675,7 @@ function updateGameArea() {
               newPosYisOK=false;
             }
           }
-
         }while(!newPosXisOK&&!newPosYisOK);
-
         myGamePiece = new myShip(newPosX, newPosY, person, tempId);
       }
     }
@@ -938,19 +957,42 @@ function myShip( x, y, name, id) {
 
       if(this.inGame&&this.alive){
         // if in game and alive
-        this.speed=0;
+        //this.speed=0;
         this.moveAngle=0;
 
         // moving the ship
         if(myGameArea.keys && myGameArea.keys[87]){
-          this.speed=-1;
+          if(this.speed>-1){
+            this.speed-=this.acc/2;
+          }else if(this.speed>-2&&this.moveAngle==0){
+            this.speed-=this.acc/4;
+          }
         }
+
+        if(myGameArea.keys && myGameArea.keys[83]){
+          if(this.speed<0){
+            this.speed+=this.acc;
+          }
+        }
+
         if(myGameArea.keys && myGameArea.keys[65] ){
           this.moveAngle=-1;
+          if(this.speed<-1){
+            this.speed+=this.acc/2;
+          }
+
         }
         if(myGameArea.keys && myGameArea.keys[68] ){
           this.moveAngle=1;
+          if(this.speed<-1){
+            this.speed+=this.acc/2;
+          }
         }
+
+        if(this.speed>0){
+          this.speed=0;
+        }
+
       } // if in game and alive
 
         // moving as spectator
@@ -1109,6 +1151,15 @@ function otherShip(x, y, a, id, name, hp) {
         this.y = newY;
       }
 
+      // if the ships is getting far away from target it means its accelerating
+      if(Math.abs(newX-this.x)>10||Math.abs(newY-this.y)>10){
+        if(this.speed==1){
+          this.speed=2;
+        }
+      }else{
+        this.speed=1;
+      }
+
       // if ship angle is very different to target angle for more then 0.5 radian change it directly
       if(Math.abs(newA-this.angle)>0.5){
         this.angle = newA;
@@ -1118,7 +1169,6 @@ function otherShip(x, y, a, id, name, hp) {
 
 
     this.show = function() {
-
 
       // moving the ship
       if(this.targetX>this.x){
@@ -1179,6 +1229,16 @@ function otherShip(x, y, a, id, name, hp) {
       //ctx.fillStyle = "blue";
       //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
       ctx.restore();
+
+
+      // drawing the target
+      /*
+      ctx.save();
+      ctx.translate(window.innerWidth/2-myGamePiece.x+this.targetX,window.innerHeight/2-myGamePiece.y+this.targetY);
+      ctx.fillStyle = "red";
+      ctx.fillRect(10 / -2, 10 / -2, 10, 10);
+      ctx.restore();
+      */
 
       ctx.font = "bold 18px Courier New";
       ctx.fillStyle = "white";
