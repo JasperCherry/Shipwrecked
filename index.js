@@ -28,6 +28,14 @@ checkFreeId();
 io.on('connection', function(socket){
   // ships sockets and their balls
 
+  // schat
+  socket.on('chat', function(txt){
+    setTimeout(function () {
+      io.emit('chat', txt);
+    }, 0)
+    //console.log(txt);
+  });
+
   // setting id
   socket.on('setId', function(msg1){
     // assign free id or 200 to play as spectator

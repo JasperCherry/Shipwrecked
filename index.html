@@ -161,6 +161,59 @@ var balls=new Array();
 var exps=new Array();
 var hits=new Array();
 
+
+// chat
+var text=new Array();
+var textReady="";
+var writingMode=false;
+var preText="TEXT:";
+
+var textMsgArr=new Array();
+
+document.addEventListener('keydown', function(event) {
+  if(event.keyCode==13){
+    if(writingMode){
+      writingMode=false;
+      // player is emiting message
+      if(textReady.length>6){
+        var txt={"p":person,"t":textReady.substring(5, textReady.length), "c":0};
+        socket.emit('chat', txt);
+      }
+      //console.log(textReady.substring(5, textReady.length));
+    }else if(!writingMode){
+      writingMode=true;
+      text=new Array();
+      textReady=preText;
+    }
+  }
+
+    if(writingMode){
+      if(event.keyCode!=8){
+        if(text.length<60){
+          text.push(String.fromCharCode(event.keyCode));
+          textReady=preText;
+          for(var x=0; x<text.length; x++){
+            textReady+=text[x];
+          }
+        }
+      }else{
+        text.pop();
+        textReady=preText;
+        for(var x=0; x<text.length; x++){
+          textReady+=text[x];
+        }
+      }
+  }
+});
+
+socket.on('chat', function(txt){
+    if(textMsgArr.length>10){
+      textMsgArr.splice(0,1);
+    }
+    textMsgArr.push(new textMsg(20, 20, txt.p, txt.t, txt.c));
+});
+
+
 // fist id variable to recognise user that asks server for id
 var firstId=Math.floor(Math.random()*1000000);
 
@@ -220,7 +273,7 @@ setInterval(function(){
       var msg1={"firstId":firstId,"status":tempId};
       socket.emit('setId', msg1);
     }
-}, 1000); // to fix
+}, 1000);
 }
 
 askId();
@@ -473,6 +526,28 @@ function updateGameArea() {
       }
     }
 
+    // showing chat
+    if(textMsgArr.length>0){
+      for(var x=0; x<textMsgArr.length; x++){
+          if(x>0){
+            textMsgArr[x].y+=20*x;
+            textMsgArr[x].show();
+            textMsgArr[x].y-=20*x;
+          }else{
+            textMsgArr[x].show();
+          }
+
+      }
+    }
+    // deleting messages
+    if(textMsgArr.length>0){
+      for(var x=0; x<textMsgArr.length; x++){
+          if(textMsgArr[x].timer==0){
+            textMsgArr.splice(x,1);
+          }
+      }
+    }
+
 
 
     // checking if player was hit
@@ -645,6 +720,14 @@ function updateGameArea() {
 
     // checking if player died
     if(myGamePiece.hp<=0){
+      // emit info to chat
+      if(myGamePiece.lastInfoText){
+        var txt={"p":person,"t":" has been killed", "c":1};
+        socket.emit('chat', txt);
+        myGamePiece.lastInfoText=false;
+      }
+
+
       myGamePiece.hp=0;
       myGamePiece.deadTimer--;
       if(myGamePiece.deadTimer==0){
@@ -711,6 +794,7 @@ function myShip( x, y, name, id) {
     this.inGame=false;
     this.alive=true;
     this.lastInfo=true;
+    this.lastInfoText=true;
     this.lastHit;
     this.deadTimer=250;
 
@@ -758,7 +842,7 @@ function myShip( x, y, name, id) {
         // if in game and alive
 
         // shooting both sides
-        if(myGameArea.keys && myGameArea.keys[79] && this.timerS==0){
+        if(!writingMode && myGameArea.keys && myGameArea.keys[79] && this.timerS==0){
 
           if(this.shootBoth && this.rightAmmo>0){
             this.shootBoth=false;
@@ -847,7 +931,7 @@ function myShip( x, y, name, id) {
         }
 
         // shooting right side
-        if(myGameArea.keys && myGameArea.keys[80] && this.timerS==0 && this.rightAmmo>0){
+        if(!writingMode && myGameArea.keys && myGameArea.keys[80] && this.timerS==0 && this.rightAmmo>0){
           this.rightAmmo--;
           var shootingHole=Math.floor(Math.random()*5);
           if(shootingHole==0){
@@ -889,7 +973,7 @@ function myShip( x, y, name, id) {
         }
 
         // shooting left side
-        if(myGameArea.keys && myGameArea.keys[73] && this.timerS==0 && this.leftAmmo>0){
+        if(!writingMode && myGameArea.keys && myGameArea.keys[73] && this.timerS==0 && this.leftAmmo>0){
           this.leftAmmo--;
           var shootingHole=Math.floor(Math.random()*5);
           if(shootingHole==0){
@@ -961,32 +1045,23 @@ function myShip( x, y, name, id) {
         this.moveAngle=0;
 
         // moving the ship
-        if(myGameArea.keys && myGameArea.keys[87]){
+        if(!writingMode &&  myGameArea.keys && myGameArea.keys[87]){
           if(this.speed>-1){
             this.speed-=this.acc/2;
-          }else if(this.speed>-2&&this.moveAngle==0){
-            this.speed-=this.acc/4;
           }
         }
 
-        if(myGameArea.keys && myGameArea.keys[83]){
+        if(!writingMode &&  myGameArea.keys && myGameArea.keys[83]){
           if(this.speed<0){
             this.speed+=this.acc;
           }
         }
 
-        if(myGameArea.keys && myGameArea.keys[65] ){
+        if(!writingMode &&  myGameArea.keys && myGameArea.keys[65] ){
           this.moveAngle=-1;
-          if(this.speed<-1){
-            this.speed+=this.acc/2;
-          }
-
         }
-        if(myGameArea.keys && myGameArea.keys[68] ){
+        if(!writingMode &&  myGameArea.keys && myGameArea.keys[68] ){
           this.moveAngle=1;
-          if(this.speed<-1){
-            this.speed+=this.acc/2;
-          }
         }
 
         if(this.speed>0){
@@ -994,6 +1069,7 @@ function myShip( x, y, name, id) {
         }
 
       } // if in game and alive
+
 
         // moving as spectator
         if(this.id==100){
@@ -1088,7 +1164,7 @@ function myShip( x, y, name, id) {
           insTime--;
           ctx.font = "bold 20px Courier New";
           ctx.fillStyle = "red";
-          ctx.fillText("MOVE : WASD  SHOOT: IOP",window.innerWidth/2-130,window.innerHeight-200);
+          ctx.fillText("MOVE : WASD  SHOOT: IOP CHAT : ENTER",window.innerWidth/2-130,window.innerHeight-200);
         }
 
         }
@@ -1102,8 +1178,14 @@ function myShip( x, y, name, id) {
             ctx.fillStyle = "red";
             ctx.fillText(info,window.innerWidth/2-200,window.innerHeight/2-100);
           }
+        }
 
-
+        // chat text message
+        if(writingMode){
+          ctx = myGameArea.context;
+          ctx.font = "bold 15px Courier New";
+          ctx.fillStyle = "white";
+          ctx.fillText(textReady,20,window.innerHeight-20);
         }
 
     }
@@ -1149,15 +1231,6 @@ function otherShip(x, y, a, id, name, hp) {
       if(Math.abs(newX-this.x)>50||Math.abs(newY-this.y)>50){
         this.x = newX;
         this.y = newY;
-      }
-
-      // if the ships is getting far away from target it means its accelerating
-      if(Math.abs(newX-this.x)>10||Math.abs(newY-this.y)>10){
-        if(this.speed==1){
-          this.speed=2;
-        }
-      }else{
-        this.speed=1;
       }
 
       // if ship angle is very different to target angle for more then 0.5 radian change it directly
@@ -1359,6 +1432,35 @@ function hit( x, y, a) {
 }
 
 
+// to finish
+function textMsg(x, y, p, t, c) {
+
+    this.x = x;
+    this.y = y;
+    this.player=p;
+    this.text=t;
+    this.color=c;
+
+    this.timer=500;
+
+    this.show = function() {
+
+      ctx = myGameArea.context;
+      
+      if(this.color==1){
+        ctx.fillStyle = "white";
+        ctx.font = "bold 15px Courier New";
+        ctx.fillText("<<< "+this.player+this.text+" >>>",this.x,this.y);
+      }
+      if(this.color==0){
+        ctx.fillStyle = "white";
+        ctx.font = "15px Courier New";
+        ctx.fillText(this.player+":"+this.text,this.x,this.y);
+      }
+
+      this.timer--;
+    }
+}
 
 
 
