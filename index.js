@@ -28,7 +28,7 @@ checkFreeId();
 io.on('connection', function(socket){
   // ships sockets and their balls
 
-  // schat
+  // chat
   socket.on('chat', function(txt){
     setTimeout(function () {
       io.emit('chat', txt);

@@ -25,6 +25,7 @@ body {
 
 <img src="pic/texture/water.jpg" id="water" style="display: none;">
 <img src="pic/texture/water2.jpg" id="water2" style="display: none;">
+<img src="pic/texture/water3.jpg" id="water3" style="display: none;">
 
 <img src="pic/exp/ex1.png" id="ex1" style="display: none;">
 <img src="pic/exp/ex2.png" id="ex2" style="display: none;">
@@ -140,15 +141,25 @@ body {
 <img src="pic/hit/hit47.png" id="hit47" style="display: none;">
 <img src="pic/hit/hit48.png" id="hit48" style="display: none;">
 
+<script src="js/objects.js"></script>
+<script src="js/player.js"></script>
+<script src="js/mainInterval.js"></script>
+<script src="js/functions.js"></script>
+<script src="js/gameUpdate.js"></script>
+<script src="js/socket.js"></script>
 
-<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+
 <script>
+
+// GAME VARIABLES
 
 //var person = prompt("Please enter your name");
 var person = "ship";
 
 var kills=0;
 
+// instructions
+var insTime=300;
 
 var socket = io();
 
@@ -162,7 +173,9 @@ var exps=new Array();
 var hits=new Array();
 
 
-// chat
+
+
+///////////////////////////////  CHAT
 var text=new Array();
 var textReady="";
 var writingMode=false;
@@ -213,19 +226,16 @@ socket.on('chat', function(txt){
     textMsgArr.push(new textMsg(20, 20, txt.p, txt.t, txt.c));
 });
 
+///////////////////// END OF CHAT
+
+
+
+
+
+///////////////////// ID REQUEST
 
 // fist id variable to recognise user that asks server for id
 var firstId=Math.floor(Math.random()*1000000);
-
-// instructions
-var insTime=300;
-
-// rounding numbers function
-function round(n, k){
-    var factor = Math.pow(10, k);
-    return Math.round(n*factor)/factor;
-}
-
 
 // node js connection to data from server
 // setting id
@@ -278,8 +288,12 @@ setInterval(function(){
 
 askId();
 
+/////////////////////////// END OF ID REQUEST
 
-// ships sockets
+
+
+/////////////// SHIP AND BALLS DATA RECEIVING
+
 socket.on('id1', function(ship1){
   if(ship1.id!=myGamePiece.id){
     // checking if the ship is allready on the map
@@ -289,10 +303,13 @@ socket.on('id1', function(ship1){
         if(ship1.hp.toString().substring(0, 1)=="D"){
           if(ship1.hp.substring(1, ship1.hp.length)==myGamePiece.id){
             kills++;
+            var txt={"p":person,"t":" have now "+kills+" kills", "c":1};
+            socket.emit('chat', txt);
+            myGamePiece.lastInfoText=false;
           }
-          otherShips[x].update(ship1.x, ship1.y, ship1.a, 0, ship1.k);
+          otherShips[x].update(ship1.x, ship1.y, ship1.a, 0, ship1.k, ship1.n);
         }else{
-          otherShips[x].update(ship1.x, ship1.y, ship1.a, ship1.hp, ship1.k);
+          otherShips[x].update(ship1.x, ship1.y, ship1.a, ship1.hp, ship1.k, ship1.n);
         }
         newPiece=false;
       }
@@ -312,10 +329,13 @@ socket.on('id2', function(ship2){
         if(ship2.hp.toString().substring(0, 1)=="D"){
           if(ship2.hp.substring(1, ship2.hp.length)==myGamePiece.id){
             kills++;
+            var txt={"p":person,"t":" have now "+kills+" kills", "c":1};
+            socket.emit('chat', txt);
+            myGamePiece.lastInfoText=false;
           }
-          otherShips[x].update(ship2.x, ship2.y, ship2.a, 0, ship2.k);
+          otherShips[x].update(ship2.x, ship2.y, ship2.a, 0, ship2.k, ship2.n);
         }else{
-          otherShips[x].update(ship2.x, ship2.y, ship2.a, ship2.hp, ship2.k);
+          otherShips[x].update(ship2.x, ship2.y, ship2.a, ship2.hp, ship2.k, ship2.n);
         }
         newPiece=false;
       }
@@ -335,10 +355,13 @@ socket.on('id3', function(ship3){
         if(ship3.hp.toString().substring(0, 1)=="D"){
           if(ship3.hp.substring(1, ship3.hp.length)==myGamePiece.id){
             kills++;
+            var txt={"p":person,"t":" have now "+kills+" kills", "c":1};
+            socket.emit('chat', txt);
+            myGamePiece.lastInfoText=false;
           }
-          otherShips[x].update(ship3.x, ship3.y, ship3.a, 0, ship3.k);
+          otherShips[x].update(ship3.x, ship3.y, ship3.a, 0, ship3.k, ship3.n);
         }else{
-          otherShips[x].update(ship3.x, ship3.y, ship3.a, ship3.hp, ship3.k);
+          otherShips[x].update(ship3.x, ship3.y, ship3.a, ship3.hp, ship3.k, ship3.n);
         }
         newPiece=false;
       }
@@ -358,10 +381,13 @@ socket.on('id4', function(ship4){
         if(ship4.hp.toString().substring(0, 1)=="D"){
           if(ship4.hp.substring(1, ship4.hp.length)==myGamePiece.id){
             kills++;
+            var txt={"p":person,"t":" have now "+kills+" kills", "c":1};
+            socket.emit('chat', txt);
+            myGamePiece.lastInfoText=false;
           }
-          otherShips[x].update(ship4.x, ship4.y, ship4.a, 0, ship4.k);
+          otherShips[x].update(ship4.x, ship4.y, ship4.a, 0, ship4.k, ship4.n);
         }else{
-          otherShips[x].update(ship4.x, ship4.y, ship4.a, ship4.hp, ship4.k);
+          otherShips[x].update(ship4.x, ship4.y, ship4.a, ship4.hp, ship4.k, ship4.n);
         }
         newPiece=false;
       }
@@ -397,6 +423,9 @@ socket.on('data4', function(ball4){
   exps.push(new exp(ball4.x, ball4.y, ball4.a));
 });
 
+/////////////// END OF SHIP AND BALLS DATA RECEIVING
+
+/////////////// SHIP POSITION SENDING
 
 // interval for data sending
 // sending ship data, position and hp
@@ -453,1059 +482,13 @@ setInterval(function(){
     }
   }
 
-}, 100);
+}, 200);
 }
 
 // running interval functions to send data
 dataS1();
 
-
-///////////////////////////////////// MAIN CANVAS INTERVAL FUNCTION
-function updateGameArea() {
-
-    myGameArea.clear();
-
-    var ctx = myGameArea.context;
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y);
-
-    // showing other ships
-    if(otherShips.length>0){
-      for(var x=0; x<otherShips.length; x++){
-          otherShips[x].show();
-          if(otherShips[x].timer<=0){
-            otherShips.splice(x,1);
-          }
-      }
-    }
-
-    // showing user ship
-    myGamePiece.update();
-
-    // showing balls
-    if(balls.length>0){
-      for(var x=0; x<balls.length; x++){
-          balls[x].show();
-      }
-    }
-    // deleting balls when timer is zero
-    if(balls.length>0){
-      for(var x=0; x<balls.length; x++){
-          if(balls[x].timer<=0){
-            balls.splice(x,1);
-          }
-      }
-    }
-
-    // showing explosions
-    if(exps.length>0){
-      for(var x=0; x<exps.length; x++){
-          exps[x].show();
-      }
-    }
-    // deleting explosions when timer is zero
-    if(exps.length>0){
-      for(var x=0; x<exps.length; x++){
-          if(exps[x].exLoop>64){
-            exps.splice(x,1);
-          }
-      }
-    }
-
-    // showing hits
-    if(hits.length>0){
-      for(var x=0; x<hits.length; x++){
-          hits[x].show();
-      }
-    }
-    // deleting hits when timer is zero
-    if(hits.length>0){
-      for(var x=0; x<hits.length; x++){
-          if(hits[x].exLoop>48){
-            hits.splice(x,1);
-          }
-      }
-    }
-
-    // showing chat
-    if(textMsgArr.length>0){
-      for(var x=0; x<textMsgArr.length; x++){
-          if(x>0){
-            textMsgArr[x].y+=20*x;
-            textMsgArr[x].show();
-            textMsgArr[x].y-=20*x;
-          }else{
-            textMsgArr[x].show();
-          }
-
-      }
-    }
-    // deleting messages
-    if(textMsgArr.length>0){
-      for(var x=0; x<textMsgArr.length; x++){
-          if(textMsgArr[x].timer==0){
-            textMsgArr.splice(x,1);
-          }
-      }
-    }
-
-
-
-    // checking if player was hit
-/*
-    ctx = myGameArea.context;
-    ctx.fillStyle = "red";
-
-    ctx.fillRect(-15+window.innerWidth/2, -15+window.innerHeight/2, 30, 30);
-
-    ctx.fillRect(-15 + window.innerWidth/2+round((-30 * Math.sin(myGamePiece.angle)), 0),
-      -15 + window.innerHeight/2+round((30 * Math.cos(myGamePiece.angle)), 0),30,30);
-
-    ctx.fillRect(-15 + window.innerWidth/2+round((30 * Math.sin(myGamePiece.angle)), 0),
-      -15 + window.innerHeight/2+round((-30 * Math.cos(myGamePiece.angle)), 0),30,30);
-*/
-
-    // checking 3 squares
-    if(balls.length>0&&myGamePiece.inGame&&myGamePiece.hp>0){
-      for(var x=0; x<balls.length; x++){
-          if(Math.abs(balls[x].x-myGamePiece.x)<15 && Math.abs(balls[x].y-myGamePiece.y)<15
-          &&balls[x].id!=myGamePiece.id){
-            if(myGamePiece.hp<=3){
-              myGamePiece.lastHit=balls[x].id;
-            }
-            myGamePiece.hp-=3;
-            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
-            balls.splice(x,1);
-          }else
-          if(Math.abs(balls[x].x-(myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0)))<15
-           && Math.abs(balls[x].y-(myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0)))<15
-          &&balls[x].id!=myGamePiece.id){
-            if(myGamePiece.hp<=3){
-              myGamePiece.lastHit=balls[x].id;
-            }
-            myGamePiece.hp-=3;
-            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
-            balls.splice(x,1);
-          }else
-          if(Math.abs(balls[x].x-(myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0)))<15
-           && Math.abs(balls[x].y-(myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0)))<15
-          &&balls[x].id!=myGamePiece.id){
-            if(myGamePiece.hp<=3){
-              myGamePiece.lastHit=balls[x].id;
-            }
-            myGamePiece.hp-=3;
-            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
-            balls.splice(x,1);
-          }
-      }
-    }
-
-    // checking if other ship was hit
-    // checking 3 squares
-    if(balls.length>0&&otherShips.length>0){
-      for(var z=0; z<otherShips.length; z++){
-        if(otherShips[z].hp>0){
-        for(var x=0; x<balls.length; x++){
-          if(Math.abs(balls[x].x-(otherShips[z].x))<15
-          && Math.abs(balls[x].y-(otherShips[z].y))<15
-          &&balls[x].id!=otherShips[z].id){
-            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
-            balls.splice(x,1);
-          }else
-          if(Math.abs(balls[x].x-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs(balls[x].y-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
-          &&balls[x].id!=otherShips[z].id){
-            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
-            balls.splice(x,1);
-          }else
-          if(Math.abs(balls[x].x-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs(balls[x].y-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
-          &&balls[x].id!=otherShips[z].id){
-            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
-            balls.splice(x,1);
-          }
-        }
-        }
-      }
-    }
-
-    // ships collision detection
-    if(otherShips.length>0){
-      for(var z=0; z<otherShips.length; z++){
-        if(otherShips[z].hp>0){
-          // first square
-          if(Math.abs(myGamePiece.x-(otherShips[z].x))<20
-          && Math.abs(myGamePiece.y-(otherShips[z].y))<20
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs(myGamePiece.x-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs(myGamePiece.y-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs(myGamePiece.x-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs(myGamePiece.y-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-
-          // second square
-          if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<20
-          && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<20
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))
-          -(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))
-          -(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))
-          -(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))
-          -(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-
-          // third square
-          if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<20
-          && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<20
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }
-        }
-      }
-    }
-
-
-    // checking if player died
-    if(myGamePiece.hp<=0){
-      // emit info to chat
-      if(myGamePiece.lastInfoText){
-        var txt={"p":person,"t":" has been killed", "c":1};
-        socket.emit('chat', txt);
-        myGamePiece.lastInfoText=false;
-      }
-
-
-      myGamePiece.hp=0;
-      myGamePiece.deadTimer--;
-      if(myGamePiece.deadTimer==0){
-
-        // system for avoiding collision with previous position and other ships
-        var newPosX;
-        var newPosY;
-        var newPosXisOK;
-        var newPosYisOK;
-        do{
-          var newPosXisOK=true;
-          var newPosYisOK=true;
-          newPosX=Math.floor(Math.random()*1025)
-          newPosY=Math.floor(Math.random()*1025);
-          // checking distance from position of being killed
-          if(Math.abs(newPosX-myGamePiece.x)<200){
-            newPosXisOK=false;
-          }
-          if(Math.abs(newPosY-myGamePiece.y)<200){
-            newPosYisOK=false;
-          }
-          // checking distance from other ships
-          for(var z=0; z<otherShips.length; z++){
-            if(Math.abs(newPosX-otherShips[z].x)<200){
-              newPosXisOK=false;
-            }
-            if(Math.abs(newPosY-otherShips[z].y)<200){
-              newPosYisOK=false;
-            }
-          }
-        }while(!newPosXisOK&&!newPosYisOK);
-        myGamePiece = new myShip(newPosX, newPosY, person, tempId);
-      }
-    }
-
-
-
-
-}/////////////////////////////////////////////////// end of game update
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function myShip( x, y, name, id) {
-
-    this.id=id;
-    this.name=name;
-    this.hp=100;
-    this.inGame=false;
-    this.alive=true;
-    this.lastInfo=true;
-    this.lastInfoText=true;
-    this.lastHit;
-    this.deadTimer=250;
-
-    this.speed = 0;
-    this.acc = 0.05;
-
-    this.angle = 0;
-    this.moveAngle = 0;
-
-    this.x = x;
-    this.y = y;
-
-    // shooting
-    this.timerS=0;
-    this.shot;
-    this.shootBoth=false; // selecting side
-
-    this.leftAmmo=10;
-    this.rightAmmo=10;
-    this.leftLoad=100;
-    this.rightLoad=100;
-
-    this.scale=0.3;
-
-
-    this.update = function() {
-
-        // checking if ship should be able to take part in action
-        if(this.id!=100){
-          this.inGame=true;
-        }else{
-          this.inGame=false;
-        }
-
-        // checking if ship is alive
-        if(this.hp>0){
-          this.alive=true;
-        }else{
-          this.alive=false;
-        }
-
-
-        // shooting and sending data
-        if(this.inGame&&this.alive){
-        // if in game and alive
-
-        // shooting both sides
-        if(!writingMode && myGameArea.keys && myGameArea.keys[79] && this.timerS==0){
-
-          if(this.shootBoth && this.rightAmmo>0){
-            this.shootBoth=false;
-            this.rightAmmo--;
-            var shootingHole=Math.floor(Math.random()*5);
-            if(shootingHole==0){
-              this.shot={"x":round(this.x+(20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
-              "y":round(this.y-(20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
-              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
-            }else if(shootingHole==1){
-              this.shot={"x":round(this.x+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
-              "y":round(this.y-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
-              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
-            }else if(shootingHole==2){
-              this.shot={"x":round(this.x+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
-              "y":round(this.y-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
-              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
-            }else if(shootingHole==3){
-              this.shot={"x":round(this.x+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
-              "y":round(this.y-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
-              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
-            }else if(shootingHole==4){
-              this.shot={"x":round(this.x+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
-              "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
-              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
-            }
-
-            this.timerS=10;
-
-            if(this.id==1){
-              socket.emit('data1', this.shot);
-            }
-            if(this.id==2){
-              socket.emit('data2', this.shot);
-            }
-            if(this.id==3){
-              socket.emit('data3', this.shot);
-            }
-            if(this.id==4){
-              socket.emit('data4', this.shot);
-            }
-
-          }else if(!this.shootBoth && this.leftAmmo>0){
-            this.shootBoth=true;
-            this.leftAmmo--;
-            var shootingHole=Math.floor(Math.random()*5);
-            if(shootingHole==0){
-              this.shot={"x":round(this.x+(20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
-              "y":round(this.y-(20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
-              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
-            }else if(shootingHole==1){
-              this.shot={"x":round(this.x+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
-              "y":round(this.y-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
-              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
-            }else if(shootingHole==2){
-              this.shot={"x":round(this.x+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
-              "y":round(this.y-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
-              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
-            }else if(shootingHole==3){
-              this.shot={"x":round(this.x+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
-              "y":round(this.y-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
-              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
-            }else if(shootingHole==4){
-              this.shot={"x":round(this.x+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
-              "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
-              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
-            }
-
-            this.timerS=10;
-
-            if(this.id==1){
-              socket.emit('data1', this.shot);
-            }
-            if(this.id==2){
-              socket.emit('data2', this.shot);
-            }
-            if(this.id==3){
-              socket.emit('data3', this.shot);
-            }
-            if(this.id==4){
-              socket.emit('data4', this.shot);
-            }
-
-          }
-
-        }
-
-        // shooting right side
-        if(!writingMode && myGameArea.keys && myGameArea.keys[80] && this.timerS==0 && this.rightAmmo>0){
-          this.rightAmmo--;
-          var shootingHole=Math.floor(Math.random()*5);
-          if(shootingHole==0){
-            this.shot={"x":round(this.x+(20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
-            "y":round(this.y-(20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
-            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
-          }else if(shootingHole==1){
-            this.shot={"x":round(this.x+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
-            "y":round(this.y-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
-            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
-          }else if(shootingHole==2){
-            this.shot={"x":round(this.x+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
-            "y":round(this.y-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
-            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
-          }else if(shootingHole==3){
-            this.shot={"x":round(this.x+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
-            "y":round(this.y-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
-            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
-          }else if(shootingHole==4){
-            this.shot={"x":round(this.x+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
-            "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
-            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4)};
-          }
-
-          this.timerS=10;
-
-          if(this.id==1){
-            socket.emit('data1', this.shot);
-          }
-          if(this.id==2){
-            socket.emit('data2', this.shot);
-          }
-          if(this.id==3){
-            socket.emit('data3', this.shot);
-          }
-          if(this.id==4){
-            socket.emit('data4', this.shot);
-          }
-        }
-
-        // shooting left side
-        if(!writingMode && myGameArea.keys && myGameArea.keys[73] && this.timerS==0 && this.leftAmmo>0){
-          this.leftAmmo--;
-          var shootingHole=Math.floor(Math.random()*5);
-          if(shootingHole==0){
-            this.shot={"x":round(this.x+(20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
-            "y":round(this.y-(20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
-            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
-          }else if(shootingHole==1){
-            this.shot={"x":round(this.x+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
-            "y":round(this.y-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
-            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
-          }else if(shootingHole==2){
-            this.shot={"x":round(this.x+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
-            "y":round(this.y-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
-            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
-          }else if(shootingHole==3){
-            this.shot={"x":round(this.x+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
-            "y":round(this.y-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
-            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
-          }else if(shootingHole==4){
-            this.shot={"x":round(this.x+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
-            "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
-            "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4)};
-          }
-
-          this.timerS=10;
-
-          if(this.id==1){
-            socket.emit('data1', this.shot);
-          }
-          if(this.id==2){
-            socket.emit('data2', this.shot);
-          }
-          if(this.id==3){
-            socket.emit('data3', this.shot);
-          }
-          if(this.id==4){
-            socket.emit('data4', this.shot);
-          }
-        }
-
-        // loading guns
-        if(this.leftAmmo<10){
-          this.leftLoad--;
-          if(this.leftLoad==0){
-            this.leftAmmo++;
-            this.leftLoad=100;
-          }
-        }
-
-        if(this.rightAmmo<10){
-          this.rightLoad--;
-          if(this.rightLoad==0){
-            this.rightAmmo++;
-            this.rightLoad=100;
-          }
-        }
-
-        // timer for shooting
-        if(this.timerS>0){
-          this.timerS--;
-        }
-
-      }// if in game and alive
-
-
-      if(this.inGame&&this.alive){
-        // if in game and alive
-        //this.speed=0;
-        this.moveAngle=0;
-
-        // moving the ship
-        if(!writingMode &&  myGameArea.keys && myGameArea.keys[87]){
-          if(this.speed>-1){
-            this.speed-=this.acc/2;
-          }
-        }
-
-        if(!writingMode &&  myGameArea.keys && myGameArea.keys[83]){
-          if(this.speed<0){
-            this.speed+=this.acc;
-          }
-        }
-
-        if(!writingMode &&  myGameArea.keys && myGameArea.keys[65] ){
-          this.moveAngle=-1;
-        }
-        if(!writingMode &&  myGameArea.keys && myGameArea.keys[68] ){
-          this.moveAngle=1;
-        }
-
-        if(this.speed>0){
-          this.speed=0;
-        }
-
-      } // if in game and alive
-
-
-        // moving as spectator
-        if(this.id==100){
-          if(myGameArea.keys && myGameArea.keys[87]){
-            this.y-=3;
-          }
-          if(myGameArea.keys && myGameArea.keys[83]){
-            this.y+=3;
-          }
-          if(myGameArea.keys && myGameArea.keys[65] ){
-            this.x-=3;
-          }
-          if(myGameArea.keys && myGameArea.keys[68] ){
-            this.x+=3;
-          }
-        }
-
-        // map border detection
-        if(myGamePiece.x<0){
-          myGamePiece.x=0;
-        }
-        if(myGamePiece.x>1024){
-          myGamePiece.x=1024;
-        }
-        if(myGamePiece.y<0){
-          myGamePiece.y=0;
-        }
-        if(myGamePiece.y>1024){
-          myGamePiece.y=1024;
-        }
-
-        if(this.inGame){
-
-        // changing position
-        this.angle += this.moveAngle * Math.PI / 180;
-        this.x -= this.speed * Math.sin(this.angle);
-        this.y += this.speed * Math.cos(this.angle);
-
-        ctx = myGameArea.context;
-        ctx.save();
-        ctx.translate(window.innerWidth/2, window.innerHeight/2);
-        ctx.rotate(this.angle);
-
-        // drawing the ship image
-        if(this.hp>80){
-          ctx.drawImage(ship1a, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-        }else if(this.hp>60){
-          ctx.drawImage(ship1b, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-        }else if(this.hp>40){
-          ctx.drawImage(ship1c, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-        }else if(this.hp>20){
-          ctx.drawImage(ship1d, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-        }else if(this.hp>0){
-          ctx.drawImage(ship1e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-        }else{
-          ctx.globalAlpha = this.deadTimer/250;
-          ctx.drawImage(ship1e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-        }
-
-        //ctx.fillStyle = "red";
-        //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
-        ctx.restore();
-
-        ctx.font = "bold 18px Courier New";
-        ctx.fillStyle = "white";
-        ctx.fillText("HP:"+this.hp,window.innerWidth/2-30,window.innerHeight/2-90);
-        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-120);
-        ctx.fillText("Kills:"+kills,window.innerWidth/2-30,window.innerHeight/2-150);
-        ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-180);
-        ctx.font = "bold 15px Courier New";
-
-        ctx.save();
-        ctx.translate(window.innerWidth/2,window.innerHeight/2);
-        ctx.rotate(this.angle);
-
-        ctx.save();
-        ctx.translate(-60,0);
-        ctx.rotate(-this.angle);
-        ctx.fillText("I"+this.leftAmmo,0,0);
-        ctx.restore();
-
-        ctx.save();
-        ctx.translate(60,0);
-        ctx.rotate(-this.angle);
-        ctx.fillText("P"+this.rightAmmo,0,0);
-        ctx.restore();
-
-        ctx.restore();
-
-        // instructions
-        if(insTime>0){
-          insTime--;
-          ctx.font = "bold 20px Courier New";
-          ctx.fillStyle = "red";
-          ctx.fillText("MOVE : WASD  SHOOT: IOP CHAT : ENTER",window.innerWidth/2-130,window.innerHeight-200);
-        }
-
-        }
-
-
-        if(!this.inGame){
-          var info = "Waiting to enter the game";
-          if(this.id==100){
-            ctx = myGameArea.context;
-            ctx.font = "bold 30px Courier New";
-            ctx.fillStyle = "red";
-            ctx.fillText(info,window.innerWidth/2-200,window.innerHeight/2-100);
-          }
-        }
-
-        // chat text message
-        if(writingMode){
-          ctx = myGameArea.context;
-          ctx.font = "bold 15px Courier New";
-          ctx.fillStyle = "white";
-          ctx.fillText(textReady,20,window.innerHeight-20);
-        }
-
-    }
-}
-
-
-
-
-
-function otherShip(x, y, a, id, name, hp) {
-
-    this.id=id;
-    this.name=name;
-    this.hp=hp;
-    this.deadTimer=250;
-    this.kills=0;
-
-    this.speed=1;
-
-    this.angle = a;
-    this.moveAngle = 0;
-
-    this.x = x;
-    this.y = y;
-    this.targetX=x;
-    this.targetY=y;
-
-    this.scale=0.3;
-
-    // time before object will be removed
-    this.timer=150;
-
-
-    this.update = function(newX, newY, newA, newHp, newK) {
-
-      this.targetX = newX;
-      this.targetY = newY;
-      this.targetA = newA;
-      this.hp=newHp;
-      this.kills=newK;
-
-      // if the ship is far away from its target move it directly
-      if(Math.abs(newX-this.x)>50||Math.abs(newY-this.y)>50){
-        this.x = newX;
-        this.y = newY;
-      }
-
-      // if ship angle is very different to target angle for more then 0.5 radian change it directly
-      if(Math.abs(newA-this.angle)>0.5){
-        this.angle = newA;
-      }
-        this.timer=150;
-    }
-
-
-    this.show = function() {
-
-      // moving the ship
-      if(this.targetX>this.x){
-        this.x+=this.speed;
-      }
-      if(this.targetX<this.x){
-        this.x-=this.speed;
-      }
-      if(this.targetY>this.y){
-        this.y+=this.speed;
-      }
-      if(this.targetY<this.y){
-        this.y-=this.speed;
-      }
-
-
-      if(this.targetA>this.angle){
-        this.moveAngle=1;
-      }
-      if(this.targetA<this.angle){
-        this.moveAngle=-1;
-      }
-      if(Math.abs(this.targetA-this.angle)<0.05){
-        this.moveAngle=0;
-      }
-
-      this.angle += this.moveAngle * Math.PI / 180;
-
-      ctx = myGameArea.context;
-      ctx.save();
-      ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
-      ctx.rotate(this.angle);
-
-      if(this.hp>0){
-        this.deadTimer=250;
-      }
-
-      if(this.hp==0&&this.deadTimer>0){
-        this.deadTimer--;
-      }
-
-      // drawing the ship image
-      if(this.hp>80){
-        ctx.drawImage(ship1a, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-      }else if(this.hp>60){
-        ctx.drawImage(ship1b, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-      }else if(this.hp>40){
-        ctx.drawImage(ship1c, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-      }else if(this.hp>20){
-        ctx.drawImage(ship1d, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-      }else if(this.hp>0){
-        ctx.drawImage(ship1e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-      }else{
-        ctx.globalAlpha = this.deadTimer/250;
-        ctx.drawImage(ship1e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
-      }
-
-      //ctx.fillStyle = "blue";
-      //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
-      ctx.restore();
-
-
-      // drawing the target
-      /*
-      ctx.save();
-      ctx.translate(window.innerWidth/2-myGamePiece.x+this.targetX,window.innerHeight/2-myGamePiece.y+this.targetY);
-      ctx.fillStyle = "red";
-      ctx.fillRect(10 / -2, 10 / -2, 10, 10);
-      ctx.restore();
-      */
-
-      ctx.font = "bold 18px Courier New";
-      ctx.fillStyle = "white";
-      ctx.fillText("HP:"+this.hp,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-50);
-      ctx.fillText(this.name,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
-      ctx.fillText("Kills:"+this.kills,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-110);
-      ctx.fillText("ID:"+this.id,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-140);
-
-      this.timer--;
-
-    }
-}
-
-
-function ball( x, y, a, id) {
-
-    this.id=id;
-    this.speed = 5;
-    //this.speed = 0;
-    this.angle = a;
-    this.timer=60
-    this.x = x;
-    this.y = y;
-
-
-    this.show = function() {
-
-      this.x += this.speed * Math.sin(this.angle);
-      this.y -= this.speed * Math.cos(this.angle);
-
-      ctx = myGameArea.context;
-      ctx.save();
-      ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
-      ctx.rotate(this.angle);
-      ctx.beginPath();
-
-      ctx.fillStyle = "black";
-      //ctx.fillStyle = "red";
-
-      ctx.arc(0, 0, 2, 0, 2*Math.PI);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-
-
-      this.timer--;
-
-    }
-}
-
-
-
-
-function exp( x, y, a) {
-
-    this.angle = a;
-    this.x = x;
-    this.y = y;
-    this.delayTime=0;
-    this.exLoop=1;
-    this.scale=0.6;
-
-    this.show = function() {
-
-      ctx = myGameArea.context;
-      ctx.save();
-      ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
-      ctx.rotate(this.angle);
-      this.delayTime++;
-      if(this.exLoop<65){
-        ctx.drawImage(document.getElementById("ex"+this.exLoop), -64*this.scale+37*this.scale, -128*this.scale+9*this.scale,
-        128*this.scale/2, 128*this.scale);
-        if(this.delayTime==1){
-          this.exLoop+=2;
-          this.delayTime=0;
-        }
-      }
-      ctx.restore();
-
-
-      this.timer--;
-
-    }
-}
-
-
-
-function hit( x, y, a) {
-
-    this.angle = a;
-    this.x = x;
-    this.y = y;
-    this.delayTime=0;
-    this.exLoop=1;
-    this.scale=0.1;
-
-    this.show = function() {
-
-      ctx = myGameArea.context;
-      ctx.save();
-      ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
-      ctx.rotate(this.angle);
-      this.delayTime++;
-      if(this.exLoop<49){
-        ctx.drawImage(document.getElementById("hit"+this.exLoop), -128*this.scale, -128*this.scale,
-        256*this.scale, 256*this.scale);
-        if(this.delayTime==1){
-          this.exLoop+=2;
-          this.delayTime=0;
-        }
-      }
-      ctx.restore();
-
-
-      this.timer--;
-
-    }
-}
-
-
-// to finish
-function textMsg(x, y, p, t, c) {
-
-    this.x = x;
-    this.y = y;
-    this.player=p;
-    this.text=t;
-    this.color=c;
-
-    this.timer=500;
-
-    this.show = function() {
-
-      ctx = myGameArea.context;
-      
-      if(this.color==1){
-        ctx.fillStyle = "white";
-        ctx.font = "bold 15px Courier New";
-        ctx.fillText("<<< "+this.player+this.text+" >>>",this.x,this.y);
-      }
-      if(this.color==0){
-        ctx.fillStyle = "white";
-        ctx.font = "15px Courier New";
-        ctx.fillText(this.player+":"+this.text,this.x,this.y);
-      }
-
-      this.timer--;
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-//// MAIN GAME INTERVAL FUNCTION FOR CANVAS
-
-function startGame() {
-    myGameArea.start();
-}
-
-
-var myGameArea = {
-    canvas : document.createElement("canvas"),
-    start : function() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-        this.context = this.canvas.getContext("2d");
-        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-        this.frameNo = 0;
-        this.interval = setInterval(updateGameArea, 20);
-        window.addEventListener('keydown', function (e) {
-            e.preventDefault();
-            myGameArea.keys = (myGameArea.keys || []);
-            myGameArea.keys[e.keyCode] = (e.type == "keydown");
-        })
-        window.addEventListener('keyup', function (e) {
-            myGameArea.keys[e.keyCode] = (e.type == "keydown");
-        })
-    },
-    stop : function() {
-        clearInterval(this.interval);
-    },
-    clear : function() {
-        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    }
-}
-
-
+/////////////// END OF SHIP POSITION SENDING
 
 
 </script>
