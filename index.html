@@ -425,6 +425,21 @@ socket.on('data4', function(ball4){
 
 /////////////// END OF SHIP AND BALLS DATA RECEIVING
 
+
+
+
+///////////////////////// AI
+
+var ai1= new aiShip(0,0);
+
+socket.on('ai1', function(aiData1){
+  ai1.update(aiData1.x, aiData1.y);
+});
+
+
+
+///////////////////////// END OF AI
+
 /////////////// SHIP POSITION SENDING
 
 // interval for data sending

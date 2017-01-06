@@ -6,6 +6,12 @@ function updateGameArea() {
     var ctx = myGameArea.context;
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y);
 
+    // showing ai ships
+    ai1.show();
+
+
+
+
     // showing other ships
     if(otherShips.length>0){
       for(var x=0; x<otherShips.length; x++){

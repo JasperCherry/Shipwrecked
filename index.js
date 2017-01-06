@@ -111,9 +111,44 @@ io.on('connection', function(socket){
     //console.log(ball4);
   });
 
+///////////////////////////////////////////// END OF PLAYERS SHIPS
 
-});
+///////////////////////////////////// AI
 
+  var aiShip1 = new aiShip();
+
+  // ai ships update interval
+  function sendAi() {
+    setInterval(function(){
+      aiShip1.update();
+      aiShip1.send();
+  }, 200);
+  }
+
+  sendAi();
+
+
+  // ai ship object
+  function aiShip() {
+
+      this.angle = 0;
+      this.x = Math.floor(Math.random()*1025);
+      this.y = Math.floor(Math.random()*1025);
+
+      this.update = function() {
+        this.x++;
+        this.y++;
+      }
+
+      this.send = function() {
+        var aiData1={"x":this.x, "y":this.y};
+        socket.emit('ai1', aiData1);
+      }
+
+  }
+
+
+}); ///////////////////// end of sockets connection
 
 
 http.listen(port, function(){
@@ -194,6 +229,11 @@ setInterval(function(){
 
 }, 2000);
 }
+
+
+
+
+
 
 
 

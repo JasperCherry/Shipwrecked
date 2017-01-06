@@ -263,3 +263,25 @@ function textMsg(x, y, p, t, c) {
       this.timer--;
     }
 }
+
+
+function aiShip(x, y) {
+
+    this.angle = 0;
+    this.x = x;
+    this.y = y;
+
+    this.update = function(x, y) {
+      this.x=x;
+      this.y=y;
+    }
+
+    this.show = function(x, y) {
+      ctx = myGameArea.context;
+      ctx.save();
+      ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
+      ctx.fillStyle = "red";
+      ctx.fillRect(10 / -2, 10 / -2, 10, 10);
+      ctx.restore();
+    }
+}
