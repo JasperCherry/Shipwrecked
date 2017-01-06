@@ -107,30 +107,30 @@ function updateGameArea() {
       for(var x=0; x<balls.length; x++){
           if(Math.abs(balls[x].x-myGamePiece.x)<15 && Math.abs(balls[x].y-myGamePiece.y)<15
           &&balls[x].id!=myGamePiece.id){
-            if(myGamePiece.hp<=3){
+            if(myGamePiece.hp<=balls[x].damage){
               myGamePiece.lastHit=balls[x].id;
             }
-            myGamePiece.hp-=3;
+            myGamePiece.hp-=balls[x].damage;
             hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
           }else
-          if(Math.abs(balls[x].x-(myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0)))<15
-           && Math.abs(balls[x].y-(myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0)))<15
+          if(Math.abs(balls[x].x-(myGamePiece.x-0+round((-30 * Math.sin(myGamePiece.angle)), 0)))<15
+           && Math.abs(balls[x].y-(myGamePiece.y-0+round((30 * Math.cos(myGamePiece.angle)), 0)))<15
           &&balls[x].id!=myGamePiece.id){
-            if(myGamePiece.hp<=3){
+            if(myGamePiece.hp<=balls[x].damage){
               myGamePiece.lastHit=balls[x].id;
             }
-            myGamePiece.hp-=3;
+            myGamePiece.hp-=balls[x].damage;
             hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
           }else
-          if(Math.abs(balls[x].x-(myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0)))<15
-           && Math.abs(balls[x].y-(myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0)))<15
+          if(Math.abs(balls[x].x-(myGamePiece.x-0+round((30 * Math.sin(myGamePiece.angle)), 0)))<15
+           && Math.abs(balls[x].y-(myGamePiece.y-0+round((-30 * Math.cos(myGamePiece.angle)), 0)))<15
           &&balls[x].id!=myGamePiece.id){
-            if(myGamePiece.hp<=3){
+            if(myGamePiece.hp<=balls[x].damage){
               myGamePiece.lastHit=balls[x].id;
             }
-            myGamePiece.hp-=3;
+            myGamePiece.hp-=balls[x].damage;
             hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
           }
@@ -149,14 +149,14 @@ function updateGameArea() {
             hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
           }else
-          if(Math.abs(balls[x].x-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs(balls[x].y-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
+          if(Math.abs(balls[x].x-(otherShips[z].x-0+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
+          && Math.abs(balls[x].y-(otherShips[z].y-0+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
           &&balls[x].id!=otherShips[z].id){
             hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
           }else
-          if(Math.abs(balls[x].x-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs(balls[x].y-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
+          if(Math.abs(balls[x].x-(otherShips[z].x-0+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
+          && Math.abs(balls[x].y-(otherShips[z].y-0+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
           &&balls[x].id!=otherShips[z].id){
             hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
             balls.splice(x,1);
@@ -171,24 +171,24 @@ function updateGameArea() {
       for(var z=0; z<otherShips.length; z++){
         if(otherShips[z].hp>0){
           // first square
-          if(Math.abs(myGamePiece.x-(otherShips[z].x))<20
-          && Math.abs(myGamePiece.y-(otherShips[z].y))<20
+          if(Math.abs(myGamePiece.x-(otherShips[z].x))<15
+          && Math.abs(myGamePiece.y-(otherShips[z].y))<15
           ){
             if(myGamePiece.hp<=1){
               myGamePiece.lastHit=otherShips[z].id;
             }
             myGamePiece.hp--;
           }else
-          if(Math.abs(myGamePiece.x-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs(myGamePiece.y-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
+          if(Math.abs(myGamePiece.x-(otherShips[z].x-0+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
+          && Math.abs(myGamePiece.y-(otherShips[z].y-0+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
           ){
             if(myGamePiece.hp<=1){
               myGamePiece.lastHit=otherShips[z].id;
             }
             myGamePiece.hp--;
           }else
-          if(Math.abs(myGamePiece.x-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs(myGamePiece.y-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
+          if(Math.abs(myGamePiece.x-(otherShips[z].x-0+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
+          && Math.abs(myGamePiece.y-(otherShips[z].y-0+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
           ){
             if(myGamePiece.hp<=1){
               myGamePiece.lastHit=otherShips[z].id;
@@ -197,28 +197,28 @@ function updateGameArea() {
           }else
 
           // second square
-          if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<20
-          && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<20
+          if(Math.abs((myGamePiece.x-0+round((-30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<15
+          && Math.abs((myGamePiece.y-0+round((30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<15
           ){
             if(myGamePiece.hp<=1){
               myGamePiece.lastHit=otherShips[z].id;
             }
             myGamePiece.hp--;
           }else
-          if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))
-          -(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))
-          -(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
+          if(Math.abs((myGamePiece.x-0+round((-30 * Math.sin(myGamePiece.angle)), 0))
+          -(otherShips[z].x-0+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
+          && Math.abs((myGamePiece.y-0+round((30 * Math.cos(myGamePiece.angle)), 0))
+          -(otherShips[z].y-0+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
           ){
             if(myGamePiece.hp<=1){
               myGamePiece.lastHit=otherShips[z].id;
             }
             myGamePiece.hp--;
           }else
-          if(Math.abs((myGamePiece.x-15+round((-30 * Math.sin(myGamePiece.angle)), 0))
-          -(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs((myGamePiece.y-15+round((30 * Math.cos(myGamePiece.angle)), 0))
-          -(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
+          if(Math.abs((myGamePiece.x-0+round((-30 * Math.sin(myGamePiece.angle)), 0))
+          -(otherShips[z].x-0+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
+          && Math.abs((myGamePiece.y-0+round((30 * Math.cos(myGamePiece.angle)), 0))
+          -(otherShips[z].y-0+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
           ){
             if(myGamePiece.hp<=1){
               myGamePiece.lastHit=otherShips[z].id;
@@ -227,24 +227,28 @@ function updateGameArea() {
           }else
 
           // third square
-          if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<20
-          && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<20
+          if(Math.abs((myGamePiece.x-0+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<15
+          && Math.abs((myGamePiece.y-0+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<15
           ){
             if(myGamePiece.hp<=1){
               myGamePiece.lastHit=otherShips[z].id;
             }
             myGamePiece.hp--;
           }else
-          if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x-15+round((-30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y-15+round((30 * Math.cos(otherShips[z].angle)), 0)))<20
+          if(Math.abs((myGamePiece.x-0+round((30 * Math.sin(myGamePiece.angle)), 0))
+          -(otherShips[z].x-0+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
+          && Math.abs((myGamePiece.y-0+round((-30 * Math.cos(myGamePiece.angle)), 0))
+          -(otherShips[z].y-0+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
           ){
             if(myGamePiece.hp<=1){
               myGamePiece.lastHit=otherShips[z].id;
             }
             myGamePiece.hp--;
           }else
-          if(Math.abs((myGamePiece.x-15+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x-15+round((30 * Math.sin(otherShips[z].angle)), 0)))<20
-          && Math.abs((myGamePiece.y-15+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y-15+round((-30 * Math.cos(otherShips[z].angle)), 0)))<20
+          if(Math.abs((myGamePiece.x-0+round((30 * Math.sin(myGamePiece.angle)), 0))
+          -(otherShips[z].x-0+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
+          && Math.abs((myGamePiece.y-0+round((-30 * Math.cos(myGamePiece.angle)), 0))
+          -(otherShips[z].y-0+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
           ){
             if(myGamePiece.hp<=1){
               myGamePiece.lastHit=otherShips[z].id;
@@ -258,13 +262,6 @@ function updateGameArea() {
 
     // checking if player died
     if(myGamePiece.hp<=0){
-      // emit info to chat
-      if(myGamePiece.lastInfoText){
-        var txt={"p":person,"t":" has been killed", "c":1};
-        socket.emit('chat', txt);
-        myGamePiece.lastInfoText=false;
-      }
-
 
       myGamePiece.hp=0;
       myGamePiece.deadTimer--;

@@ -1,14 +1,13 @@
 
-function otherShip(x, y, a, id, name, hp) {
+function otherShip(x, y, a, id, name, hp, shipType) {
 
     this.id=id;
     this.name=name;
     this.hp=hp;
     this.deadTimer=250;
     this.kills=0;
-
+    this.type=shipType;
     this.speed=1;
-
     this.angle = a;
     this.moveAngle = 0;
 
@@ -23,7 +22,7 @@ function otherShip(x, y, a, id, name, hp) {
     this.timer=150;
 
 
-    this.update = function(newX, newY, newA, newHp, newK, newN) {
+    this.update = function(newX, newY, newA, newHp, newK, newN, newT) {
 
       this.targetX = newX;
       this.targetY = newY;
@@ -31,6 +30,7 @@ function otherShip(x, y, a, id, name, hp) {
       this.hp=newHp;
       this.kills=newK;
       this.name=newN;
+      this.type=newT;
 
       // if the ship is far away from its target move it directly
       if(Math.abs(newX-this.x)>50||Math.abs(newY-this.y)>50){
@@ -124,6 +124,7 @@ function otherShip(x, y, a, id, name, hp) {
       ctx.fillText(this.name,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
       ctx.fillText("Kills:"+this.kills,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-110);
       ctx.fillText("ID:"+this.id,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-140);
+      ctx.fillText("Type:"+this.type,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-170);
 
       this.timer--;
 
@@ -131,7 +132,7 @@ function otherShip(x, y, a, id, name, hp) {
 }
 
 
-function ball( x, y, a, id) {
+function ball( x, y, a, id, d) {
 
     this.id=id;
     this.speed = 5;
@@ -140,7 +141,7 @@ function ball( x, y, a, id) {
     this.timer=60
     this.x = x;
     this.y = y;
-
+    this.damage=d;
 
     this.show = function() {
 
