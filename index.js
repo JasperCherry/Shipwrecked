@@ -47,6 +47,7 @@ io.on('connection', function(socket){
     //console.log(msg1);
   });
 
+
   // ship1
   socket.on('id1', function(ship1){
     setTimeout(function () {
@@ -62,6 +63,14 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball1);
   });
+  socket.on('ship1ai1', function(ai){
+    setTimeout(function () {
+      var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
+      io.emit('ship1ai1', aiNew);
+      //console.log(aiNew);
+    }, 0)
+  });
+
 
   // ship2
   socket.on('id2', function(ship2){
@@ -78,6 +87,14 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball2);
   });
+  socket.on('ship2ai1', function(ai){
+    setTimeout(function () {
+      var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
+      io.emit('ship2ai1', aiNew);
+      //console.log(aiNew);
+    }, 0)
+  });
+
 
   // ship3
   socket.on('id3', function(ship3){
@@ -94,6 +111,14 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball3);
   });
+  socket.on('ship3ai1', function(ai){
+    setTimeout(function () {
+      var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
+      io.emit('ship3ai1', aiNew);
+      //console.log(aiNew);
+    }, 0)
+  });
+
 
   // ship4
   socket.on('id4', function(ship4){
@@ -110,50 +135,87 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball4);
   });
+  socket.on('ship4ai1', function(ai){
+    setTimeout(function () {
+      var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
+      io.emit('ship4ai1', aiNew);
+      //console.log(aiNew);
+    }, 0)
+  });
 
 ///////////////////////////////////////////// END OF PLAYERS SHIPS
-
-///////////////////////////////////// AI
-
-  var aiShip1 = new aiShip();
-
-  // ai ships update interval
-  function sendAi() {
-    setInterval(function(){
-      aiShip1.update();
-      aiShip1.send();
-  }, 200);
-  }
-
-  sendAi();
-
-
-  // ai ship object
-  function aiShip() {
-
-      this.angle = 0;
-      this.x = Math.floor(Math.random()*1025);
-      this.y = Math.floor(Math.random()*1025);
-
-      this.update = function() {
-        this.x++;
-        this.y++;
-      }
-
-      this.send = function() {
-        var aiData1={"x":this.x, "y":this.y};
-        socket.emit('ai1', aiData1);
-      }
-
-  }
 
 
 }); ///////////////////// end of sockets connection
 
+  var aiShip1 = new aiShip();
 
-http.listen(port, function(){
-  console.log('listening on *:'+port);
-});
+
+  // ai ships update interval
+  function moveAi() {
+    setInterval(function(){
+      aiShip1.update();
+    }, 20);
+  }
+
+
+
+  moveAi();
+
+
+
+
+
+
+
+
+
+
+
+// ai ship object
+function aiShip() {
+
+    this.x = Math.floor(Math.random()*1025);
+    this.y = Math.floor(Math.random()*1025);
+    this.targetX = Math.floor(Math.random()*1025);
+    this.targetY = Math.floor(Math.random()*1025);
+
+    this.angle = 0;
+    this.targetA = 0;
+
+    this.speed=1;
+
+    this.targetChange=400;
+
+    // every 20 ms update, every 200 ms send
+    this.sendTimer=10;
+
+
+    this.update = function() {
+
+      this.targetA=Math.atan2( this.targetY - this.y, this.targetX - this.x)+(-90 * Math.PI / 180);
+
+      if(Math.abs(this.targetA-this.angle)>0.05){
+        // moving the angle
+        if(this.targetA>this.angle){
+          this.angle += 1 * Math.PI / 180;
+        }
+        if(this.targetA<this.angle){
+          this.angle -= 1 * Math.PI / 180;
+        }
+      }else{
+        // moving the ship
+        this.x -= this.speed * Math.sin(this.angle);
+        this.y += this.speed * Math.cos(this.angle);
+      }
+
+      // if target has been reached
+      if(Math.abs(this.targetX-this.x)<5 && Math.abs(this.targetY-this.y)<5){
+        this.targetX = Math.floor(Math.random()*1025);
+        this.targetY = Math.floor(Math.random()*1025);
+      }
+    }
+}
 
 
 // function that checks if id is taken:
@@ -232,13 +294,16 @@ setInterval(function(){
 
 
 
+// rounding numbers function
+function round(n, k){
+    var factor = Math.pow(10, k);
+    return Math.round(n*factor)/factor;
+}
 
 
-
-
-
-
-
+http.listen(port, function(){
+  console.log('listening on *:'+port);
+});
 
 
 // end

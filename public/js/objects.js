@@ -265,23 +265,83 @@ function textMsg(x, y, p, t, c) {
 }
 
 
-function aiShip(x, y) {
+function aiShip(x, y, a) {
 
-    this.angle = 0;
+    this.angle = a;
+    this.targetA=this.angle;
+
     this.x = x;
     this.y = y;
+    this.targetX=x;
+    this.targetY=y;
 
-    this.update = function(x, y) {
-      this.x=x;
-      this.y=y;
+    this.desX=0;
+    this.desY=0;
+
+    this.speed=1;
+
+    this.timer=150;
+
+    this.update = function(newX, newY, newA, d1, d2) {
+
+      this.desX=d1;
+      this.desY=d2;
+
+      this.targetX = newX;
+      this.targetY = newY;
+      this.targetA = newA;
+
+      // if the ship is far away from its target move it directly
+      if(Math.abs(newX-this.x)>50||Math.abs(newY-this.y)>50){
+        this.x = newX;
+        this.y = newY;
+      }
+
+
+      this.timer=150;
     }
 
     this.show = function(x, y) {
+
+      // moving the ship
+      if(this.targetX>this.x){
+        this.x+=this.speed;
+      }
+      if(this.targetX<this.x){
+        this.x-=this.speed;
+      }
+      if(this.targetY>this.y){
+        this.y+=this.speed;
+      }
+      if(this.targetY<this.y){
+        this.y-=this.speed;
+      }
+
+      // changing the angle
+      if(Math.abs(this.targetA-this.angle)>0.05){
+        if(this.targetA>this.angle){
+          this.angle+=1 * Math.PI / 180;
+        }
+        if(this.targetA<this.angle){
+          this.angle-=1 * Math.PI / 180;
+        }
+      }
+
       ctx = myGameArea.context;
       ctx.save();
       ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
+      ctx.rotate(this.angle);
       ctx.fillStyle = "red";
-      ctx.fillRect(10 / -2, 10 / -2, 10, 10);
+      ctx.fillRect(30 / -2, 60 / -2, 30, 60);
       ctx.restore();
+
+      ctx = myGameArea.context;
+      ctx.save();
+      ctx.translate(window.innerWidth/2-myGamePiece.x+this.desX,window.innerHeight/2-myGamePiece.y+this.desY);
+      ctx.fillStyle = "green";
+      ctx.fillRect(30 / -2, 30 / -2, 30, 30);
+      ctx.restore();
+
+      this.timer--;
     }
 }
