@@ -63,6 +63,7 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball1);
   });
+  /*
   socket.on('ship1ai1', function(ai){
     setTimeout(function () {
       var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
@@ -70,7 +71,7 @@ io.on('connection', function(socket){
       //console.log(aiNew);
     }, 0)
   });
-
+  */
 
   // ship2
   socket.on('id2', function(ship2){
@@ -87,6 +88,7 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball2);
   });
+  /*
   socket.on('ship2ai1', function(ai){
     setTimeout(function () {
       var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
@@ -94,6 +96,7 @@ io.on('connection', function(socket){
       //console.log(aiNew);
     }, 0)
   });
+  */
 
 
   // ship3
@@ -111,6 +114,7 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball3);
   });
+  /*
   socket.on('ship3ai1', function(ai){
     setTimeout(function () {
       var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
@@ -118,6 +122,7 @@ io.on('connection', function(socket){
       //console.log(aiNew);
     }, 0)
   });
+  */
 
 
   // ship4
@@ -135,6 +140,7 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball4);
   });
+  /*
   socket.on('ship4ai1', function(ai){
     setTimeout(function () {
       var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
@@ -142,6 +148,7 @@ io.on('connection', function(socket){
       //console.log(aiNew);
     }, 0)
   });
+  */
 
 ///////////////////////////////////////////// END OF PLAYERS SHIPS
 
@@ -155,6 +162,8 @@ io.on('connection', function(socket){
   function moveAi() {
     setInterval(function(){
       aiShip1.update();
+      var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
+      io.emit('ship1ai1', aiNew);
     }, 20);
   }
 

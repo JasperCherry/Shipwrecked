@@ -430,26 +430,14 @@ socket.on('data4', function(ball4){
 
 ///////////////////////// AI
 
-var ship1ai1Data;
-var ship2ai1Data;
-var ship3ai1Data;
-var ship4ai1Data;
 
 var ai1= new aiShip(0,0,0);
 
 // sockets for 1st ai ship
 socket.on('ship1ai1', function(ai){
-  ship1ai1Data=ai;
+  ai1.update(ai.x, ai.y, ai.a, ai.t1, ai.t2);
 });
-socket.on('ship2ai1', function(ai){
-  ship2ai1Data=ai;
-});
-socket.on('ship3ai1', function(ai){
-  ship3ai1Data=ai;
-});
-socket.on('ship4ai1', function(ai){
-  ship4ai1Data=ai;
-});
+
 
 
 
@@ -459,7 +447,7 @@ socket.on('ship4ai1', function(ai){
 
 // interval for data sending
 // 1. sending ship data, position and hp
-// 2. sending request for AI ships
+
 function dataS1() {
 setInterval(function(){
 
@@ -475,11 +463,8 @@ setInterval(function(){
       "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
       socket.emit('id1', ship1);
     }
-    // asking for ai ship1 data
-    socket.emit('ship1ai1', "ai");
-
-
   }
+
   if(myGamePiece.id==2){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
@@ -491,9 +476,8 @@ setInterval(function(){
       "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
       socket.emit('id2', ship2);
     }
-    // asking for ai ship1 data
-    socket.emit('ship2ai1', "ai");
   }
+
   if(myGamePiece.id==3){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
@@ -505,9 +489,8 @@ setInterval(function(){
       "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
       socket.emit('id3', ship3);
     }
-    // asking for ai ship1 data
-    socket.emit('ship3ai1', "ai");
   }
+
   if(myGamePiece.id==4){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
@@ -519,8 +502,6 @@ setInterval(function(){
       "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
       socket.emit('id4', ship4);
     }
-    // asking for ai ship1 data
-    socket.emit('ship4ai1', "ai");
   }
 
 }, 200);

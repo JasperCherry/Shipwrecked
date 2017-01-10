@@ -6,24 +6,9 @@ function updateGameArea() {
     var ctx = myGameArea.context;
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y);
 
-    // updating ai ships
-    if(myGamePiece.id==1){
-      ai1.update(ship1ai1Data.x, ship1ai1Data.y, ship1ai1Data.a, ship1ai1Data.t1, ship1ai1Data.t2);
-    }
-    if(myGamePiece.id==2){
-      ai1.update(ship2ai1Data.x, ship2ai1Data.y, ship2ai1Data.a, ship2ai1Data.t1, ship2ai1Data.t2);
-    }
-    if(myGamePiece.id==3){
-      ai1.update(ship3ai1Data.x, ship3ai1Data.y, ship3ai1Data.a, ship3ai1Data.t1, ship3ai1Data.t2);
-    }
-    if(myGamePiece.id==4){
-      ai1.update(ship4ai1Data.x, ship4ai1Data.y, ship4ai1Data.a, ship4ai1Data.t1, ship4ai1Data.t2);
-    }
 
     // showing ai ships
     ai1.show();
-
-
 
 
     // showing other ships
