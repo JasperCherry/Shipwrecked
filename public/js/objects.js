@@ -270,6 +270,7 @@ function aiShip(x, y, a) {
     this.angle = a;
     this.targetA=this.angle;
 
+    this.scale=0.3;
     this.x = x;
     this.y = y;
     this.targetX=x;
@@ -331,8 +332,13 @@ function aiShip(x, y, a) {
       ctx.save();
       ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
       ctx.rotate(this.angle);
-      ctx.fillStyle = "red";
-      ctx.fillRect(30 / -2, 60 / -2, 30, 60);
+      //ctx.fillStyle = "red";
+      //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
+
+      // drawing the ship image
+
+      ctx.drawImage(ship1a, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+
       ctx.restore();
 
       ctx = myGameArea.context;

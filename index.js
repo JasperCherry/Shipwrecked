@@ -13,15 +13,19 @@ app.get('/', function(req, res){
 
 var ship1a=false;
 var ship1b=false;
+var ship1total;
 
 var ship2a=false;
 var ship2b=false;
+var ship2total;
 
 var ship3a=false;
 var ship3b=false;
+var ship3total;
 
 var ship4a=false;
 var ship4b=false;
+var ship4total;
 
 checkFreeId();
 
@@ -54,6 +58,7 @@ io.on('connection', function(socket){
       io.emit('id1', ship1);
       ship1a=true;
       ship1b=true;
+      ship1total=ship1;
     }, 0)
     //console.log(ship1);
   });
@@ -63,15 +68,7 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball1);
   });
-  /*
-  socket.on('ship1ai1', function(ai){
-    setTimeout(function () {
-      var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
-      io.emit('ship1ai1', aiNew);
-      //console.log(aiNew);
-    }, 0)
-  });
-  */
+
 
   // ship2
   socket.on('id2', function(ship2){
@@ -79,6 +76,7 @@ io.on('connection', function(socket){
       io.emit('id2', ship2);
       ship2a=true;
       ship2b=true;
+      ship2total=ship2;
     }, 0)
     //console.log(ship2);
   });
@@ -88,15 +86,6 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball2);
   });
-  /*
-  socket.on('ship2ai1', function(ai){
-    setTimeout(function () {
-      var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
-      io.emit('ship2ai1', aiNew);
-      //console.log(aiNew);
-    }, 0)
-  });
-  */
 
 
   // ship3
@@ -105,6 +94,7 @@ io.on('connection', function(socket){
       io.emit('id3', ship3);
       ship3a=true;
       ship3b=true;
+      ship3total=ship3;
     }, 0)
     //console.log(ship3);
   });
@@ -114,15 +104,6 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball3);
   });
-  /*
-  socket.on('ship3ai1', function(ai){
-    setTimeout(function () {
-      var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
-      io.emit('ship3ai1', aiNew);
-      //console.log(aiNew);
-    }, 0)
-  });
-  */
 
 
   // ship4
@@ -131,6 +112,7 @@ io.on('connection', function(socket){
       io.emit('id4', ship4);
       ship4a=true;
       ship4b=true;
+      ship4total=ship4;
     }, 0)
     //console.log(ship4);
   });
@@ -140,15 +122,8 @@ io.on('connection', function(socket){
     }, 0)
     //console.log(ball4);
   });
-  /*
-  socket.on('ship4ai1', function(ai){
-    setTimeout(function () {
-      var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
-      io.emit('ship4ai1', aiNew);
-      //console.log(aiNew);
-    }, 0)
-  });
-  */
+
+
 
 ///////////////////////////////////////////// END OF PLAYERS SHIPS
 
@@ -163,7 +138,7 @@ io.on('connection', function(socket){
     setInterval(function(){
       aiShip1.update();
       var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
-      io.emit('ship1ai1', aiNew);
+      io.emit('ship1ai', aiNew);
     }, 20);
   }
 
@@ -189,42 +164,157 @@ function aiShip() {
     this.targetX = Math.floor(Math.random()*1025);
     this.targetY = Math.floor(Math.random()*1025);
 
-    this.angle = 0;
-    this.targetA = 0;
+    this.angle=0;
+    this.targetA=0;
+    // timer for changing the angle
+    this.targetTimer=0;
+    // timer for changing the target
+    this.targetTimer2=0;
 
-    this.speed=1;
+    this.speed=0; // to fix
 
     this.targetChange=400;
 
     // every 20 ms update, every 200 ms send
     this.sendTimer=10;
 
+    // shooting
+    this.fireAngle;
+    this.ballDamage=3;
+    this.fireGap=15;
+    this.timerSR=0;
+    this.timerSL=0;
 
     this.update = function() {
 
-      this.targetA=Math.atan2( this.targetY - this.y, this.targetX - this.x)+(-90 * Math.PI / 180);
+      if(this.targetTimer==150){
+        this.targetA=Math.atan2( this.targetY - this.y, this.targetX - this.x)+(-90 * Math.PI / 180);
 
-      if(Math.abs(this.targetA-this.angle)>0.05){
-        // moving the angle
-        if(this.targetA>this.angle){
-          this.angle += 1 * Math.PI / 180;
+        if(Math.abs(this.targetA-this.angle)>0.05){
+          // moving the angle
+          if(this.targetA>this.angle){
+          //  this.angle += 1 * Math.PI / 180; to fix
+          }
+          if(this.targetA<this.angle){
+          //  this.angle -= 1 * Math.PI / 180;
+          }
+        }else{
+          // stop rotating if the angle is set
+          this.targetTimer=0;
         }
-        if(this.targetA<this.angle){
-          this.angle -= 1 * Math.PI / 180;
-        }
+
       }else{
-        // moving the ship
-        this.x -= this.speed * Math.sin(this.angle);
-        this.y += this.speed * Math.cos(this.angle);
+        this.targetTimer++;
       }
 
+      // moving the ship
+      this.x -= this.speed * Math.sin(this.angle);
+      this.y += this.speed * Math.cos(this.angle);
+
+      // changing the target from time to time
+      if(this.targetTimer2==400){
+        this.targetX = Math.floor(Math.random()*1025);
+        this.targetY = Math.floor(Math.random()*1025);
+        this.targetTimer2=0;
+      }else{
+        this.targetTimer2++;
+      }
+
+
       // if target has been reached
-      if(Math.abs(this.targetX-this.x)<5 && Math.abs(this.targetY-this.y)<5){
+      if(Math.abs(this.targetX-this.x)<50 && Math.abs(this.targetY-this.y)<50){
         this.targetX = Math.floor(Math.random()*1025);
         this.targetY = Math.floor(Math.random()*1025);
       }
+
+      // shooting
+
+      // if ship exists in the game
+      if((ship1a||ship1b)&&ship1total!=null){
+
+          this.fireAngle=Math.atan2( ship1total.y - this.y, ship1total.x - this.x)+(180 * Math.PI / 180);
+          while(this.fireAngle>6.28){
+            this.fireAngle-=6.28;
+          }
+          while(this.fireAngle<-6.28){
+            this.fireAngle+=6.28;
+          }
+
+          // shooting right side
+          if(Math.abs(this.fireAngle)>2.86&&Math.abs(this.fireAngle)<3.42){
+            if(this.timerSR==0){
+            var shootingHole=Math.floor(Math.random()*5);
+            if(shootingHole==0){
+              this.shot={"x":round(this.x+(20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+              "y":round(this.y-(20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4), "d":this.ballDamage};
+            }else if(shootingHole==1){
+              this.shot={"x":round(this.x+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+              "y":round(this.y-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4), "d":this.ballDamage};
+            }else if(shootingHole==2){
+              this.shot={"x":round(this.x+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+              "y":round(this.y-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4), "d":this.ballDamage};
+            }else if(shootingHole==3){
+              this.shot={"x":round(this.x+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+              "y":round(this.y-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4), "d":this.ballDamage};
+            }else if(shootingHole==4){
+              this.shot={"x":round(this.x+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle+90 * Math.PI / 180)), 0),
+              "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4), "d":this.ballDamage};
+            }
+            io.emit('ship1aibr', this.shot);
+            this.timerSR=this.fireGap;
+            }
+          }
+          // shooting left side
+          if(Math.abs(this.fireAngle)>6||Math.abs(this.fireAngle)<0.28){
+            if(this.timerSL==0){
+            var shootingHole=Math.floor(Math.random()*5);
+            if(shootingHole==0){
+              this.shot={"x":round(this.x+(20 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+              "y":round(this.y-(20 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4), "d":this.ballDamage};
+            }else if(shootingHole==1){
+              this.shot={"x":round(this.x+(12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+              "y":round(this.y-(12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4), "d":this.ballDamage};
+            }else if(shootingHole==2){
+              this.shot={"x":round(this.x+(4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+              "y":round(this.y-(4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4), "d":this.ballDamage};
+            }else if(shootingHole==3){
+              this.shot={"x":round(this.x+(-4 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+              "y":round(this.y-(-4 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4), "d":this.ballDamage};
+            }else if(shootingHole==4){
+              this.shot={"x":round(this.x+(-12 * Math.sin(this.angle))+ 12 * (Math.sin(this.angle-90 * Math.PI / 180)), 0),
+              "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
+              "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4), "d":this.ballDamage};
+            }
+            io.emit('ship1aibl', this.shot);
+            this.timerSL=this.fireGap;
+            }
+          }
+
+         // timers for shooting sideways
+         if(this.timerSR>0){
+           this.timerSR--;
+         }
+         if(this.timerSL>0){
+           this.timerSL--;
+         }
+
+
+      }
+
+
     }
 }
+
+
 
 
 // function that checks if id is taken:
