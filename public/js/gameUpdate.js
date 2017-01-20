@@ -268,6 +268,13 @@ function updateGameArea() {
     // checking if player died
     if(myGamePiece.hp<=0){
 
+      if(myGamePiece.lastHit.toString()=="ai1"&&myGamePiece.lastInfo==true){
+        myGamePiece.lastInfo=false;
+        var txt={"p":"","t":person+" has been killed by AI", "c":1};
+        socket.emit('chat', txt);
+      }
+
+
       myGamePiece.hp=0;
       myGamePiece.deadTimer--;
       if(myGamePiece.deadTimer==0){

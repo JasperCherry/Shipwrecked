@@ -265,8 +265,9 @@ function textMsg(x, y, p, t, c) {
 }
 
 
-function aiShip(x, y, a, newHp) {
+function aiShip(x, y, a, newHp, newId) {
 
+    this.id=newId;
     this.angle = a;
     this.targetA=this.angle;
     this.hp=newHp;
@@ -334,13 +335,42 @@ function aiShip(x, y, a, newHp) {
         this.deadTimer--;
       }
 
+      // checking if ship was hit
+      if(balls.length>0){
+          if(this.hp>0){
+          for(var x=0; x<balls.length; x++){
+            if(balls[x].id!=this.id){
+            if(Math.abs(balls[x].x-(this.x))<15
+            && Math.abs(balls[x].y-(this.y))<15
+            &&balls[x].id!=this.id){
+              hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
+              balls.splice(x,1);
+            }else
+            if(Math.abs(balls[x].x-(this.x-0+round((-30 * Math.sin(this.angle)), 0)))<15
+            && Math.abs(balls[x].y-(this.y-0+round((30 * Math.cos(this.angle)), 0)))<15
+            &&balls[x].id!=this.id){
+              hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
+              balls.splice(x,1);
+            }else
+            if(Math.abs(balls[x].x-(this.x-0+round((30 * Math.sin(this.angle)), 0)))<15
+            && Math.abs(balls[x].y-(this.y-0+round((-30 * Math.cos(this.angle)), 0)))<15
+            &&balls[x].id!=this.id){
+              hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
+              balls.splice(x,1);
+            }
+            }
+          }
+          }
+      }
+
+
       ctx = myGameArea.context;
       ctx.save();
       ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
       ctx.rotate(this.angle);
       //ctx.fillStyle = "red";
       //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
-      
+
       // drawing the ship image
       if(this.hp>80){
         ctx.drawImage(ship1a, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);

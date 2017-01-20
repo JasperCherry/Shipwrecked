@@ -159,7 +159,6 @@ io.on('connection', function(socket){
             }
         }
       }
-      console.log(balls.length);
 
     }, 20);
   }
@@ -191,6 +190,7 @@ function aiShip() {
     this.lastHit;
     this.lastInfo=true;
     this.alive=true;
+    this.selfRepair=50;
 
     this.angle=0;
     this.targetA=0;
@@ -199,7 +199,7 @@ function aiShip() {
     // timer for changing the target
     this.targetTimer2=0;
 
-    this.speed=0; // to fix
+    this.speed=1;
 
     this.targetChange=400;
 
@@ -208,7 +208,7 @@ function aiShip() {
 
     // shooting
     this.fireAngle;
-    this.ballDamage=3;
+    this.ballDamage=5;
     this.fireGap=15;
     this.timerSR=0;
     this.timerSL=0;
@@ -221,14 +221,12 @@ function aiShip() {
         // checking distance
         if(Math.abs(shipdata.x-this.x)<350 && Math.abs(shipdata.y-this.y)<350){
           this.fireAngle=Math.atan2( shipdata.y - this.y, shipdata.x - this.x)+(180 * Math.PI / 180);
-          while(this.fireAngle>6.28){
-            this.fireAngle-=6.28;
-          }
-          while(this.fireAngle<-6.28){
-            this.fireAngle+=6.28;
-          }
+
+          this.fireAngle=Math.abs((this.fireAngle-this.angle)%6.28);
+          //console.log(this.fireAngle);
+
           // shooting right side
-          if(Math.abs(this.fireAngle)>2.86&&Math.abs(this.fireAngle)<3.42){
+          if(Math.abs(this.fireAngle)>3.14-0.28&&Math.abs(this.fireAngle)<3.14+0.28){
             if(this.timerSR==0){
             var shootingHole=Math.floor(Math.random()*5);
             if(shootingHole==0){
@@ -300,6 +298,18 @@ function aiShip() {
 
     this.update = function() {
 
+      // self repair
+      if(this.alive){
+          if(this.hp<10){  // to fix
+            this.selfRepair--;
+            if(this.selfRepair==0){
+              this.selfRepair=50;
+              this.hp++;
+            }
+          }
+      }
+
+
       // checking if ship is alive
       if(this.hp>0){
         this.alive=true;
@@ -335,15 +345,15 @@ function aiShip() {
       if(this.alive){
 
       if(this.targetTimer==150){
-        this.targetA=Math.atan2( this.targetY - this.y, this.targetX - this.x)+(-90 * Math.PI / 180);
+        this.targetA=Math.atan2( this.targetY - this.y, this.targetX - this.x)+(90 * Math.PI / 180);
 
         if(Math.abs(this.targetA-this.angle)>0.05){
           // moving the angle
           if(this.targetA>this.angle){
-          //  this.angle += 1 * Math.PI / 180; to fix
+            this.angle += 1 * Math.PI / 180;
           }
           if(this.targetA<this.angle){
-          //  this.angle -= 1 * Math.PI / 180;
+            this.angle -= 1 * Math.PI / 180;
           }
         }else{
           // stop rotating if the angle is set
@@ -357,8 +367,22 @@ function aiShip() {
       }
 
       // moving the ship
-      this.x -= this.speed * Math.sin(this.angle);
-      this.y += this.speed * Math.cos(this.angle);
+      this.x += this.speed * Math.sin(this.angle);
+      this.y -= this.speed * Math.cos(this.angle);
+
+      // map border detection
+      if(this.x<0){
+        this.x=0;
+      }
+      if(this.x>1024){
+        this.x=1024;
+      }
+      if(this.y<0){
+        this.y=0;
+      }
+      if(this.y>1024){
+        this.y=1024;
+      }
 
       // changing the target from time to time
       if(this.alive){

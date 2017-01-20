@@ -320,17 +320,17 @@ function myShip( x, y, name, id, shipType) {
         }
 
         // map border detection
-        if(myGamePiece.x<0){
-          myGamePiece.x=0;
+        if(this.x<0){
+          this.x=0;
         }
-        if(myGamePiece.x>1024){
-          myGamePiece.x=1024;
+        if(this.x>1024){
+          this.x=1024;
         }
-        if(myGamePiece.y<0){
-          myGamePiece.y=0;
+        if(this.y<0){
+          this.y=0;
         }
-        if(myGamePiece.y>1024){
-          myGamePiece.y=1024;
+        if(this.y>1024){
+          this.y=1024;
         }
 
         if(this.inGame){
