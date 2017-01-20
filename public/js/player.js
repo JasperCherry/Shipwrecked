@@ -7,7 +7,6 @@ function myShip( x, y, name, id, shipType) {
     this.inGame=false;
     this.alive=true;
     this.lastInfo=true;
-    this.lastInfoText=true;
     this.lastHit;
     this.deadTimer=250;
 

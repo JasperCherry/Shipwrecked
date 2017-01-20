@@ -10,6 +10,7 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+var balls=new Array();
 
 var ship1a=false;
 var ship1b=false;
@@ -65,6 +66,7 @@ io.on('connection', function(socket){
   socket.on('data1', function(ball1){
     setTimeout(function () {
       io.emit('data1', ball1);
+      balls.push(new ball(ball1.x, ball1.y, ball1.a, 1, ball1.d));
     }, 0)
     //console.log(ball1);
   });
@@ -83,6 +85,7 @@ io.on('connection', function(socket){
   socket.on('data2', function(ball2){
     setTimeout(function () {
       io.emit('data2', ball2);
+      balls.push(new ball(ball2.x, ball2.y, ball2.a, 2, ball2.d));
     }, 0)
     //console.log(ball2);
   });
@@ -101,6 +104,7 @@ io.on('connection', function(socket){
   socket.on('data3', function(ball3){
     setTimeout(function () {
       io.emit('data3', ball3);
+      balls.push(new ball(ball3.x, ball3.y, ball3.a, 3, ball3.d));
     }, 0)
     //console.log(ball3);
   });
@@ -119,6 +123,7 @@ io.on('connection', function(socket){
   socket.on('data4', function(ball4){
     setTimeout(function () {
       io.emit('data4', ball4);
+      balls.push(new ball(ball4.x, ball4.y, ball4.a, 4, ball4.d));
     }, 0)
     //console.log(ball4);
   });
@@ -137,8 +142,25 @@ io.on('connection', function(socket){
   function moveAi() {
     setInterval(function(){
       aiShip1.update();
-      var aiNew={"x":round(aiShip1.x, 0), "y":round(aiShip1.y, 0), "a":round(aiShip1.angle, 4), "t1":round(aiShip1.targetX, 0), "t2":round(aiShip1.targetY, 0)};
-      io.emit('ship1ai', aiNew);
+
+
+
+      // showing balls
+      if(balls.length>0){
+        for(var x=0; x<balls.length; x++){
+            balls[x].show();
+        }
+      }
+      // deleting balls when timer is zero
+      if(balls.length>0){
+        for(var x=0; x<balls.length; x++){
+            if(balls[x].timer<=0){
+              balls.splice(x,1);
+            }
+        }
+      }
+      console.log(balls.length);
+
     }, 20);
   }
 
@@ -159,10 +181,16 @@ io.on('connection', function(socket){
 // ai ship object
 function aiShip() {
 
+    this.id=0;
     this.x = Math.floor(Math.random()*1025);
     this.y = Math.floor(Math.random()*1025);
     this.targetX = Math.floor(Math.random()*1025);
     this.targetY = Math.floor(Math.random()*1025);
+
+    this.hp=10; // to fix
+    this.lastHit;
+    this.lastInfo=true;
+    this.alive=true;
 
     this.angle=0;
     this.targetA=0;
@@ -185,61 +213,20 @@ function aiShip() {
     this.timerSR=0;
     this.timerSL=0;
 
-    this.update = function() {
+    this.deadTimer=250;
 
-      if(this.targetTimer==150){
-        this.targetA=Math.atan2( this.targetY - this.y, this.targetX - this.x)+(-90 * Math.PI / 180);
-
-        if(Math.abs(this.targetA-this.angle)>0.05){
-          // moving the angle
-          if(this.targetA>this.angle){
-          //  this.angle += 1 * Math.PI / 180; to fix
-          }
-          if(this.targetA<this.angle){
-          //  this.angle -= 1 * Math.PI / 180;
-          }
-        }else{
-          // stop rotating if the angle is set
-          this.targetTimer=0;
-        }
-
-      }else{
-        this.targetTimer++;
-      }
-
-      // moving the ship
-      this.x -= this.speed * Math.sin(this.angle);
-      this.y += this.speed * Math.cos(this.angle);
-
-      // changing the target from time to time
-      if(this.targetTimer2==400){
-        this.targetX = Math.floor(Math.random()*1025);
-        this.targetY = Math.floor(Math.random()*1025);
-        this.targetTimer2=0;
-      }else{
-        this.targetTimer2++;
-      }
-
-
-      // if target has been reached
-      if(Math.abs(this.targetX-this.x)<50 && Math.abs(this.targetY-this.y)<50){
-        this.targetX = Math.floor(Math.random()*1025);
-        this.targetY = Math.floor(Math.random()*1025);
-      }
-
-      // shooting
-
+    this.ifShootP = function(control1, control2, shipdata) {
       // if ship exists in the game
-      if((ship1a||ship1b)&&ship1total!=null){
-
-          this.fireAngle=Math.atan2( ship1total.y - this.y, ship1total.x - this.x)+(180 * Math.PI / 180);
+      if((control1||control2)&&shipdata!=null){
+        // checking distance
+        if(Math.abs(shipdata.x-this.x)<350 && Math.abs(shipdata.y-this.y)<350){
+          this.fireAngle=Math.atan2( shipdata.y - this.y, shipdata.x - this.x)+(180 * Math.PI / 180);
           while(this.fireAngle>6.28){
             this.fireAngle-=6.28;
           }
           while(this.fireAngle<-6.28){
             this.fireAngle+=6.28;
           }
-
           // shooting right side
           if(Math.abs(this.fireAngle)>2.86&&Math.abs(this.fireAngle)<3.42){
             if(this.timerSR==0){
@@ -266,6 +253,7 @@ function aiShip() {
               "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4), "d":this.ballDamage};
             }
             io.emit('ship1aibr', this.shot);
+            balls.push(new ball(this.shot.x, this.shot.y, this.shot.a, 0, this.shot.d));
             this.timerSR=this.fireGap;
             }
           }
@@ -295,10 +283,10 @@ function aiShip() {
               "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4), "d":this.ballDamage};
             }
             io.emit('ship1aibl', this.shot);
+            balls.push(new ball(this.shot.x, this.shot.y, this.shot.a, 0, this.shot.d));
             this.timerSL=this.fireGap;
             }
           }
-
          // timers for shooting sideways
          if(this.timerSR>0){
            this.timerSR--;
@@ -306,15 +294,168 @@ function aiShip() {
          if(this.timerSL>0){
            this.timerSL--;
          }
+        }
+      }
+    }
 
+    this.update = function() {
+
+      // checking if ship is alive
+      if(this.hp>0){
+        this.alive=true;
+      }else{
+        this.alive=false;
+      }
+
+      // respawn
+      if(!this.alive){
+        this.deadTimer--;
+        if(this.deadTimer==0){
+          this.deadTimer=250;
+          this.x = Math.floor(Math.random()*1025);
+          this.y = Math.floor(Math.random()*1025);
+          this.alive=true;
+          this.hp=10; // to fix
+          this.lastInfo=true;
+        }
+      }
+
+      // sending data
+      if(this.hp==0&&this.lastInfo){
+        this.lastInfo=false;
+        var aiNew={"x":round(this.x, 0), "y":round(this.y, 0), "a":round(this.angle, 4),
+         "t1":round(this.targetX, 0), "t2":round(this.targetY, 0), "hp":"D"+this.lastHit};
+        io.emit('ship1ai', aiNew);
+      }else{
+        var aiNew={"x":round(this.x, 0), "y":round(this.y, 0), "a":round(this.angle, 4),
+         "t1":round(this.targetX, 0), "t2":round(this.targetY, 0), "hp":this.hp};
+        io.emit('ship1ai', aiNew);
+      }
+
+      if(this.alive){
+
+      if(this.targetTimer==150){
+        this.targetA=Math.atan2( this.targetY - this.y, this.targetX - this.x)+(-90 * Math.PI / 180);
+
+        if(Math.abs(this.targetA-this.angle)>0.05){
+          // moving the angle
+          if(this.targetA>this.angle){
+          //  this.angle += 1 * Math.PI / 180; to fix
+          }
+          if(this.targetA<this.angle){
+          //  this.angle -= 1 * Math.PI / 180;
+          }
+        }else{
+          // stop rotating if the angle is set
+          this.targetTimer=0;
+        }
+
+      }else{
+        this.targetTimer++;
+      }
 
       }
 
+      // moving the ship
+      this.x -= this.speed * Math.sin(this.angle);
+      this.y += this.speed * Math.cos(this.angle);
+
+      // changing the target from time to time
+      if(this.alive){
+        if(this.targetTimer2==this.targetChange){
+          this.targetX = Math.floor(Math.random()*1025);
+          this.targetY = Math.floor(Math.random()*1025);
+          this.targetTimer2=0;
+        }else{
+          this.targetTimer2++;
+        }
+      }
+
+
+
+      // if target has been reached
+      if(Math.abs(this.targetX-this.x)<50 && Math.abs(this.targetY-this.y)<50){
+        this.targetX = Math.floor(Math.random()*1025);
+        this.targetY = Math.floor(Math.random()*1025);
+      }
+
+      // checking for targets to open fire
+      if(this.alive){
+        this.ifShootP(ship1a, ship1b, ship1total);
+        this.ifShootP(ship2a, ship2b, ship2total);
+        this.ifShootP(ship3a, ship3b, ship3total);
+        this.ifShootP(ship4a, ship4b, ship4total);
+      }
+
+
+
+      // checking for harm
+      // checking 3 squares
+      if(balls.length>0){
+        for(var x=0; x<balls.length; x++){
+            if(Math.abs(balls[x].x-this.x)<15 && Math.abs(balls[x].y-this.y)<15
+            &&balls[x].id!=this.id){
+              if(this.hp<=balls[x].damage){
+                this.lastHit=balls[x].id;
+              }
+              this.hp-=balls[x].damage;
+              balls.splice(x,1);
+            }else
+            if(Math.abs(balls[x].x-(this.x-0+round((-30 * Math.sin(this.angle)), 0)))<15
+             && Math.abs(balls[x].y-(this.y-0+round((30 * Math.cos(this.angle)), 0)))<15
+            &&balls[x].id!=this.id){
+              if(this.hp<=balls[x].damage){
+                this.lastHit=balls[x].id;
+              }
+              this.hp-=balls[x].damage;
+              balls.splice(x,1);
+            }else
+            if(Math.abs(balls[x].x-(this.x-0+round((30 * Math.sin(this.angle)), 0)))<15
+             && Math.abs(balls[x].y-(this.y-0+round((-30 * Math.cos(this.angle)), 0)))<15
+            &&balls[x].id!=this.id){
+              if(this.hp<=balls[x].damage){
+                this.lastHit=balls[x].id;
+              }
+              this.hp-=balls[x].damage;
+              balls.splice(x,1);
+            }
+        }
+      }
+
+      // reducing hp to 0
+      if(this.hp<0){
+        this.hp=0;
+      }
+
+
 
     }
+
+
 }
 
 
+
+function ball( x, y, a, id, d) {
+
+    this.id=id;
+    this.speed = 5;
+    //this.speed = 0;
+    this.angle = a;
+    this.timer=60
+    this.x = x;
+    this.y = y;
+    this.damage=d;
+
+    this.show = function() {
+
+      this.x += this.speed * Math.sin(this.angle);
+      this.y -= this.speed * Math.cos(this.angle);
+
+      this.timer--;
+
+    }
+}
 
 
 // function that checks if id is taken:

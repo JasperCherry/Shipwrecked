@@ -265,29 +265,27 @@ function textMsg(x, y, p, t, c) {
 }
 
 
-function aiShip(x, y, a) {
+function aiShip(x, y, a, newHp) {
 
     this.angle = a;
     this.targetA=this.angle;
-
+    this.hp=newHp;
     this.scale=0.3;
     this.x = x;
     this.y = y;
     this.targetX=x;
     this.targetY=y;
-
     this.desX=0;
     this.desY=0;
-
     this.speed=1;
-
     this.timer=150;
+    this.deadTimer=250;
 
-    this.update = function(newX, newY, newA, d1, d2) {
+    this.update = function(newX, newY, newA, d1, d2, newHp) {
 
       this.desX=d1;
       this.desY=d2;
-
+      this.hp=newHp;
       this.targetX = newX;
       this.targetY = newY;
       this.targetA = newA;
@@ -328,16 +326,36 @@ function aiShip(x, y, a) {
         }
       }
 
+      if(this.hp>0){
+        this.deadTimer=250;
+      }
+
+      if(this.hp==0&&this.deadTimer>0){
+        this.deadTimer--;
+      }
+
       ctx = myGameArea.context;
       ctx.save();
       ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
       ctx.rotate(this.angle);
       //ctx.fillStyle = "red";
       //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
-
+      
       // drawing the ship image
-
-      ctx.drawImage(ship1a, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      if(this.hp>80){
+        ctx.drawImage(ship1a, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.hp>60){
+        ctx.drawImage(ship1b, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.hp>40){
+        ctx.drawImage(ship1c, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.hp>20){
+        ctx.drawImage(ship1d, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.hp>0){
+        ctx.drawImage(ship1e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else{
+        ctx.globalAlpha = this.deadTimer/250;
+        ctx.drawImage(ship1e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }
 
       ctx.restore();
 
@@ -346,7 +364,14 @@ function aiShip(x, y, a) {
       ctx.translate(window.innerWidth/2-myGamePiece.x+this.desX,window.innerHeight/2-myGamePiece.y+this.desY);
       ctx.fillStyle = "green";
       ctx.fillRect(30 / -2, 30 / -2, 30, 30);
+
       ctx.restore();
+
+      ctx.font = "bold 18px Courier New";
+      ctx.fillStyle = "white";
+      ctx.fillText("HP:"+this.hp,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-50);
+      ctx.fillText("AI",window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
+
 
       this.timer--;
     }
