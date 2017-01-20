@@ -171,99 +171,15 @@ function updateGameArea() {
       }
     }
 
-    // ships collision detection
+    // live ships collision detection
     if(otherShips.length>0){
       for(var z=0; z<otherShips.length; z++){
-        if(otherShips[z].hp>0){
-          // first square
-          if(Math.abs(myGamePiece.x-(otherShips[z].x))<15
-          && Math.abs(myGamePiece.y-(otherShips[z].y))<15
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs(myGamePiece.x-(otherShips[z].x-0+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs(myGamePiece.y-(otherShips[z].y-0+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs(myGamePiece.x-(otherShips[z].x-0+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs(myGamePiece.y-(otherShips[z].y-0+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-
-          // second square
-          if(Math.abs((myGamePiece.x-0+round((-30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<15
-          && Math.abs((myGamePiece.y-0+round((30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<15
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs((myGamePiece.x-0+round((-30 * Math.sin(myGamePiece.angle)), 0))
-          -(otherShips[z].x-0+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs((myGamePiece.y-0+round((30 * Math.cos(myGamePiece.angle)), 0))
-          -(otherShips[z].y-0+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs((myGamePiece.x-0+round((-30 * Math.sin(myGamePiece.angle)), 0))
-          -(otherShips[z].x-0+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs((myGamePiece.y-0+round((30 * Math.cos(myGamePiece.angle)), 0))
-          -(otherShips[z].y-0+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-
-          // third square
-          if(Math.abs((myGamePiece.x-0+round((30 * Math.sin(myGamePiece.angle)), 0))-(otherShips[z].x))<15
-          && Math.abs((myGamePiece.y-0+round((-30 * Math.cos(myGamePiece.angle)), 0))-(otherShips[z].y))<15
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs((myGamePiece.x-0+round((30 * Math.sin(myGamePiece.angle)), 0))
-          -(otherShips[z].x-0+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs((myGamePiece.y-0+round((-30 * Math.cos(myGamePiece.angle)), 0))
-          -(otherShips[z].y-0+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }else
-          if(Math.abs((myGamePiece.x-0+round((30 * Math.sin(myGamePiece.angle)), 0))
-          -(otherShips[z].x-0+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs((myGamePiece.y-0+round((-30 * Math.cos(myGamePiece.angle)), 0))
-          -(otherShips[z].y-0+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
-          ){
-            if(myGamePiece.hp<=1){
-              myGamePiece.lastHit=otherShips[z].id;
-            }
-            myGamePiece.hp--;
-          }
-        }
+        ifCollide(otherShips[z]);
       }
     }
 
+    // ai ships collision detection
+    ifCollide(ai1);
 
     // checking if player died
     if(myGamePiece.hp<=0){
