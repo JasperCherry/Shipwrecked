@@ -135,17 +135,21 @@ io.on('connection', function(socket){
 
 }); ///////////////////// end of sockets connection
 
-  var aiShip1 = new aiShip();
+  var aiShip1 = new aiShip("Flying Dutchman",81);
+  var aiShip2 = new aiShip("Mary Celeste",82);
+
 
 
   // ai ships update interval
   function moveAi() {
     setInterval(function(){
-      aiShip1.update();
+
+      aiShip1.update(); // to fix -> make it send data ony 5 times / second
+      aiShip2.update();
 
 
 
-      // showing balls
+      // updating balls
       if(balls.length>0){
         for(var x=0; x<balls.length; x++){
             balls[x].show();
@@ -178,9 +182,10 @@ io.on('connection', function(socket){
 
 
 // ai ship object
-function aiShip() {
+function aiShip(newName, newId) {
 
-    this.id=0;
+    this.name=newName;
+    this.id=newId;
     this.x = Math.floor(Math.random()*1025);
     this.y = Math.floor(Math.random()*1025);
     this.targetX = Math.floor(Math.random()*1025);
@@ -199,7 +204,7 @@ function aiShip() {
     // timer for changing the target
     this.targetTimer2=0;
 
-    this.speed=1;
+    this.speed=0;
 
     this.targetChange=400;
 
@@ -215,6 +220,100 @@ function aiShip() {
 
     this.deadTimer=250;
 
+    // collision detection
+    this.ifCollide = function(element){
+    if(element!=null){
+    if(element.hp>0){
+      // first square
+      if(Math.abs(this.x-(element.x))<15
+      && Math.abs(this.y-(element.y))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs(this.x-(element.x-0+round((-30 * Math.sin(element.a)), 0)))<15
+      && Math.abs(this.y-(element.y-0+round((30 * Math.cos(element.a)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs(this.x-(element.x-0+round((30 * Math.sin(element.a)), 0)))<15
+      && Math.abs(this.y-(element.y-0+round((-30 * Math.cos(element.a)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+
+      // second square
+      if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))-(element.x))<15
+      && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))-(element.y))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))
+      -(element.x-0+round((-30 * Math.sin(element.a)), 0)))<15
+      && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))
+      -(element.y-0+round((30 * Math.cos(element.a)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))
+      -(element.x-0+round((30 * Math.sin(element.a)), 0)))<15
+      && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))
+      -(element.y-0+round((-30 * Math.cos(element.a)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+
+      // third square
+      if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))-(element.x))<15
+      && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))-(element.y))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))
+      -(element.x-0+round((-30 * Math.sin(element.a)), 0)))<15
+      && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))
+      -(element.y-0+round((30 * Math.cos(element.a)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))
+      -(element.x-0+round((30 * Math.sin(element.a)), 0)))<15
+      && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))
+      -(element.y-0+round((-30 * Math.cos(element.a)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }
+    }
+    }
+    }
+
+    // if target is in the range -> open fire function
     this.ifShootP = function(control1, control2, shipdata) {
       // if ship exists in the game
       if((control1||control2)&&shipdata!=null){
@@ -250,7 +349,12 @@ function aiShip() {
               "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle+90 * Math.PI / 180)), 0),
               "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4), "d":this.ballDamage};
             }
-            io.emit('ship1aibr', this.shot);
+            if(this.id==81){
+              io.emit('ship1aibl', this.shot);
+            }
+            if(this.id==82){
+              io.emit('ship2aibl', this.shot);
+            }
             balls.push(new ball(this.shot.x, this.shot.y, this.shot.a, 0, this.shot.d));
             this.timerSR=this.fireGap;
             }
@@ -280,7 +384,12 @@ function aiShip() {
               "y":round(this.y-(-12 * Math.cos(this.angle))- 12 * (Math.cos(this.angle-90 * Math.PI / 180)), 0),
               "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  - 90) * Math.PI / 180), 4), "d":this.ballDamage};
             }
-            io.emit('ship1aibl', this.shot);
+            if(this.id==81){
+              io.emit('ship1aibl', this.shot);
+            }
+            if(this.id==82){
+              io.emit('ship2aibl', this.shot);
+            }
             balls.push(new ball(this.shot.x, this.shot.y, this.shot.a, 0, this.shot.d));
             this.timerSL=this.fireGap;
             }
@@ -297,6 +406,7 @@ function aiShip() {
     }
 
     this.update = function() {
+
 
       // self repair
       if(this.alive){
@@ -333,13 +443,24 @@ function aiShip() {
       // sending data
       if(this.hp==0&&this.lastInfo){
         this.lastInfo=false;
-        var aiNew={"x":round(this.x, 0), "y":round(this.y, 0), "a":round(this.angle, 4),
+        var aiNew={"n":this.name, "x":round(this.x, 0), "y":round(this.y, 0), "a":round(this.angle, 4),
          "t1":round(this.targetX, 0), "t2":round(this.targetY, 0), "hp":"D"+this.lastHit};
-        io.emit('ship1ai', aiNew);
+         if(this.id==81){
+           io.emit('ship1ai', aiNew);
+         }
+         if(this.id==82){
+           io.emit('ship2ai', aiNew);
+         }
+
       }else{
-        var aiNew={"x":round(this.x, 0), "y":round(this.y, 0), "a":round(this.angle, 4),
+        var aiNew={"n":this.name,"x":round(this.x, 0), "y":round(this.y, 0), "a":round(this.angle, 4),
          "t1":round(this.targetX, 0), "t2":round(this.targetY, 0), "hp":this.hp};
-        io.emit('ship1ai', aiNew);
+         if(this.id==81){
+           io.emit('ship1ai', aiNew);
+         }
+         if(this.id==82){
+           io.emit('ship2ai', aiNew);
+         }
       }
 
       if(this.alive){
@@ -405,10 +526,19 @@ function aiShip() {
 
       // checking for targets to open fire
       if(this.alive){
+        // requires  x, y,
         this.ifShootP(ship1a, ship1b, ship1total);
         this.ifShootP(ship2a, ship2b, ship2total);
         this.ifShootP(ship3a, ship3b, ship3total);
         this.ifShootP(ship4a, ship4b, ship4total);
+
+
+        // requires x, y, angle, id,
+        this.ifCollide(ship1total);
+        this.ifCollide(ship2total);
+        this.ifCollide(ship3total);
+        this.ifCollide(ship4total);
+
       }
 
 
@@ -418,7 +548,7 @@ function aiShip() {
       if(balls.length>0){
         for(var x=0; x<balls.length; x++){
             if(Math.abs(balls[x].x-this.x)<15 && Math.abs(balls[x].y-this.y)<15
-            &&balls[x].id!=this.id){
+            &&balls[x].id!=0){
               if(this.hp<=balls[x].damage){
                 this.lastHit=balls[x].id;
               }
@@ -427,7 +557,7 @@ function aiShip() {
             }else
             if(Math.abs(balls[x].x-(this.x-0+round((-30 * Math.sin(this.angle)), 0)))<15
              && Math.abs(balls[x].y-(this.y-0+round((30 * Math.cos(this.angle)), 0)))<15
-            &&balls[x].id!=this.id){
+            &&balls[x].id!=0){
               if(this.hp<=balls[x].damage){
                 this.lastHit=balls[x].id;
               }
@@ -436,7 +566,7 @@ function aiShip() {
             }else
             if(Math.abs(balls[x].x-(this.x-0+round((30 * Math.sin(this.angle)), 0)))<15
              && Math.abs(balls[x].y-(this.y-0+round((-30 * Math.cos(this.angle)), 0)))<15
-            &&balls[x].id!=this.id){
+            &&balls[x].id!=0){
               if(this.hp<=balls[x].damage){
                 this.lastHit=balls[x].id;
               }
@@ -524,6 +654,7 @@ setInterval(function(){
   // checking ship1
   if(ship1b==true&&ship1a==false){
     ship1b=false;
+    ship1total=null;
   }
   if(ship1a==true){
     ship1a=false;
@@ -532,6 +663,7 @@ setInterval(function(){
   // checking ship2
   if(ship2b==true&&ship2a==false){
     ship2b=false;
+    ship2total=null;
   }
   if(ship2a==true){
     ship2a=false;
@@ -540,6 +672,7 @@ setInterval(function(){
   // checking ship3
   if(ship3b==true&&ship3a==false){
     ship3b=false;
+    ship3total=null;
   }
   if(ship3a==true){
     ship3a=false;
@@ -548,6 +681,7 @@ setInterval(function(){
   // checking ship4
   if(ship4b==true&&ship4a==false){
     ship4b=false;
+    ship4total=null;
   }
   if(ship4a==true){
     ship4a=false;

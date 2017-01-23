@@ -267,6 +267,7 @@ function textMsg(x, y, p, t, c) {
 
 function aiShip(x, y, a, newHp, newId) {
 
+    this.name=null;
     this.id=newId;
     this.angle = a;
     this.targetA=this.angle;
@@ -282,8 +283,9 @@ function aiShip(x, y, a, newHp, newId) {
     this.timer=150;
     this.deadTimer=250;
 
-    this.update = function(newX, newY, newA, d1, d2, newHp) {
+    this.update = function(newName, newX, newY, newA, d1, d2, newHp) {
 
+      this.name=newName;
       this.desX=d1;
       this.desY=d2;
       this.hp=newHp;
@@ -400,7 +402,7 @@ function aiShip(x, y, a, newHp, newId) {
       ctx.font = "bold 18px Courier New";
       ctx.fillStyle = "white";
       ctx.fillText("HP:"+this.hp,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-50);
-      ctx.fillText("AI",window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
+      ctx.fillText(this.name,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
 
 
       this.timer--;

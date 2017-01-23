@@ -243,34 +243,9 @@ socket.on('setId', function(msg1){
   if(msg1.firstId==firstId){
     if(msg1.status!=tempId){
       tempId=msg1.status;
-
-      // system for avoiding collision with previous position and other ships
-      var newPosX;
-      var newPosY;
-      var newPosXisOK;
-      var newPosYisOK;
-      do{
-        var newPosXisOK=true;
-        var newPosYisOK=true;
-        newPosX=Math.floor(Math.random()*1025)
-        newPosY=Math.floor(Math.random()*1025);
-        // checking distance from position of being killed
-        if(Math.abs(newPosX-myGamePiece.x)<200){
-          newPosXisOK=false;
-        }
-        if(Math.abs(newPosY-myGamePiece.y)<200){
-          newPosYisOK=false;
-        }
-        // checking distance from other ships
-        for(var z=0; z<otherShips.length; z++){
-          if(Math.abs(newPosX-otherShips[z].x)<200){
-            newPosXisOK=false;
-          }
-          if(Math.abs(newPosY-otherShips[z].y)<200){
-            newPosYisOK=false;
-          }
-        }
-      }while(!newPosXisOK&&!newPosYisOK);
+      // respawn
+      var newPosX=Math.floor(Math.random()*1025)
+      var newPosY=Math.floor(Math.random()*1025);
       myGamePiece = new myShip(newPosX, newPosY, person, tempId, 1);
     }
   }
@@ -432,20 +407,20 @@ socket.on('data4', function(ball4){
 
 
 var ai1 = new aiShip(0,0,0,0,"ai1");
+var ai2 = new aiShip(0,0,0,0,"ai2");
 
 // sockets for 1st ai ship
 socket.on('ship1ai', function(ai){
-  ai1.update(ai.x, ai.y, ai.a, ai.t1, ai.t2, ai.hp);
 
   if(ai1.hp.toString().substring(0, 1)=="D"){
     if(ai1.hp.substring(1, ai1.hp.length)==myGamePiece.id){
       kills++;
-      var txt={"p":"","t":"AI has been killed by "+person+" which has now "+kills+" kills", "c":1};
+      var txt={"p":"","t":ai1.name+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
       socket.emit('chat', txt);
     }
-    ai1.update(ai.x, ai.y, ai.a, ai.t1, ai.t2, 0);
+    ai1.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, 0);
   }else{
-    ai1.update(ai.x, ai.y, ai.a, ai.t1, ai.t2, ai.hp);
+    ai1.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, ai.hp);
   }
 });
 // for its bullets from right side
@@ -456,6 +431,31 @@ socket.on('ship1aibr', function(aib){
 // for its bullets from left side
 socket.on('ship1aibl', function(aib){
   balls.push(new ball(aib.x, aib.y, aib.a, ai1.id, aib.d));
+  exps.push(new exp(aib.x, aib.y, aib.a));
+});
+
+// sockets for 2nd ai ship
+socket.on('ship2ai', function(ai){
+
+  if(ai2.hp.toString().substring(0, 1)=="D"){
+    if(ai2.hp.substring(1, ai2.hp.length)==myGamePiece.id){
+      kills++;
+      var txt={"p":"","t":ai2.name+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
+      socket.emit('chat', txt);
+    }
+    ai2.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, 0);
+  }else{
+    ai2.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, ai.hp);
+  }
+});
+// for its bullets from right side
+socket.on('ship2aibr', function(aib){
+  balls.push(new ball(aib.x, aib.y, aib.a, ai2.id, aib.d));
+  exps.push(new exp(aib.x, aib.y, aib.a));
+});
+// for its bullets from left side
+socket.on('ship2aibl', function(aib){
+  balls.push(new ball(aib.x, aib.y, aib.a, ai2.id, aib.d));
   exps.push(new exp(aib.x, aib.y, aib.a));
 });
 

@@ -9,6 +9,7 @@ function updateGameArea() {
 
     // showing ai ships
     ai1.show();
+    ai2.show();
 
 
     // showing other ships
@@ -180,49 +181,31 @@ function updateGameArea() {
 
     // ai ships collision detection
     ifCollide(ai1);
+    ifCollide(ai2);
 
     // checking if player died
     if(myGamePiece.hp<=0){
 
       if(myGamePiece.lastHit.toString()=="ai1"&&myGamePiece.lastInfo==true){
         myGamePiece.lastInfo=false;
-        var txt={"p":"","t":person+" has been killed by AI", "c":1};
+        var txt={"p":"","t":person+" has been killed by "+ai1.name, "c":1};
+        socket.emit('chat', txt);
+      }
+
+      if(myGamePiece.lastHit.toString()=="ai2"&&myGamePiece.lastInfo==true){
+        myGamePiece.lastInfo=false;
+        var txt={"p":"","t":person+" has been killed by "+ai2.name, "c":1};
         socket.emit('chat', txt);
       }
 
 
       myGamePiece.hp=0;
       myGamePiece.deadTimer--;
-      if(myGamePiece.deadTimer==0){
-
-        // system for avoiding collision with previous position and other ships
-        var newPosX;
-        var newPosY;
-        var newPosXisOK;
-        var newPosYisOK;
-        do{
-          var newPosXisOK=true;
-          var newPosYisOK=true;
-          newPosX=Math.floor(Math.random()*1025)
-          newPosY=Math.floor(Math.random()*1025);
-          // checking distance from position of being killed
-          if(Math.abs(newPosX-myGamePiece.x)<200){
-            newPosXisOK=false;
-          }
-          if(Math.abs(newPosY-myGamePiece.y)<200){
-            newPosYisOK=false;
-          }
-          // checking distance from other ships
-          for(var z=0; z<otherShips.length; z++){
-            if(Math.abs(newPosX-otherShips[z].x)<200){
-              newPosXisOK=false;
-            }
-            if(Math.abs(newPosY-otherShips[z].y)<200){
-              newPosYisOK=false;
-            }
-          }
-        }while(!newPosXisOK&&!newPosYisOK);
-        myGamePiece = new myShip(newPosX, newPosY, person, tempId);
+      if(myGamePiece.deadTimer==0){  
+        // respawn
+        var newPosX=Math.floor(Math.random()*1025)
+        var newPosY=Math.floor(Math.random()*1025);
+        myGamePiece = new myShip(newPosX, newPosY, person, tempId, 1);
       }
     }
 
