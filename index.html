@@ -23,6 +23,12 @@ body {
 <img src="pic/ships/ship1d.png" id="ship1d" style="display: none;">
 <img src="pic/ships/ship1e.png" id="ship1e" style="display: none;">
 
+<img src="pic/ships/ship2a.png" id="ship2a" style="display: none;">
+<img src="pic/ships/ship2b.png" id="ship2b" style="display: none;">
+<img src="pic/ships/ship2c.png" id="ship2c" style="display: none;">
+<img src="pic/ships/ship2d.png" id="ship2d" style="display: none;">
+<img src="pic/ships/ship2e.png" id="ship2e" style="display: none;">
+
 <img src="pic/texture/water.jpg" id="water" style="display: none;">
 <img src="pic/texture/water2.jpg" id="water2" style="display: none;">
 <img src="pic/texture/water3.jpg" id="water3" style="display: none;">
@@ -247,6 +253,10 @@ socket.on('setId', function(msg1){
       var newPosX=Math.floor(Math.random()*1025)
       var newPosY=Math.floor(Math.random()*1025);
       myGamePiece = new myShip(newPosX, newPosY, person, tempId, 1);
+
+      // info about joining the game
+      var txt={"p":"","t":person+" has joined the game", "c":1};
+      socket.emit('chat', txt);
     }
   }
 });
@@ -254,10 +264,12 @@ socket.on('setId', function(msg1){
 // asking for id interval function
 function askId() {
 setInterval(function(){
+  if(person.toString().toLowerCase()!="spectator"){
     if(myGamePiece.id==100){
       var msg1={"firstId":firstId,"status":tempId};
       socket.emit('setId', msg1);
     }
+  }
 }, 1000);
 }
 
@@ -525,7 +537,7 @@ setInterval(function(){
     }
   }
 
-}, 200);
+}, 100); // n times per second / 10
 }
 
 // running interval functions to send data

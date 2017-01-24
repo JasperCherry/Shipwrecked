@@ -19,7 +19,7 @@ function otherShip(x, y, a, id, name, hp, shipType) {
     this.scale=0.3;
 
     // time before object will be removed
-    this.timer=150;
+    this.timer=50;
 
 
     this.update = function(newX, newY, newA, newHp, newK, newN, newT) {
@@ -33,7 +33,7 @@ function otherShip(x, y, a, id, name, hp, shipType) {
       this.type=newT;
 
       // if the ship is far away from its target move it directly
-      if(Math.abs(newX-this.x)>50||Math.abs(newY-this.y)>50){
+      if(Math.abs(newX-this.x)>30||Math.abs(newY-this.y)>30){
         this.x = newX;
         this.y = newY;
       }
@@ -42,7 +42,7 @@ function otherShip(x, y, a, id, name, hp, shipType) {
       if(Math.abs(newA-this.angle)>0.5){
         this.angle = newA;
       }
-        this.timer=150;
+        this.timer=50;
     }
 
 
@@ -280,7 +280,7 @@ function aiShip(x, y, a, newHp, newId) {
     this.desX=0;
     this.desY=0;
     this.speed=1;
-    this.timer=150;
+    this.timer=50;
     this.deadTimer=250;
 
     this.update = function(newName, newX, newY, newA, d1, d2, newHp) {
@@ -294,13 +294,17 @@ function aiShip(x, y, a, newHp, newId) {
       this.targetA = newA;
 
       // if the ship is far away from its target move it directly
-      if(Math.abs(newX-this.x)>50||Math.abs(newY-this.y)>50){
+      if(Math.abs(newX-this.x)>30||Math.abs(newY-this.y)>30){
         this.x = newX;
         this.y = newY;
       }
 
+      // if ship angle is very different to target angle for more then 0.5 radian change it directly
+      if(Math.abs(newA-this.angle)>0.5){
+        this.angle = newA;
+      }
 
-      this.timer=150;
+      this.timer=50;
     }
 
     this.show = function(x, y) {
@@ -375,18 +379,18 @@ function aiShip(x, y, a, newHp, newId) {
 
       // drawing the ship image
       if(this.hp>80){
-        ctx.drawImage(ship1a, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        ctx.drawImage(ship2a, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
       }else if(this.hp>60){
-        ctx.drawImage(ship1b, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        ctx.drawImage(ship2b, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
       }else if(this.hp>40){
-        ctx.drawImage(ship1c, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        ctx.drawImage(ship2c, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
       }else if(this.hp>20){
-        ctx.drawImage(ship1d, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        ctx.drawImage(ship2d, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
       }else if(this.hp>0){
-        ctx.drawImage(ship1e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        ctx.drawImage(ship2e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
       }else{
         ctx.globalAlpha = this.deadTimer/250;
-        ctx.drawImage(ship1e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+        ctx.drawImage(ship2e, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
       }
 
       ctx.restore();
@@ -396,7 +400,6 @@ function aiShip(x, y, a, newHp, newId) {
       ctx.translate(window.innerWidth/2-myGamePiece.x+this.desX,window.innerHeight/2-myGamePiece.y+this.desY);
       ctx.fillStyle = "green";
       ctx.fillRect(30 / -2, 30 / -2, 30, 30);
-
       ctx.restore();
 
       ctx.font = "bold 18px Courier New";

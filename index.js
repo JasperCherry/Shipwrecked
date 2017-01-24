@@ -144,7 +144,7 @@ io.on('connection', function(socket){
   function moveAi() {
     setInterval(function(){
 
-      aiShip1.update(); // to fix -> make it send data ony 5 times / second
+      aiShip1.update();
       aiShip2.update();
 
 
@@ -204,9 +204,11 @@ function aiShip(newName, newId) {
     // timer for changing the target
     this.targetTimer2=0;
 
-    this.speed=0;
+    this.speed=1;
 
     this.targetChange=400;
+
+    this.emitTimer=0;
 
     // every 20 ms update, every 200 ms send
     this.sendTimer=10;
@@ -219,6 +221,12 @@ function aiShip(newName, newId) {
     this.timerSL=0;
 
     this.deadTimer=250;
+
+    // wind
+    this.windT=Math.random()*Math.PI*2;
+    this.windSpeed=0.1;
+    this.windTimer=0;
+    this.windC=this.windT;
 
     // collision detection
     this.ifCollide = function(element){
@@ -407,6 +415,24 @@ function aiShip(newName, newId) {
 
     this.update = function() {
 
+      // wind
+      this.x -= this.windSpeed * Math.sin(this.windC);
+      this.y += this.windSpeed * Math.cos(this.windC);
+      // changing direction from time to time
+      if(this.windTimer==100){
+        this.windTimer=0;
+        this.windT=Math.random()*Math.PI*2;
+      }else{
+        this.windTimer++;
+      }
+      if(Math.abs(this.windT-this.windC)>0.05){
+        if(this.windT>this.windC){
+          this.windC = this.windC + 1* Math.PI / 180;
+        }
+        if(this.windT<this.windC){
+          this.windC = this.windC - 1* Math.PI / 180;
+        }
+      }
 
       // self repair
       if(this.alive){
@@ -441,27 +467,35 @@ function aiShip(newName, newId) {
       }
 
       // sending data
-      if(this.hp==0&&this.lastInfo){
-        this.lastInfo=false;
-        var aiNew={"n":this.name, "x":round(this.x, 0), "y":round(this.y, 0), "a":round(this.angle, 4),
-         "t1":round(this.targetX, 0), "t2":round(this.targetY, 0), "hp":"D"+this.lastHit};
-         if(this.id==81){
-           io.emit('ship1ai', aiNew);
-         }
-         if(this.id==82){
-           io.emit('ship2ai', aiNew);
-         }
+      // n times per second  / 10
+      if(this.emitTimer==5){
+        this.emitTimer=0;
+        if(this.hp==0&&this.lastInfo){
+          this.lastInfo=false;
+          var aiNew={"n":this.name, "x":round(this.x, 0), "y":round(this.y, 0), "a":round(this.angle, 4),
+           "t1":round(this.targetX, 0), "t2":round(this.targetY, 0), "hp":"D"+this.lastHit};
+           if(this.id==81){
+             io.emit('ship1ai', aiNew);
+           }
+           if(this.id==82){
+             io.emit('ship2ai', aiNew);
+           }
 
+        }else{
+          var aiNew={"n":this.name,"x":round(this.x, 0), "y":round(this.y, 0), "a":round(this.angle, 4),
+           "t1":round(this.targetX, 0), "t2":round(this.targetY, 0), "hp":this.hp};
+           if(this.id==81){
+             io.emit('ship1ai', aiNew);
+           }
+           if(this.id==82){
+             io.emit('ship2ai', aiNew);
+           }
+        }
       }else{
-        var aiNew={"n":this.name,"x":round(this.x, 0), "y":round(this.y, 0), "a":round(this.angle, 4),
-         "t1":round(this.targetX, 0), "t2":round(this.targetY, 0), "hp":this.hp};
-         if(this.id==81){
-           io.emit('ship1ai', aiNew);
-         }
-         if(this.id==82){
-           io.emit('ship2ai', aiNew);
-         }
+        this.emitTimer++;
       }
+
+
 
       if(this.alive){
 
@@ -534,11 +568,9 @@ function aiShip(newName, newId) {
 
 
         // requires x, y, angle, id,
+        /* if ai have to suffer from collision
         this.ifCollide(ship1total);
-        this.ifCollide(ship2total);
-        this.ifCollide(ship3total);
-        this.ifCollide(ship4total);
-
+        */
       }
 
 

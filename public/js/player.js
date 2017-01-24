@@ -42,6 +42,11 @@ function myShip( x, y, name, id, shipType) {
     this.rightLoad=this.loadGap;
     this.scale=0.3;
 
+    // wind
+    this.windT=Math.random()*Math.PI*2;
+    this.windSpeed=0.1;
+    this.windTimer=0;
+    this.windC=this.windT;
 
     this.update = function() {
 
@@ -57,6 +62,28 @@ function myShip( x, y, name, id, shipType) {
           this.alive=true;
         }else{
           this.alive=false;
+        }
+
+        // wind reaction
+        if(this.inGame){
+          this.x -= this.windSpeed * Math.sin(this.windC);
+          this.y += this.windSpeed * Math.cos(this.windC);
+
+          // changing direction from time to time
+          if(this.windTimer==100){
+            this.windTimer=0;
+            this.windT=Math.random()*Math.PI*2;
+          }else{
+            this.windTimer++;
+          }
+          if(Math.abs(this.windT-this.windC)>0.05){
+            if(this.windT>this.windC){
+              this.windC = this.windC + 1* Math.PI / 180;
+            }
+            if(this.windT<this.windC){
+              this.windC = this.windC - 1* Math.PI / 180;
+            }
+          }
         }
 
 
@@ -372,6 +399,7 @@ function myShip( x, y, name, id, shipType) {
         ctx.fillText("Kills:"+kills,window.innerWidth/2-30,window.innerHeight/2-150);
         ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-180);
         ctx.fillText("Type:"+this.type,window.innerWidth/2-30,window.innerHeight/2-210);
+
         ctx.font = "bold 15px Courier New";
 
         ctx.save();
@@ -404,7 +432,12 @@ function myShip( x, y, name, id, shipType) {
 
 
         if(!this.inGame){
+
           var info = "Waiting to enter the game";
+          if(person.toString().toLowerCase()=="spectator"){
+            var info = "You are spectator";
+          }
+
           if(this.id==100){
             ctx = myGameArea.context;
             ctx.font = "bold 30px Courier New";
