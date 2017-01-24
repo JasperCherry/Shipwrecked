@@ -402,18 +402,19 @@ function aiShip(newName, newId) {
             this.timerSL=this.fireGap;
             }
           }
-         // timers for shooting sideways
-         if(this.timerSR>0){
-           this.timerSR--;
-         }
-         if(this.timerSL>0){
-           this.timerSL--;
-         }
         }
       }
     }
 
     this.update = function() {
+
+      // timers for shooting sideways
+      if(this.timerSR>0){
+        this.timerSR--;
+      }
+      if(this.timerSL>0){
+        this.timerSL--;
+      }
 
       // wind
       this.x -= this.windSpeed * Math.sin(this.windC);
@@ -493,7 +494,7 @@ function aiShip(newName, newId) {
              io.emit('ship2ai', aiNew);
            }
         }
-        
+
       }else{
         this.emitTimer++;
       }
