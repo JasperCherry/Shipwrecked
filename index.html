@@ -423,9 +423,8 @@ var ai2 = new aiShip(0,0,0,0,"ai2");
 
 // sockets for 1st ai ship
 socket.on('ship1ai', function(ai){
-
-  if(ai1.hp.toString().substring(0, 1)=="D"){
-    if(ai1.hp.substring(1, ai1.hp.length)==myGamePiece.id){
+  if(ai.hp.toString().substring(0, 1)=="D"){
+    if(ai.hp.substring(1, ai.hp.length)==myGamePiece.id){
       kills++;
       var txt={"p":"","t":ai1.name+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
       socket.emit('chat', txt);
@@ -448,9 +447,8 @@ socket.on('ship1aibl', function(aib){
 
 // sockets for 2nd ai ship
 socket.on('ship2ai', function(ai){
-
-  if(ai2.hp.toString().substring(0, 1)=="D"){
-    if(ai2.hp.substring(1, ai2.hp.length)==myGamePiece.id){
+  if(ai.hp.toString().substring(0, 1)=="D"){
+    if(ai.hp.substring(1, ai.hp.length)==myGamePiece.id){
       kills++;
       var txt={"p":"","t":ai2.name+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
       socket.emit('chat', txt);

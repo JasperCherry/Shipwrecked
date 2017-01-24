@@ -469,6 +469,7 @@ function aiShip(newName, newId) {
       // sending data
       // n times per second  / 10
       if(this.emitTimer==5){
+
         this.emitTimer=0;
         if(this.hp==0&&this.lastInfo){
           this.lastInfo=false;
@@ -482,6 +483,7 @@ function aiShip(newName, newId) {
            }
 
         }else{
+
           var aiNew={"n":this.name,"x":round(this.x, 0), "y":round(this.y, 0), "a":round(this.angle, 4),
            "t1":round(this.targetX, 0), "t2":round(this.targetY, 0), "hp":this.hp};
            if(this.id==81){
@@ -491,6 +493,7 @@ function aiShip(newName, newId) {
              io.emit('ship2ai', aiNew);
            }
         }
+        
       }else{
         this.emitTimer++;
       }
