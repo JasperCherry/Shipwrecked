@@ -1,0 +1,33 @@
+
+
+
+
+
+
+
+
+
+-------------- other -------------------------------
+
+balance ai
+
+regulate how much data is being send from server, much more for ai , even 50/sec
+
+upgrades + starting screen
+
+instructions to show while clicking some button
+
+large map
+
+chat improvements / symbols / font / pirate style font?
+
+portviewer minimal gaps, canvas
+
+
+info how many live players in the game
+
+
+info if player left the game
+
+
+http://code.almeros.com/code-examples/water-effect-canvas/#.WIERklWLRdh
