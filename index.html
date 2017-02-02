@@ -162,6 +162,8 @@ body {
 
 // GAME VARIABLES
 
+var socket = io();
+
 //var person = prompt("Please enter your name");
 var person;
 //var person = "spectator";
@@ -170,12 +172,19 @@ if(person==null){
   person="player";
 }
 
+
+// player kills
 var kills=0;
+// number of live players in game
+var livePlayers=0;
+
+socket.on('liveP', function(number){
+    livePlayers=number;
+});
 
 // instructions
 var infoTime=300;
 
-var socket = io();
 
 var tempId=100;
 var myGamePiece = new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025),

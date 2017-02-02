@@ -1,8 +1,5 @@
 
 
-info how many live players in the game
-
-
 
 
 
@@ -16,11 +13,10 @@ info how many live players in the game
 balance ai
 
 
-upgrades + starting screen
+upgrades (on the run)
 
 
 large map
-
 
 
 chat improvements / symbols / font / pirate style font?

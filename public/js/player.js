@@ -586,5 +586,11 @@ function myShip( x, y, name, id, shipType) {
           ctx.fillText("to earn points",window.innerWidth/2 + 100,310);
         }
 
+
+        ctx = myGameArea.context;
+        ctx.font = "20px Courier New";
+        ctx.fillStyle = "white";
+        ctx.fillText("PLAYERS:"+livePlayers,window.innerWidth - 150,40);
+
     }
 }

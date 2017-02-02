@@ -689,6 +689,9 @@ setInterval(function(){
   console.log(ship4b);
   console.log("");
 */
+
+  var livePlayers=0;
+
   // checking ship1
   if(ship1b==true&&ship1a==false){
     ship1b=false;
@@ -700,6 +703,7 @@ setInterval(function(){
   }
   if(ship1a==true){
     ship1a=false;
+    livePlayers++;
   }
 
   // checking ship2
@@ -713,6 +717,7 @@ setInterval(function(){
   }
   if(ship2a==true){
     ship2a=false;
+    livePlayers++;
   }
 
   // checking ship3
@@ -726,6 +731,7 @@ setInterval(function(){
   }
   if(ship3a==true){
     ship3a=false;
+    livePlayers++;
   }
 
   // checking ship4
@@ -739,7 +745,10 @@ setInterval(function(){
   }
   if(ship4a==true){
     ship4a=false;
+    livePlayers++;
   }
+
+  io.emit('liveP', livePlayers);
 
 }, 2000);
 }
