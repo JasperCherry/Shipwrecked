@@ -48,6 +48,100 @@ function myShip( x, y, name, id, shipType) {
     this.windTimer=0;
     this.windC=this.windT;
 
+
+    // collision detection function
+    this.ifCollide = function(element) {
+    if(element.hp>0){
+      // first square
+      if(Math.abs(this.x-(element.x))<15
+      && Math.abs(this.y-(element.y))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs(this.x-(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
+      && Math.abs(this.y-(element.y-0+round((30 * Math.cos(element.angle)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs(this.x-(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
+      && Math.abs(this.y-(element.y-0+round((-30 * Math.cos(element.angle)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+
+      // second square
+      if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))-(element.x))<15
+      && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))-(element.y))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))
+      -(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
+      && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))
+      -(element.y-0+round((30 * Math.cos(element.angle)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))
+      -(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
+      && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))
+      -(element.y-0+round((-30 * Math.cos(element.angle)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+
+      // third square
+      if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))-(element.x))<15
+      && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))-(element.y))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))
+      -(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
+      && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))
+      -(element.y-0+round((30 * Math.cos(element.angle)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }else
+      if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))
+      -(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
+      && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))
+      -(element.y-0+round((-30 * Math.cos(element.angle)), 0)))<15
+      ){
+        if(this.hp<=1){
+          this.lastHit=element.id;
+        }
+        this.hp--;
+      }
+    }
+    }
+
+
+    // main ship behaviour function
     this.update = function() {
 
         // checking if ship should be able to take part in action
@@ -62,6 +156,25 @@ function myShip( x, y, name, id, shipType) {
           this.alive=true;
         }else{
           this.alive=false;
+        }
+
+        // live ships collision detection
+        if(this.inGame){
+
+        if(otherShips.length>0){
+          for(var z=0; z<otherShips.length; z++){
+            this.ifCollide(otherShips[z]);
+          }
+        }
+
+        // ai ships collision detection
+        this.ifCollide(ai1);
+        this.ifCollide(ai2);
+
+        }
+
+        if(this.hp<0){
+          this.hp=0;
         }
 
         // wind reaction
@@ -420,20 +533,17 @@ function myShip( x, y, name, id, shipType) {
 
         ctx.restore();
 
-        // instructions
-        if(insTime>0){
-          insTime--;
-          ctx.font = "bold 20px Courier New";
-          ctx.fillStyle = "red";
-          ctx.fillText("MOVE : WASD  SHOOT: IOP CHAT : ENTER",window.innerWidth/2-130,window.innerHeight-200);
         }
 
+        if(infoTime>0){
+          infoTime--;
         }
 
+        if(infoTime>0){
 
         if(!this.inGame){
-
           var info = "Waiting to enter the game";
+
           if(person.toString().toLowerCase()=="spectator"){
             var info = "You are spectator";
           }
@@ -442,8 +552,15 @@ function myShip( x, y, name, id, shipType) {
             ctx = myGameArea.context;
             ctx.font = "bold 30px Courier New";
             ctx.fillStyle = "red";
-            ctx.fillText(info,window.innerWidth/2-200,window.innerHeight/2-100);
+            ctx.fillText(info,window.innerWidth/2-150,window.innerHeight/2+100);
           }
+        }
+
+        ctx = myGameArea.context;
+        ctx.font = "bold 30px Courier New";
+        ctx.fillStyle = "red";
+        ctx.fillText("Press H for manual",window.innerWidth/2-150,window.innerHeight/2+150);
+
         }
 
         // chat text message
@@ -452,6 +569,21 @@ function myShip( x, y, name, id, shipType) {
           ctx.font = "bold 15px Courier New";
           ctx.fillStyle = "white";
           ctx.fillText(textReady,20,window.innerHeight-20);
+        }
+
+        // show info about game
+        if(showInfo){
+          ctx = myGameArea.context;
+          ctx.font = "20px Courier New";
+          ctx.fillStyle = "white";
+          ctx.fillText("GAME MANUAL:",window.innerWidth/2 + 100,100);
+          ctx.fillText("moving : W,A,S,D",window.innerWidth/2 + 100,130);
+          ctx.fillText("shooting :",window.innerWidth/2 + 100,160);
+          ctx.fillText("I-left P-right O-both sides",window.innerWidth/2 + 100,190);
+          ctx.fillText("use ENTER to chat",window.innerWidth/2 + 100,220);
+
+          ctx.fillText("Destroy The Flying Dutchman",window.innerWidth/2 + 100,280);
+          ctx.fillText("to earn points",window.innerWidth/2 + 100,310);
         }
 
     }

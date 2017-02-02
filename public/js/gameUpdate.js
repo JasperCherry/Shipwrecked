@@ -57,6 +57,7 @@ function updateGameArea() {
 
     // showing hits
     if(hits.length>0){
+
       for(var x=0; x<hits.length; x++){
           hits[x].show();
       }
@@ -172,16 +173,7 @@ function updateGameArea() {
       }
     }
 
-    // live ships collision detection
-    if(otherShips.length>0){
-      for(var z=0; z<otherShips.length; z++){
-        ifCollide(otherShips[z]);
-      }
-    }
 
-    // ai ships collision detection
-    ifCollide(ai1);
-    ifCollide(ai2);
 
     // checking if player died
     if(myGamePiece.hp<=0){
@@ -201,7 +193,7 @@ function updateGameArea() {
 
       myGamePiece.hp=0;
       myGamePiece.deadTimer--;
-      if(myGamePiece.deadTimer==0){  
+      if(myGamePiece.deadTimer==0){
         // respawn
         var newPosX=Math.floor(Math.random()*1025)
         var newPosY=Math.floor(Math.random()*1025);

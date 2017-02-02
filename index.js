@@ -468,8 +468,8 @@ function aiShip(newName, newId) {
       }
 
       // sending data
-      // n times per second  / 10
-      if(this.emitTimer==5){
+      // n times per second  / 25
+      if(this.emitTimer==2){
 
         this.emitTimer=0;
         if(this.hp==0&&this.lastInfo){
@@ -571,10 +571,12 @@ function aiShip(newName, newId) {
         this.ifShootP(ship4a, ship4b, ship4total);
 
 
-        // requires x, y, angle, id,
-        /* if ai have to suffer from collision
+        // requires x, y, angle, id
         this.ifCollide(ship1total);
-        */
+        this.ifCollide(ship2total);
+        this.ifCollide(ship3total);
+        this.ifCollide(ship4total);
+
       }
 
 
@@ -690,6 +692,10 @@ setInterval(function(){
   // checking ship1
   if(ship1b==true&&ship1a==false){
     ship1b=false;
+
+    var txt={"p":"" ,"t":ship1total.n+" has left the game", "c":1};
+    io.emit('chat', txt);
+
     ship1total=null;
   }
   if(ship1a==true){
@@ -699,6 +705,10 @@ setInterval(function(){
   // checking ship2
   if(ship2b==true&&ship2a==false){
     ship2b=false;
+
+    var txt={"p":"" ,"t":ship2total.n+" has left the game", "c":1};
+    io.emit('chat', txt);
+
     ship2total=null;
   }
   if(ship2a==true){
@@ -708,6 +718,10 @@ setInterval(function(){
   // checking ship3
   if(ship3b==true&&ship3a==false){
     ship3b=false;
+
+    var txt={"p":"" ,"t":ship3total.n+" has left the game", "c":1};
+    io.emit('chat', txt);
+
     ship3total=null;
   }
   if(ship3a==true){
@@ -717,6 +731,10 @@ setInterval(function(){
   // checking ship4
   if(ship4b==true&&ship4a==false){
     ship4b=false;
+
+    var txt={"p":"" ,"t":ship4total.n+" has left the game", "c":1};
+    io.emit('chat', txt);
+
     ship4total=null;
   }
   if(ship4a==true){

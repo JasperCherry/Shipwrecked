@@ -4,6 +4,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <style>
 canvas {
+    position:absolute;
+    top:0;
+    left:0;
     background-color: black;
 }
 html, body {
@@ -160,12 +163,17 @@ body {
 // GAME VARIABLES
 
 //var person = prompt("Please enter your name");
-var person = "ship";
+var person;
+//var person = "spectator";
+
+if(person==null){
+  person="player";
+}
 
 var kills=0;
 
 // instructions
-var insTime=300;
+var infoTime=300;
 
 var socket = io();
 
@@ -178,7 +186,8 @@ var balls=new Array();
 var exps=new Array();
 var hits=new Array();
 
-
+// showing manual for player
+var showInfo=false;
 
 
 ///////////////////////////////  CHAT
@@ -190,7 +199,12 @@ var preText="TEXT:";
 var textMsgArr=new Array();
 
 document.addEventListener('keydown', function(event) {
-  if(event.keyCode==13){
+
+  if(event.keyCode==72&&!writingMode){
+    showInfo=!showInfo;
+  }
+
+  if(event.keyCode==13&&myGamePiece.inGame){
     if(writingMode){
       writingMode=false;
       // player is emiting message
@@ -241,12 +255,12 @@ socket.on('chat', function(txt){
 ///////////////////// ID REQUEST
 
 // fist id variable to recognise user that asks server for id
-var firstId=Math.floor(Math.random()*1000000);
-
+var firstId1=Math.floor(Math.random()*1000000);
+var firstId2=Math.floor(Math.random()*1000000);
 // node js connection to data from server
 // setting id
 socket.on('setId', function(msg1){
-  if(msg1.firstId==firstId){
+  if(msg1.firstId1==firstId1&&msg1.firstId2==firstId2){
     if(msg1.status!=tempId){
       tempId=msg1.status;
       // respawn
@@ -266,7 +280,7 @@ function askId() {
 setInterval(function(){
   if(person.toString().toLowerCase()!="spectator"){
     if(myGamePiece.id==100){
-      var msg1={"firstId":firstId,"status":tempId};
+      var msg1={"firstId1":firstId1,"firstId2":firstId2,"status":tempId};
       socket.emit('setId', msg1);
     }
   }

@@ -19,7 +19,7 @@ function otherShip(x, y, a, id, name, hp, shipType) {
     this.scale=0.3;
 
     // time before object will be removed
-    this.timer=50;
+    this.timer=150;
 
 
     this.update = function(newX, newY, newA, newHp, newK, newN, newT) {
@@ -42,7 +42,7 @@ function otherShip(x, y, a, id, name, hp, shipType) {
       if(Math.abs(newA-this.angle)>0.5){
         this.angle = newA;
       }
-        this.timer=50;
+        this.timer=150;
     }
 
 
