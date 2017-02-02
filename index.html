@@ -164,13 +164,15 @@ body {
 
 var socket = io();
 
-//var person = prompt("Please enter your name");
+//var person = prompt("Please enter your name (max 20 characters)");
 var person;
 //var person = "spectator";
 
-if(person==null){
-  person="player";
+if(person==""||person==null){
+  person="Player";
 }
+
+person=person.substring(0, 20);
 
 
 // player kills
@@ -187,7 +189,7 @@ var infoTime=300;
 
 
 var tempId=100;
-var myGamePiece = new myShip(Math.floor(Math.random()*1025), Math.floor(Math.random()*1025),
+var myGamePiece = new myShip(Math.floor(Math.random()*2048+1), Math.floor(Math.random()*2048+1),
 person, tempId, 1);
 
 var otherShips=new Array();
@@ -273,8 +275,8 @@ socket.on('setId', function(msg1){
     if(msg1.status!=tempId){
       tempId=msg1.status;
       // respawn
-      var newPosX=Math.floor(Math.random()*1025)
-      var newPosY=Math.floor(Math.random()*1025);
+      var newPosX=Math.floor(Math.random()*2048+1)
+      var newPosY=Math.floor(Math.random()*2048+1);
       myGamePiece = new myShip(newPosX, newPosY, person, tempId, 1);
 
       // info about joining the game
@@ -443,6 +445,10 @@ socket.on('data4', function(ball4){
 
 var ai1 = new aiShip(0,0,0,0,"ai1");
 var ai2 = new aiShip(0,0,0,0,"ai2");
+var ai3 = new aiShip(0,0,0,0,"ai3");
+var ai4 = new aiShip(0,0,0,0,"ai4");
+var ai5 = new aiShip(0,0,0,0,"ai5");
+
 
 // sockets for 1st ai ship
 socket.on('ship1ai', function(ai){
@@ -489,6 +495,78 @@ socket.on('ship2aibr', function(aib){
 // for its bullets from left side
 socket.on('ship2aibl', function(aib){
   balls.push(new ball(aib.x, aib.y, aib.a, ai2.id, aib.d));
+  exps.push(new exp(aib.x, aib.y, aib.a));
+});
+
+// sockets for 3rd ai ship
+socket.on('ship3ai', function(ai){
+  if(ai.hp.toString().substring(0, 1)=="D"){
+    if(ai.hp.substring(1, ai.hp.length)==myGamePiece.id){
+      kills++;
+      var txt={"p":"","t":ai3.name+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
+      socket.emit('chat', txt);
+    }
+    ai3.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, 0);
+  }else{
+    ai3.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, ai.hp);
+  }
+});
+// for its bullets from right side
+socket.on('ship3aibr', function(aib){
+  balls.push(new ball(aib.x, aib.y, aib.a, ai3.id, aib.d));
+  exps.push(new exp(aib.x, aib.y, aib.a));
+});
+// for its bullets from left side
+socket.on('ship3aibl', function(aib){
+  balls.push(new ball(aib.x, aib.y, aib.a, ai3.id, aib.d));
+  exps.push(new exp(aib.x, aib.y, aib.a));
+});
+
+// sockets for 4th ai ship
+socket.on('ship4ai', function(ai){
+  if(ai.hp.toString().substring(0, 1)=="D"){
+    if(ai.hp.substring(1, ai.hp.length)==myGamePiece.id){
+      kills++;
+      var txt={"p":"","t":ai4.name+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
+      socket.emit('chat', txt);
+    }
+    ai4.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, 0);
+  }else{
+    ai4.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, ai.hp);
+  }
+});
+// for its bullets from right side
+socket.on('ship4aibr', function(aib){
+  balls.push(new ball(aib.x, aib.y, aib.a, ai4.id, aib.d));
+  exps.push(new exp(aib.x, aib.y, aib.a));
+});
+// for its bullets from left side
+socket.on('ship4aibl', function(aib){
+  balls.push(new ball(aib.x, aib.y, aib.a, ai4.id, aib.d));
+  exps.push(new exp(aib.x, aib.y, aib.a));
+});
+
+// sockets for 5th ai ship
+socket.on('ship5ai', function(ai){
+  if(ai.hp.toString().substring(0, 1)=="D"){
+    if(ai.hp.substring(1, ai.hp.length)==myGamePiece.id){
+      kills++;
+      var txt={"p":"","t":ai5.name+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
+      socket.emit('chat', txt);
+    }
+    ai5.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, 0);
+  }else{
+    ai5.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, ai.hp);
+  }
+});
+// for its bullets from right side
+socket.on('ship5aibr', function(aib){
+  balls.push(new ball(aib.x, aib.y, aib.a, ai5.id, aib.d));
+  exps.push(new exp(aib.x, aib.y, aib.a));
+});
+// for its bullets from left side
+socket.on('ship5aibl', function(aib){
+  balls.push(new ball(aib.x, aib.y, aib.a, ai5.id, aib.d));
   exps.push(new exp(aib.x, aib.y, aib.a));
 });
 

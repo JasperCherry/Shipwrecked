@@ -170,6 +170,9 @@ function myShip( x, y, name, id, shipType) {
         // ai ships collision detection
         this.ifCollide(ai1);
         this.ifCollide(ai2);
+        this.ifCollide(ai3);
+        this.ifCollide(ai4);
+        this.ifCollide(ai5);
 
         }
 
@@ -463,14 +466,14 @@ function myShip( x, y, name, id, shipType) {
         if(this.x<0){
           this.x=0;
         }
-        if(this.x>1024){
-          this.x=1024;
+        if(this.x>2048){
+          this.x=2048;
         }
         if(this.y<0){
           this.y=0;
         }
-        if(this.y>1024){
-          this.y=1024;
+        if(this.y>2048){
+          this.y=2048;
         }
 
         if(this.inGame){
@@ -582,7 +585,7 @@ function myShip( x, y, name, id, shipType) {
           ctx.fillText("I-left P-right O-both sides",window.innerWidth/2 + 100,190);
           ctx.fillText("use ENTER to chat",window.innerWidth/2 + 100,220);
 
-          ctx.fillText("Destroy The Flying Dutchman",window.innerWidth/2 + 100,280);
+          ctx.fillText("Destroy other ships",window.innerWidth/2 + 100,280);
           ctx.fillText("to earn points",window.innerWidth/2 + 100,310);
         }
 

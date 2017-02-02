@@ -137,6 +137,9 @@ io.on('connection', function(socket){
 
   var aiShip1 = new aiShip("Flying Dutchman",81);
   var aiShip2 = new aiShip("Mary Celeste",82);
+  var aiShip3 = new aiShip("Lady Lovibond",83);
+  var aiShip4 = new aiShip("Octavius",84);
+  var aiShip5 = new aiShip("Caleuche",85);
 
 
 
@@ -146,6 +149,9 @@ io.on('connection', function(socket){
 
       aiShip1.update();
       aiShip2.update();
+      aiShip3.update();
+      aiShip4.update();
+      aiShip5.update();
 
 
 
@@ -186,16 +192,16 @@ function aiShip(newName, newId) {
 
     this.name=newName;
     this.id=newId;
-    this.x = Math.floor(Math.random()*1025);
-    this.y = Math.floor(Math.random()*1025);
-    this.targetX = Math.floor(Math.random()*1025);
-    this.targetY = Math.floor(Math.random()*1025);
+    this.x = Math.floor(Math.random()*2048+1);
+    this.y = Math.floor(Math.random()*2048+1);
+    this.targetX = Math.floor(Math.random()*2048+1);
+    this.targetY = Math.floor(Math.random()*2048+1);
 
-    this.hp=10; // to fix
+    this.hp=100; // to fix
     this.lastHit;
     this.lastInfo=true;
     this.alive=true;
-    this.selfRepair=50;
+    this.selfRepair=100;
 
     this.angle=0;
     this.targetA=0;
@@ -358,10 +364,19 @@ function aiShip(newName, newId) {
               "a":round(this.angle+( (Math.round(Math.random() * (20)) - 10  + 90) * Math.PI / 180), 4), "d":this.ballDamage};
             }
             if(this.id==81){
-              io.emit('ship1aibl', this.shot);
+              io.emit('ship1aibr', this.shot);
             }
             if(this.id==82){
-              io.emit('ship2aibl', this.shot);
+              io.emit('ship2aibr', this.shot);
+            }
+            if(this.id==83){
+              io.emit('ship3aibr', this.shot);
+            }
+            if(this.id==84){
+              io.emit('ship4aibr', this.shot);
+            }
+            if(this.id==85){
+              io.emit('ship5aibr', this.shot);
             }
             balls.push(new ball(this.shot.x, this.shot.y, this.shot.a, 0, this.shot.d));
             this.timerSR=this.fireGap;
@@ -397,6 +412,15 @@ function aiShip(newName, newId) {
             }
             if(this.id==82){
               io.emit('ship2aibl', this.shot);
+            }
+            if(this.id==83){
+              io.emit('ship3aibl', this.shot);
+            }
+            if(this.id==84){
+              io.emit('ship4aibl', this.shot);
+            }
+            if(this.id==85){
+              io.emit('ship5aibl', this.shot);
             }
             balls.push(new ball(this.shot.x, this.shot.y, this.shot.a, 0, this.shot.d));
             this.timerSL=this.fireGap;
@@ -437,10 +461,10 @@ function aiShip(newName, newId) {
 
       // self repair
       if(this.alive){
-          if(this.hp<10){  // to fix
+          if(this.hp<100){  // to fix
             this.selfRepair--;
             if(this.selfRepair==0){
-              this.selfRepair=50;
+              this.selfRepair=100;
               this.hp++;
             }
           }
@@ -459,10 +483,10 @@ function aiShip(newName, newId) {
         this.deadTimer--;
         if(this.deadTimer==0){
           this.deadTimer=250;
-          this.x = Math.floor(Math.random()*1025);
-          this.y = Math.floor(Math.random()*1025);
+          this.x = Math.floor(Math.random()*2048+1);
+          this.y = Math.floor(Math.random()*2048+1);
           this.alive=true;
-          this.hp=10; // to fix
+          this.hp=100; // to fix
           this.lastInfo=true;
         }
       }
@@ -482,6 +506,15 @@ function aiShip(newName, newId) {
            if(this.id==82){
              io.emit('ship2ai', aiNew);
            }
+           if(this.id==83){
+             io.emit('ship3ai', aiNew);
+           }
+           if(this.id==84){
+             io.emit('ship4ai', aiNew);
+           }
+           if(this.id==85){
+             io.emit('ship5ai', aiNew);
+           }
 
         }else{
 
@@ -492,6 +525,15 @@ function aiShip(newName, newId) {
            }
            if(this.id==82){
              io.emit('ship2ai', aiNew);
+           }
+           if(this.id==83){
+             io.emit('ship3ai', aiNew);
+           }
+           if(this.id==84){
+             io.emit('ship4ai', aiNew);
+           }
+           if(this.id==85){
+             io.emit('ship5ai', aiNew);
            }
         }
 
@@ -533,21 +575,21 @@ function aiShip(newName, newId) {
       if(this.x<0){
         this.x=0;
       }
-      if(this.x>1024){
-        this.x=1024;
+      if(this.x>2048){
+        this.x=2048;
       }
       if(this.y<0){
         this.y=0;
       }
-      if(this.y>1024){
-        this.y=1024;
+      if(this.y>2048){
+        this.y=2048;
       }
 
       // changing the target from time to time
       if(this.alive){
         if(this.targetTimer2==this.targetChange){
-          this.targetX = Math.floor(Math.random()*1025);
-          this.targetY = Math.floor(Math.random()*1025);
+          this.targetX = Math.floor(Math.random()*2048+1);
+          this.targetY = Math.floor(Math.random()*2048+1);
           this.targetTimer2=0;
         }else{
           this.targetTimer2++;
@@ -558,8 +600,8 @@ function aiShip(newName, newId) {
 
       // if target has been reached
       if(Math.abs(this.targetX-this.x)<50 && Math.abs(this.targetY-this.y)<50){
-        this.targetX = Math.floor(Math.random()*1025);
-        this.targetY = Math.floor(Math.random()*1025);
+        this.targetX = Math.floor(Math.random()*2048+1);
+        this.targetY = Math.floor(Math.random()*2048+1);
       }
 
       // checking for targets to open fire

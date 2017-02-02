@@ -4,12 +4,51 @@ function updateGameArea() {
     myGameArea.clear();
 
     var ctx = myGameArea.context;
+
+    // playing area
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y+1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y+1024);
+
+    // upper part
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y-1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y-1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y-1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y-1024);
+
+    // lower part
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y+2048);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y+2048);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y+2048);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y+2048);
+
+    // left part
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y+1024);
+
+    // right part
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y+1024);
+
+
+    ctx.fillStyle = "red";
+    ctx.globalAlpha = 0.5;
+    ctx.fillRect(window.innerWidth/2-myGamePiece.x-5, window.innerHeight/2-myGamePiece.y, 2048+10, -5);
+    ctx.fillRect(window.innerWidth/2-myGamePiece.x-5, window.innerHeight/2-myGamePiece.y+2048, 2048+10, 5);
+    ctx.fillRect(window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y, -5, 2048);
+    ctx.fillRect(window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y, 5, 2048);
+    ctx.globalAlpha = 1;
+
 
 
     // showing ai ships
     ai1.show();
     ai2.show();
+    ai3.show();
+    ai4.show();
+    ai5.show();
+    
 
 
     // showing other ships
@@ -195,8 +234,8 @@ function updateGameArea() {
       myGamePiece.deadTimer--;
       if(myGamePiece.deadTimer==0){
         // respawn
-        var newPosX=Math.floor(Math.random()*1025)
-        var newPosY=Math.floor(Math.random()*1025);
+        var newPosX=Math.floor(Math.random()*2048+1)
+        var newPosY=Math.floor(Math.random()*2048+1);
         myGamePiece = new myShip(newPosX, newPosY, person, tempId, 1);
       }
     }
