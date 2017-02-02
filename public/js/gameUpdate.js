@@ -48,7 +48,7 @@ function updateGameArea() {
     ai3.show();
     ai4.show();
     ai5.show();
-    
+
 
 
     // showing other ships
@@ -226,6 +226,24 @@ function updateGameArea() {
       if(myGamePiece.lastHit.toString()=="ai2"&&myGamePiece.lastInfo==true){
         myGamePiece.lastInfo=false;
         var txt={"p":"","t":person+" has been killed by "+ai2.name, "c":1};
+        socket.emit('chat', txt);
+      }
+
+      if(myGamePiece.lastHit.toString()=="ai3"&&myGamePiece.lastInfo==true){
+        myGamePiece.lastInfo=false;
+        var txt={"p":"","t":person+" has been killed by "+ai3.name, "c":1};
+        socket.emit('chat', txt);
+      }
+
+      if(myGamePiece.lastHit.toString()=="ai4"&&myGamePiece.lastInfo==true){
+        myGamePiece.lastInfo=false;
+        var txt={"p":"","t":person+" has been killed by "+ai4.name, "c":1};
+        socket.emit('chat', txt);
+      }
+
+      if(myGamePiece.lastHit.toString()=="ai5"&&myGamePiece.lastInfo==true){
+        myGamePiece.lastInfo=false;
+        var txt={"p":"","t":person+" has been killed by "+ai5.name, "c":1};
         socket.emit('chat', txt);
       }
 

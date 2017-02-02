@@ -1,15 +1,14 @@
 
 
+change the name and kills positions (info display)
 
+
+extend to 10 players
 
 
 
 -------------- other -------------------------------
 
-
-
-
-extend to 10 players
 
 
 
@@ -19,9 +18,7 @@ upgrades (on the run)
 music / sounds / graphics
 
 
-
-plot / idea / name
-
+plot / idea / name  - change app name
 
 
 chat improvements / symbols / font / pirate style font?
