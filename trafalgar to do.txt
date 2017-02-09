@@ -1,11 +1,5 @@
 
 
-change the name and kills positions (info display)
-
-
-extend to 10 players
-
-
 
 
 

@@ -28,6 +28,30 @@ var ship4a=false;
 var ship4b=false;
 var ship4total;
 
+var ship5a=false;
+var ship5b=false;
+var ship5total;
+
+var ship6a=false;
+var ship6b=false;
+var ship6total;
+
+var ship7a=false;
+var ship7b=false;
+var ship7total;
+
+var ship8a=false;
+var ship8b=false;
+var ship8total;
+
+var ship9a=false;
+var ship9b=false;
+var ship9total;
+
+var ship10a=false;
+var ship10b=false;
+var ship10total;
+
 checkFreeId();
 
 io.on('connection', function(socket){
@@ -129,6 +153,115 @@ io.on('connection', function(socket){
   });
 
 
+  // ship5
+  socket.on('id5', function(ship5){
+    setTimeout(function () {
+      io.emit('id5', ship5);
+      ship5a=true;
+      ship5b=true;
+      ship5total=ship5;
+    }, 0)
+    //console.log(ship5);
+  });
+  socket.on('data5', function(ball5){
+    setTimeout(function () {
+      io.emit('data5', ball5);
+      balls.push(new ball(ball5.x, ball5.y, ball5.a, 5, ball5.d));
+    }, 0)
+    //console.log(ball5);
+  });
+
+
+  // ship6
+  socket.on('id6', function(ship6){
+    setTimeout(function () {
+      io.emit('id6', ship6);
+      ship6a=true;
+      ship6b=true;
+      ship6total=ship6;
+    }, 0)
+    //console.log(ship6);
+  });
+  socket.on('data6', function(ball6){
+    setTimeout(function () {
+      io.emit('data6', ball6);
+      balls.push(new ball(ball6.x, ball6.y, ball6.a, 6, ball6.d));
+    }, 0)
+    //console.log(ball6);
+  });
+
+  // ship7
+  socket.on('id7', function(ship7){
+    setTimeout(function () {
+      io.emit('id7', ship7);
+      ship7a=true;
+      ship7b=true;
+      ship7total=ship7;
+    }, 0)
+    //console.log(ship7);
+  });
+  socket.on('data7', function(ball7){
+    setTimeout(function () {
+      io.emit('data7', ball7);
+      balls.push(new ball(ball7.x, ball7.y, ball7.a, 7, ball7.d));
+    }, 0)
+    //console.log(ball7);
+  });
+
+  // ship8
+  socket.on('id8', function(ship8){
+    setTimeout(function () {
+      io.emit('id8', ship8);
+      ship8a=true;
+      ship8b=true;
+      ship8total=ship8;
+    }, 0)
+    //console.log(ship8);
+  });
+  socket.on('data8', function(ball8){
+    setTimeout(function () {
+      io.emit('data8', ball8);
+      balls.push(new ball(ball8.x, ball8.y, ball8.a, 8, ball8.d));
+    }, 0)
+    //console.log(ball8);
+  });
+
+  // ship9
+  socket.on('id9', function(ship9){
+    setTimeout(function () {
+      io.emit('id9', ship9);
+      ship9a=true;
+      ship9b=true;
+      ship9total=ship9;
+    }, 0)
+    //console.log(ship9);
+  });
+  socket.on('data9', function(ball9){
+    setTimeout(function () {
+      io.emit('data9', ball9);
+      balls.push(new ball(ball9.x, ball9.y, ball9.a, 9, ball9.d));
+    }, 0)
+    //console.log(ball9);
+  });
+
+  // ship10
+  socket.on('id10', function(ship10){
+    setTimeout(function () {
+      io.emit('id10', ship10);
+      ship10a=true;
+      ship10b=true;
+      ship10total=ship10;
+    }, 0)
+    //console.log(ship10);
+  });
+  socket.on('data10', function(ball10){
+    setTimeout(function () {
+      io.emit('data10', ball10);
+      balls.push(new ball(ball10.x, ball10.y, ball10.a, 10, ball10.d));
+    }, 0)
+    //console.log(ball10);
+  });
+
 
 ///////////////////////////////////////////// END OF PLAYERS SHIPS
 
@@ -170,6 +303,18 @@ io.on('connection', function(socket){
         }
       }
 
+      // detecting if balls shot by players hit other players and have to be removed
+      ifPhitP(ship1total);
+      ifPhitP(ship2total);
+      ifPhitP(ship3total);
+      ifPhitP(ship4total);
+      ifPhitP(ship5total);
+      ifPhitP(ship6total);
+      ifPhitP(ship7total);
+      ifPhitP(ship8total);
+      ifPhitP(ship9total);
+      ifPhitP(ship10total);
+
     }, 20);
   }
 
@@ -210,7 +355,7 @@ function aiShip(newName, newId) {
     // timer for changing the target
     this.targetTimer2=0;
 
-    this.speed=1;
+    this.speed=0;
 
     this.targetChange=400;
 
@@ -611,6 +756,12 @@ function aiShip(newName, newId) {
         this.ifShootP(ship2a, ship2b, ship2total);
         this.ifShootP(ship3a, ship3b, ship3total);
         this.ifShootP(ship4a, ship4b, ship4total);
+        this.ifShootP(ship5a, ship5b, ship5total);
+        this.ifShootP(ship6a, ship6b, ship6total);
+        this.ifShootP(ship7a, ship7b, ship7total);
+        this.ifShootP(ship8a, ship8b, ship8total);
+        this.ifShootP(ship9a, ship9b, ship9total);
+        this.ifShootP(ship10a, ship10b, ship10total);
 
 
         // requires x, y, angle, id
@@ -618,6 +769,12 @@ function aiShip(newName, newId) {
         this.ifCollide(ship2total);
         this.ifCollide(ship3total);
         this.ifCollide(ship4total);
+        this.ifCollide(ship5total);
+        this.ifCollide(ship6total);
+        this.ifCollide(ship7total);
+        this.ifCollide(ship8total);
+        this.ifCollide(ship9total);
+        this.ifCollide(ship10total);
 
       }
 
@@ -691,6 +848,31 @@ function ball( x, y, a, id, d) {
     }
 }
 
+function ifPhitP(element) {
+  // checking for harm
+  // checking 3 squares
+  if(element!=null){
+  if(balls.length>0){
+    for(var x=0; x<balls.length; x++){
+        if(Math.abs(balls[x].x-element.x)<15 && Math.abs(balls[x].y-element.y)<15
+        &&balls[x].id!=element.id){
+          balls.splice(x,1);
+        }else
+        if(Math.abs(balls[x].x-(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
+         && Math.abs(balls[x].y-(element.y-0+round((30 * Math.cos(element.angle)), 0)))<15
+         &&balls[x].id!=element.id){
+           balls.splice(x,1);
+        }else
+        if(Math.abs(balls[x].x-(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
+         && Math.abs(balls[x].y-(element.y-0+round((-30 * Math.cos(element.angle)), 0)))<15
+         &&balls[x].id!=element.id){
+           balls.splice(x,1);
+        }
+    }
+  }
+  }
+}
+
 
 // function that checks if id is taken:
 function checkId() {
@@ -713,6 +895,36 @@ function checkId() {
     ship4a=true;
     ship4b=true;
     return 4;
+  }
+  if(!ship5a&&!ship5b){
+    ship5a=true;
+    ship5b=true;
+    return 5;
+  }
+  if(!ship6a&&!ship6b){
+    ship6a=true;
+    ship6b=true;
+    return 6;
+  }
+  if(!ship7a&&!ship7b){
+    ship7a=true;
+    ship7b=true;
+    return 7;
+  }
+  if(!ship8a&&!ship8b){
+    ship8a=true;
+    ship8b=true;
+    return 8;
+  }
+  if(!ship9a&&!ship9b){
+    ship9a=true;
+    ship9b=true;
+    return 9;
+  }
+  if(!ship10a&&!ship10b){
+    ship10a=true;
+    ship10b=true;
+    return 10;
   }
   return 100;
 }
@@ -787,6 +999,90 @@ setInterval(function(){
   }
   if(ship4a==true){
     ship4a=false;
+    livePlayers++;
+  }
+
+  // checking ship5
+  if(ship5b==true&&ship5a==false){
+    ship5b=false;
+
+    var txt={"p":"" ,"t":ship5total.n+" has left the game", "c":1};
+    io.emit('chat', txt);
+
+    ship5total=null;
+  }
+  if(ship5a==true){
+    ship5a=false;
+    livePlayers++;
+  }
+
+  // checking ship6
+  if(ship6b==true&&ship6a==false){
+    ship6b=false;
+
+    var txt={"p":"" ,"t":ship6total.n+" has left the game", "c":1};
+    io.emit('chat', txt);
+
+    ship6total=null;
+  }
+  if(ship6a==true){
+    ship6a=false;
+    livePlayers++;
+  }
+
+  // checking ship7
+  if(ship7b==true&&ship7a==false){
+    ship7b=false;
+
+    var txt={"p":"" ,"t":ship7total.n+" has left the game", "c":1};
+    io.emit('chat', txt);
+
+    ship7total=null;
+  }
+  if(ship7a==true){
+    ship7a=false;
+    livePlayers++;
+  }
+
+  // checking ship8
+  if(ship8b==true&&ship8a==false){
+    ship8b=false;
+
+    var txt={"p":"" ,"t":ship8total.n+" has left the game", "c":1};
+    io.emit('chat', txt);
+
+    ship8total=null;
+  }
+  if(ship8a==true){
+    ship8a=false;
+    livePlayers++;
+  }
+
+  // checking ship9
+  if(ship9b==true&&ship9a==false){
+    ship9b=false;
+
+    var txt={"p":"" ,"t":ship9total.n+" has left the game", "c":1};
+    io.emit('chat', txt);
+
+    ship9total=null;
+  }
+  if(ship9a==true){
+    ship9a=false;
+    livePlayers++;
+  }
+
+  // checking ship10
+  if(ship10b==true&&ship10a==false){
+    ship10b=false;
+
+    var txt={"p":"" ,"t":ship10total.n+" has left the game", "c":1};
+    io.emit('chat', txt);
+
+    ship10total=null;
+  }
+  if(ship10a==true){
+    ship10a=false;
     livePlayers++;
   }
 

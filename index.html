@@ -410,6 +410,162 @@ socket.on('id4', function(ship4){
     }
   }
 });
+socket.on('id5', function(ship5){
+  if(ship5.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==ship5.id){
+        if(ship5.hp.toString().substring(0, 1)=="D"){
+          if(ship5.hp.substring(1, ship5.hp.length)==myGamePiece.id){
+            kills++;
+            var txt={"p":"","t":ship5.n+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
+            socket.emit('chat', txt);
+            myGamePiece.lastInfoText=false;
+          }
+          otherShips[x].update(ship5.x, ship5.y, ship5.a, 0, ship5.k, ship5.n, ship5.t);
+        }else{
+          otherShips[x].update(ship5.x, ship5.y, ship5.a, ship5.hp, ship5.k, ship5.n, ship5.t);
+        }
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(ship5.x, ship5.y,
+      ship5.a, ship5.id, ship5.n, ship5.hp, ship5.t));
+    }
+  }
+});
+socket.on('id6', function(ship6){
+  if(ship6.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==ship6.id){
+        if(ship6.hp.toString().substring(0, 1)=="D"){
+          if(ship6.hp.substring(1, ship6.hp.length)==myGamePiece.id){
+            kills++;
+            var txt={"p":"","t":ship6.n+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
+            socket.emit('chat', txt);
+            myGamePiece.lastInfoText=false;
+          }
+          otherShips[x].update(ship6.x, ship6.y, ship6.a, 0, ship6.k, ship6.n, ship6.t);
+        }else{
+          otherShips[x].update(ship6.x, ship6.y, ship6.a, ship6.hp, ship6.k, ship6.n, ship6.t);
+        }
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(ship6.x, ship6.y,
+      ship6.a, ship6.id, ship6.n, ship6.hp, ship6.t));
+    }
+  }
+});
+socket.on('id7', function(ship7){
+  if(ship7.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==ship7.id){
+        if(ship7.hp.toString().substring(0, 1)=="D"){
+          if(ship7.hp.substring(1, ship7.hp.length)==myGamePiece.id){
+            kills++;
+            var txt={"p":"","t":ship7.n+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
+            socket.emit('chat', txt);
+            myGamePiece.lastInfoText=false;
+          }
+          otherShips[x].update(ship7.x, ship7.y, ship7.a, 0, ship7.k, ship7.n, ship7.t);
+        }else{
+          otherShips[x].update(ship7.x, ship7.y, ship7.a, ship7.hp, ship7.k, ship7.n, ship7.t);
+        }
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(ship7.x, ship7.y,
+      ship7.a, ship7.id, ship7.n, ship7.hp, ship7.t));
+    }
+  }
+});
+socket.on('id8', function(ship8){
+  if(ship8.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==ship8.id){
+        if(ship8.hp.toString().substring(0, 1)=="D"){
+          if(ship8.hp.substring(1, ship8.hp.length)==myGamePiece.id){
+            kills++;
+            var txt={"p":"","t":ship8.n+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
+            socket.emit('chat', txt);
+            myGamePiece.lastInfoText=false;
+          }
+          otherShips[x].update(ship8.x, ship8.y, ship8.a, 0, ship8.k, ship8.n, ship8.t);
+        }else{
+          otherShips[x].update(ship8.x, ship8.y, ship8.a, ship8.hp, ship8.k, ship8.n, ship8.t);
+        }
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(ship8.x, ship8.y,
+      ship8.a, ship8.id, ship8.n, ship8.hp, ship8.t));
+    }
+  }
+});
+socket.on('id9', function(ship9){
+  if(ship9.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==ship9.id){
+        if(ship9.hp.toString().substring(0, 1)=="D"){
+          if(ship9.hp.substring(1, ship9.hp.length)==myGamePiece.id){
+            kills++;
+            var txt={"p":"","t":ship9.n+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
+            socket.emit('chat', txt);
+            myGamePiece.lastInfoText=false;
+          }
+          otherShips[x].update(ship9.x, ship9.y, ship9.a, 0, ship9.k, ship9.n, ship9.t);
+        }else{
+          otherShips[x].update(ship9.x, ship9.y, ship9.a, ship9.hp, ship9.k, ship9.n, ship9.t);
+        }
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(ship9.x, ship9.y,
+      ship9.a, ship9.id, ship9.n, ship9.hp, ship9.t));
+    }
+  }
+});
+socket.on('id10', function(ship10){
+  if(ship10.id!=myGamePiece.id){
+    // checking if the ship is allready on the map
+    var newPiece=true;
+    for(var x=0; x<otherShips.length; x++){
+      if(otherShips[x].id==ship10.id){
+        if(ship10.hp.toString().substring(0, 1)=="D"){
+          if(ship10.hp.substring(1, ship10.hp.length)==myGamePiece.id){
+            kills++;
+            var txt={"p":"","t":ship10.n+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
+            socket.emit('chat', txt);
+            myGamePiece.lastInfoText=false;
+          }
+          otherShips[x].update(ship10.x, ship10.y, ship10.a, 0, ship10.k, ship10.n, ship10.t);
+        }else{
+          otherShips[x].update(ship10.x, ship10.y, ship10.a, ship10.hp, ship10.k, ship10.n, ship10.t);
+        }
+        newPiece=false;
+      }
+    }
+    if(newPiece){
+      otherShips.push(new otherShip(ship10.x, ship10.y,
+      ship10.a, ship10.id, ship10.n, ship10.hp, ship6.t));
+    }
+  }
+});
 
 
 // receiving data and creating balls
@@ -433,6 +589,36 @@ socket.on('data3', function(ball3){
 socket.on('data4', function(ball4){
   balls.push(new ball(ball4.x, ball4.y, ball4.a, 4, ball4.d));
   exps.push(new exp(ball4.x, ball4.y, ball4.a));
+});
+// ship5
+socket.on('data5', function(ball5){
+  balls.push(new ball(ball5.x, ball5.y, ball5.a, 5, ball5.d));
+  exps.push(new exp(ball5.x, ball5.y, ball5.a));
+});
+// ship6
+socket.on('data6', function(ball6){
+  balls.push(new ball(ball6.x, ball6.y, ball6.a, 6, ball6.d));
+  exps.push(new exp(ball6.x, ball6.y, ball6.a));
+});
+// ship7
+socket.on('data7', function(ball7){
+  balls.push(new ball(ball7.x, ball7.y, ball7.a, 7, ball7.d));
+  exps.push(new exp(ball7.x, ball7.y, ball7.a));
+});
+// ship8
+socket.on('data8', function(ball8){
+  balls.push(new ball(ball8.x, ball8.y, ball8.a, 8, ball8.d));
+  exps.push(new exp(ball8.x, ball8.y, ball8.a));
+});
+// ship9
+socket.on('data9', function(ball9){
+  balls.push(new ball(ball9.x, ball9.y, ball9.a, 9, ball9.d));
+  exps.push(new exp(ball9.x, ball9.y, ball9.a));
+});
+// ship10
+socket.on('data10', function(ball10){
+  balls.push(new ball(ball10.x, ball10.y, ball10.a, 10, ball10.d));
+  exps.push(new exp(ball10.x, ball10.y, ball10.a));
 });
 
 /////////////// END OF SHIP AND BALLS DATA RECEIVING
@@ -633,6 +819,84 @@ setInterval(function(){
       var ship4={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
       "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
       socket.emit('id4', ship4);
+    }
+  }
+
+  if(myGamePiece.id==5){
+    if(myGamePiece.hp==0&&myGamePiece.lastInfo){
+      myGamePiece.lastInfo=false;
+      var ship5={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      socket.emit('id5', ship5);
+    }else{
+      var ship5={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      socket.emit('id5', ship5);
+    }
+  }
+
+  if(myGamePiece.id==6){
+    if(myGamePiece.hp==0&&myGamePiece.lastInfo){
+      myGamePiece.lastInfo=false;
+      var ship6={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      socket.emit('id6', ship6);
+    }else{
+      var ship4={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      socket.emit('id6', ship4);
+    }
+  }
+
+  if(myGamePiece.id==7){
+    if(myGamePiece.hp==0&&myGamePiece.lastInfo){
+      myGamePiece.lastInfo=false;
+      var ship7={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      socket.emit('id7', ship7);
+    }else{
+      var ship7={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      socket.emit('id7', ship7);
+    }
+  }
+
+  if(myGamePiece.id==8){
+    if(myGamePiece.hp==0&&myGamePiece.lastInfo){
+      myGamePiece.lastInfo=false;
+      var ship8={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      socket.emit('id8', ship8);
+    }else{
+      var ship8={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      socket.emit('id8', ship8);
+    }
+  }
+
+  if(myGamePiece.id==9){
+    if(myGamePiece.hp==0&&myGamePiece.lastInfo){
+      myGamePiece.lastInfo=false;
+      var ship9={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      socket.emit('id9', ship9);
+    }else{
+      var ship9={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      socket.emit('id9', ship9);
+    }
+  }
+
+  if(myGamePiece.id==10){
+    if(myGamePiece.hp==0&&myGamePiece.lastInfo){
+      myGamePiece.lastInfo=false;
+      var ship10={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      socket.emit('id10', ship10);
+    }else{
+      var ship10={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      socket.emit('id10', ship10);
     }
   }
 

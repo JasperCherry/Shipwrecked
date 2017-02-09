@@ -250,6 +250,24 @@ function myShip( x, y, name, id, shipType) {
             if(this.id==4){
               socket.emit('data4', this.shot);
             }
+            if(this.id==5){
+              socket.emit('data5', this.shot);
+            }
+            if(this.id==6){
+              socket.emit('data6', this.shot);
+            }
+            if(this.id==7){
+              socket.emit('data7', this.shot);
+            }
+            if(this.id==8){
+              socket.emit('data8', this.shot);
+            }
+            if(this.id==9){
+              socket.emit('data9', this.shot);
+            }
+            if(this.id==10){
+              socket.emit('data10', this.shot);
+            }
 
           }else if(!this.shootBoth && this.leftAmmo>0){
             this.shootBoth=true;
@@ -290,6 +308,24 @@ function myShip( x, y, name, id, shipType) {
             }
             if(this.id==4){
               socket.emit('data4', this.shot);
+            }
+            if(this.id==5){
+              socket.emit('data5', this.shot);
+            }
+            if(this.id==6){
+              socket.emit('data6', this.shot);
+            }
+            if(this.id==7){
+              socket.emit('data7', this.shot);
+            }
+            if(this.id==8){
+              socket.emit('data8', this.shot);
+            }
+            if(this.id==9){
+              socket.emit('data9', this.shot);
+            }
+            if(this.id==10){
+              socket.emit('data10', this.shot);
             }
 
           }
@@ -336,6 +372,24 @@ function myShip( x, y, name, id, shipType) {
           if(this.id==4){
             socket.emit('data4', this.shot);
           }
+          if(this.id==5){
+            socket.emit('data5', this.shot);
+          }
+          if(this.id==6){
+            socket.emit('data6', this.shot);
+          }
+          if(this.id==7){
+            socket.emit('data7', this.shot);
+          }
+          if(this.id==8){
+            socket.emit('data8', this.shot);
+          }
+          if(this.id==9){
+            socket.emit('data9', this.shot);
+          }
+          if(this.id==10){
+            socket.emit('data10', this.shot);
+          }
         }
 
         // shooting left side
@@ -377,6 +431,24 @@ function myShip( x, y, name, id, shipType) {
           }
           if(this.id==4){
             socket.emit('data4', this.shot);
+          }
+          if(this.id==5){
+            socket.emit('data5', this.shot);
+          }
+          if(this.id==6){
+            socket.emit('data6', this.shot);
+          }
+          if(this.id==7){
+            socket.emit('data7', this.shot);
+          }
+          if(this.id==8){
+            socket.emit('data8', this.shot);
+          }
+          if(this.id==9){
+            socket.emit('data9', this.shot);
+          }
+          if(this.id==10){
+            socket.emit('data10', this.shot);
           }
         }
 
