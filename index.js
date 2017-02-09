@@ -192,9 +192,9 @@ function aiShip(newName, newId) {
 
     this.name=newName;
     this.id=newId;
-    this.x = Math.floor(Math.random()*2048+1);
+    this.x = Math.floor(Math.random()*3072+1);
     this.y = Math.floor(Math.random()*2048+1);
-    this.targetX = Math.floor(Math.random()*2048+1);
+    this.targetX = Math.floor(Math.random()*3072+1);
     this.targetY = Math.floor(Math.random()*2048+1);
 
     this.hp=100; // to fix
@@ -483,7 +483,7 @@ function aiShip(newName, newId) {
         this.deadTimer--;
         if(this.deadTimer==0){
           this.deadTimer=250;
-          this.x = Math.floor(Math.random()*2048+1);
+          this.x = Math.floor(Math.random()*3072+1);
           this.y = Math.floor(Math.random()*2048+1);
           this.alive=true;
           this.hp=100; // to fix
@@ -575,8 +575,8 @@ function aiShip(newName, newId) {
       if(this.x<0){
         this.x=0;
       }
-      if(this.x>2048){
-        this.x=2048;
+      if(this.x>3072){
+        this.x=3072;
       }
       if(this.y<0){
         this.y=0;

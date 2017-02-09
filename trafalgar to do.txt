@@ -7,12 +7,20 @@ extend to 10 players
 
 
 
+
+
 -------------- other -------------------------------
 
 
 
 
-upgrades (on the run)
+upgrades (on the run) / get icons
+-damage
+-reload time
+-hp
+-self repair
+-number of bullets
+
 
 
 music / sounds / graphics

@@ -466,8 +466,8 @@ function myShip( x, y, name, id, shipType) {
         if(this.x<0){
           this.x=0;
         }
-        if(this.x>2048){
-          this.x=2048;
+        if(this.x>3072){
+          this.x=3072;
         }
         if(this.y<0){
           this.y=0;
@@ -511,8 +511,9 @@ function myShip( x, y, name, id, shipType) {
         ctx.font = "bold 18px Courier New";
         ctx.fillStyle = "white";
         ctx.fillText("HP:"+this.hp,window.innerWidth/2-30,window.innerHeight/2-90);
-        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-120);
-        ctx.fillText("Kills:"+kills,window.innerWidth/2-30,window.innerHeight/2-150);
+        ctx.fillText("Kills:"+kills,window.innerWidth/2-30,window.innerHeight/2-120);
+        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-150);
+        // hide in game
         ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-180);
         ctx.fillText("Type:"+this.type,window.innerWidth/2-30,window.innerHeight/2-210);
 

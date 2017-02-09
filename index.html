@@ -189,7 +189,7 @@ var infoTime=300;
 
 
 var tempId=100;
-var myGamePiece = new myShip(Math.floor(Math.random()*2048+1), Math.floor(Math.random()*2048+1),
+var myGamePiece = new myShip(Math.floor(Math.random()*3072+1), Math.floor(Math.random()*2048+1),
 person, tempId, 1);
 
 var otherShips=new Array();
@@ -275,7 +275,7 @@ socket.on('setId', function(msg1){
     if(msg1.status!=tempId){
       tempId=msg1.status;
       // respawn
-      var newPosX=Math.floor(Math.random()*2048+1)
+      var newPosX=Math.floor(Math.random()*3072+1)
       var newPosY=Math.floor(Math.random()*2048+1);
       myGamePiece = new myShip(newPosX, newPosY, person, tempId, 1);
 
