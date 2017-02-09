@@ -355,7 +355,7 @@ function aiShip(newName, newId) {
     // timer for changing the target
     this.targetTimer2=0;
 
-    this.speed=0;
+    this.speed=1;
 
     this.targetChange=400;
 

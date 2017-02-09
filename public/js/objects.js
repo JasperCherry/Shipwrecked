@@ -117,6 +117,9 @@ function otherShip(x, y, a, id, name, hp, shipType) {
       ctx.fillRect(10 / -2, 10 / -2, 10, 10);
       ctx.restore();
       */
+    }
+
+    this.info = function() {
 
       ctx.font = "bold 18px Courier New";
       ctx.fillStyle = "white";
@@ -395,6 +398,10 @@ function aiShip(x, y, a, newHp, newId) {
       }
 
       ctx.restore();
+
+    }
+
+    this.info = function() {
 
       ctx = myGameArea.context;
       ctx.save();

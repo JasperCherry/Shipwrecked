@@ -1,13 +1,5 @@
 
 
-
-
-
--------------- other -------------------------------
-
-
-
-
 upgrades (on the run) / get icons
 -damage
 -reload time
@@ -17,12 +9,17 @@ upgrades (on the run) / get icons
 
 
 
+
+-------------- other -------------------------------
+
+
+chat working 100 procent properly
+
+
+
 music / sounds / graphics
 
 
-plot / idea / name  - change app name
 
-
-chat improvements / symbols / font / pirate style font?
 
 

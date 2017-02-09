@@ -200,6 +200,9 @@ var hits=new Array();
 // showing manual for player
 var showInfo=false;
 
+// showing mini map for player
+var showMinimap=false;
+
 
 ///////////////////////////////  CHAT
 var text=new Array();
@@ -213,6 +216,10 @@ document.addEventListener('keydown', function(event) {
 
   if(event.keyCode==72&&!writingMode){
     showInfo=!showInfo;
+  }
+
+  if(event.keyCode==77&&!writingMode){
+    showMinimap=!showMinimap;
   }
 
   if(event.keyCode==13&&myGamePiece.inGame){

@@ -579,6 +579,12 @@ function myShip( x, y, name, id, shipType) {
         //ctx.fillStyle = "red";
         //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
         ctx.restore();
+        }
+      }
+
+      this.info = function() {
+
+        if(this.inGame){
 
         ctx.font = "bold 18px Courier New";
         ctx.fillStyle = "white";
@@ -657,16 +663,17 @@ function myShip( x, y, name, id, shipType) {
           ctx.fillText("shooting :",window.innerWidth/2 + 100,160);
           ctx.fillText("I-left P-right O-both sides",window.innerWidth/2 + 100,190);
           ctx.fillText("use ENTER to chat",window.innerWidth/2 + 100,220);
+          ctx.fillText("press M for minimap",window.innerWidth/2 + 100,250);
 
-          ctx.fillText("Destroy other ships",window.innerWidth/2 + 100,280);
-          ctx.fillText("to earn points",window.innerWidth/2 + 100,310);
+          ctx.fillText("Destroy other ships",window.innerWidth/2 + 100,310);
+          ctx.fillText("to earn points",window.innerWidth/2 + 100,340);
         }
 
 
         ctx = myGameArea.context;
-        ctx.font = "20px Courier New";
+        ctx.font = "18px Courier New";
         ctx.fillStyle = "white";
-        ctx.fillText("PLAYERS:"+livePlayers,window.innerWidth - 150,40);
+        ctx.fillText("PLAYERS:"+livePlayers,window.innerWidth - 140,40);
 
     }
 }

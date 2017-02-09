@@ -53,8 +53,6 @@ function updateGameArea() {
     ai4.show();
     ai5.show();
 
-
-
     // showing other ships
     if(otherShips.length>0){
       for(var x=0; x<otherShips.length; x++){
@@ -67,6 +65,28 @@ function updateGameArea() {
 
     // showing user ship
     myGamePiece.update();
+
+    // showing info
+    // showing ai ships
+    ai1.info();
+    ai2.info();
+    ai3.info();
+    ai4.info();
+    ai5.info();
+
+    // showing other ships
+    if(otherShips.length>0){
+      for(var x=0; x<otherShips.length; x++){
+          otherShips[x].info();
+          if(otherShips[x].timer<=0){
+            otherShips.splice(x,1);
+          }
+      }
+    }
+
+    // showing user ship
+    myGamePiece.info();
+
 
     // showing balls
     if(balls.length>0){
@@ -136,6 +156,100 @@ function updateGameArea() {
       }
     }
 
+    // show minimap
+
+    if(showMinimap){
+      ctx.globalAlpha = 0.2;
+      ctx = myGameArea.context;
+      ctx.fillStyle = "blue";
+      ctx.fillRect(window.innerWidth/2 - 450 ,window.innerHeight/2 - 300, 900, 600);
+      ctx.globalAlpha = 1;
+
+      // showing ai position
+      ctx.fillStyle = "silver";
+      if(ai1.hp==0){
+        ctx.fillStyle = "black";
+      }
+      ctx.fillRect(window.innerWidth/2 - 450 + (ai1.x/3072*900) -5,
+      window.innerHeight/2 - 300 + (ai1.y/2048*600) -5,
+      10, 10);
+      ctx.fillStyle = "silver";
+      if(ai2.hp==0){
+        ctx.fillStyle = "black";
+      }
+      ctx.fillRect(window.innerWidth/2 - 450 + (ai2.x/3072*900) -5,
+      window.innerHeight/2 - 300 + (ai2.y/2048*600) -5,
+      10, 10);
+      ctx.fillStyle = "silver";
+      if(ai3.hp==0){
+        ctx.fillStyle = "black";
+      }
+      ctx.fillRect(window.innerWidth/2 - 450 + (ai3.x/3072*900) -5,
+      window.innerHeight/2 - 300 + (ai3.y/2048*600) -5,
+      10, 10);
+      ctx.fillStyle = "silver";
+      if(ai4.hp==0){
+        ctx.fillStyle = "black";
+      }
+      ctx.fillRect(window.innerWidth/2 - 450 + (ai4.x/3072*900) -5,
+      window.innerHeight/2 - 300 + (ai4.y/2048*600) -5,
+      10, 10);
+      ctx.fillStyle = "silver";
+      if(ai5.hp==0){
+        ctx.fillStyle = "black";
+      }
+      ctx.fillRect(window.innerWidth/2 - 450 + (ai5.x/3072*900) -5,
+      window.innerHeight/2 - 300 + (ai5.y/2048*600) -5,
+      10, 10);
+
+      // showing other ships position
+      if(otherShips.length>0){
+        for(var x=0; x<otherShips.length; x++){
+          if(otherShips[x].hp==0){
+            ctx.fillStyle = "black";
+          }else{
+            ctx.fillStyle = "red";
+          }
+          ctx.fillRect(window.innerWidth/2 - 450 + (otherShips[x].x/3072*900) -5,
+          window.innerHeight/2 - 300 + (otherShips[x].y/2048*600) -5,
+          10, 10);
+        }
+      }
+
+      // showing player position
+      if(myGamePiece.inGame){
+        ctx.fillStyle = "orange";
+      }else{
+        ctx.fillStyle = "white";
+      }
+
+      if(myGamePiece.hp==0){
+        ctx.fillStyle = "black";
+      }
+
+      ctx.fillRect(window.innerWidth/2 - 450 + (myGamePiece.x/3072*900) -5,
+      window.innerHeight/2 - 300 + (myGamePiece.y/2048*600) -5,
+       10, 10);
+
+      // showing bullets
+      if(balls.length>0){
+        ctx.fillStyle = "black";
+        for(var x=0; x<balls.length; x++){
+          ctx.fillRect(window.innerWidth/2 - 450 + (balls[x].x/3072*900) -1,
+          window.innerHeight/2 - 300 + (balls[x].y/2048*600) -1,
+          2, 2);
+        }
+      }
+
+    }
+
+
+    // displaying info
+    // player
+
+    // other players
+
+    // ai
 
 
     // checking if player was hit
