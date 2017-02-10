@@ -1,3 +1,5 @@
+names in minimap
+
 
 
 upgrades (on the run) / get icons

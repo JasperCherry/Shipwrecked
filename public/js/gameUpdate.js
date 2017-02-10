@@ -159,42 +159,46 @@ function updateGameArea() {
     // show minimap
 
     if(showMinimap){
-      ctx.globalAlpha = 0.2;
+      //ctx.globalAlpha = 0.2;
       ctx = myGameArea.context;
       ctx.fillStyle = "blue";
       ctx.fillRect(window.innerWidth/2 - 450 ,window.innerHeight/2 - 300, 900, 600);
-      ctx.globalAlpha = 1;
+      //ctx.globalAlpha = 1;
 
       // showing ai position
-      ctx.fillStyle = "silver";
+      ctx.fillStyle = "red";
       if(ai1.hp==0){
         ctx.fillStyle = "black";
       }
       ctx.fillRect(window.innerWidth/2 - 450 + (ai1.x/3072*900) -5,
       window.innerHeight/2 - 300 + (ai1.y/2048*600) -5,
       10, 10);
-      ctx.fillStyle = "silver";
+
+      ctx.fillStyle = "red";
       if(ai2.hp==0){
         ctx.fillStyle = "black";
       }
       ctx.fillRect(window.innerWidth/2 - 450 + (ai2.x/3072*900) -5,
       window.innerHeight/2 - 300 + (ai2.y/2048*600) -5,
       10, 10);
-      ctx.fillStyle = "silver";
+
+      ctx.fillStyle = "red";
       if(ai3.hp==0){
         ctx.fillStyle = "black";
       }
       ctx.fillRect(window.innerWidth/2 - 450 + (ai3.x/3072*900) -5,
       window.innerHeight/2 - 300 + (ai3.y/2048*600) -5,
       10, 10);
-      ctx.fillStyle = "silver";
+
+      ctx.fillStyle = "red";
       if(ai4.hp==0){
         ctx.fillStyle = "black";
       }
       ctx.fillRect(window.innerWidth/2 - 450 + (ai4.x/3072*900) -5,
       window.innerHeight/2 - 300 + (ai4.y/2048*600) -5,
       10, 10);
-      ctx.fillStyle = "silver";
+
+      ctx.fillStyle = "red";
       if(ai5.hp==0){
         ctx.fillStyle = "black";
       }
@@ -208,7 +212,7 @@ function updateGameArea() {
           if(otherShips[x].hp==0){
             ctx.fillStyle = "black";
           }else{
-            ctx.fillStyle = "red";
+            ctx.fillStyle = "orange";
           }
           ctx.fillRect(window.innerWidth/2 - 450 + (otherShips[x].x/3072*900) -5,
           window.innerHeight/2 - 300 + (otherShips[x].y/2048*600) -5,
@@ -218,7 +222,7 @@ function updateGameArea() {
 
       // showing player position
       if(myGamePiece.inGame){
-        ctx.fillStyle = "orange";
+        ctx.fillStyle = "lime";
       }else{
         ctx.fillStyle = "white";
       }
@@ -230,6 +234,45 @@ function updateGameArea() {
       ctx.fillRect(window.innerWidth/2 - 450 + (myGamePiece.x/3072*900) -5,
       window.innerHeight/2 - 300 + (myGamePiece.y/2048*600) -5,
        10, 10);
+
+
+
+
+      // displaying names on minimap
+      ctx.font = "bold 12px Courier New";
+      ctx.fillStyle = "white";
+
+      // ai
+      ctx.fillText(ai1.name,
+        window.innerWidth/2 - 450 + (ai1.x/3072*900) -5,
+        window.innerHeight/2 - 300 + (ai1.y/2048*600) -5-5);
+      ctx.fillText(ai2.name,
+        window.innerWidth/2 - 450 + (ai2.x/3072*900) -5,
+        window.innerHeight/2 - 300 + (ai2.y/2048*600) -5-5);
+      ctx.fillText(ai3.name,
+        window.innerWidth/2 - 450 + (ai3.x/3072*900) -5,
+        window.innerHeight/2 - 300 + (ai3.y/2048*600) -5-5);
+      ctx.fillText(ai4.name,
+        window.innerWidth/2 - 450 + (ai4.x/3072*900) -5,
+        window.innerHeight/2 - 300 + (ai4.y/2048*600) -5-5);
+      ctx.fillText(ai5.name,
+        window.innerWidth/2 - 450 + (ai5.x/3072*900) -5,
+        window.innerHeight/2 - 300 + (ai5.y/2048*600) -5-5);
+
+      // other players
+      if(otherShips.length>0){
+        for(var x=0; x<otherShips.length; x++){
+          ctx.fillText(otherShips[x].name,
+            window.innerWidth/2 - 450 + (otherShips[x].x/3072*900) -5,
+            window.innerHeight/2 - 300 + (otherShips[x].y/2048*600) -5-5);
+          }
+        }
+
+      // player
+      ctx.fillText(myGamePiece.name,
+        window.innerWidth/2 - 450 + (myGamePiece.x/3072*900) -5,
+        window.innerHeight/2 - 300 + (myGamePiece.y/2048*600) -5-5);
+
 
       // showing bullets
       if(balls.length>0){
