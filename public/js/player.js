@@ -544,8 +544,8 @@ function myShip( x, y, name, id, shipType) {
         if(this.y<0){
           this.y=0;
         }
-        if(this.y>2048){
-          this.y=2048;
+        if(this.y>3072){
+          this.y=3072;
         }
 
         if(this.inGame){
@@ -592,8 +592,8 @@ function myShip( x, y, name, id, shipType) {
         ctx.fillText("Kills:"+kills,window.innerWidth/2-30,window.innerHeight/2-120);
         ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-150);
         // hide in game
-        ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-180);
-        ctx.fillText("Type:"+this.type,window.innerWidth/2-30,window.innerHeight/2-210);
+        //ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-180);
+        //ctx.fillText("Type:"+this.type,window.innerWidth/2-30,window.innerHeight/2-210);
 
         ctx.font = "bold 15px Courier New";
 
@@ -669,11 +669,11 @@ function myShip( x, y, name, id, shipType) {
           ctx.fillText("to earn points",window.innerWidth/2 + 100,340);
         }
 
-
-        ctx = myGameArea.context;
-        ctx.font = "18px Courier New";
-        ctx.fillStyle = "white";
-        ctx.fillText("PLAYERS:"+livePlayers,window.innerWidth - 140,40);
-
+        if(!showMinimap){
+          ctx = myGameArea.context;
+          ctx.font = "15px Courier New";
+          ctx.fillStyle = "white";
+          ctx.fillText("PLAYERS:"+livePlayers,window.innerWidth - 130,window.innerHeight - 170);
+        }
     }
 }

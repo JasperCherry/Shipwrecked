@@ -12,6 +12,9 @@ function updateGameArea() {
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y+1024);
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y+1024);
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y+1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y+2048);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y+2048);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y+2048);
 
     // upper part
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y-1024);
@@ -21,27 +24,28 @@ function updateGameArea() {
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y-1024);
 
     // lower part
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y+2048);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y+2048);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y+2048);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y+2048);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y+2048);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y+3072);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y+3072);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y+3072);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y+3072);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y+3072);
 
     // left part
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y);
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y+1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y+2048);
 
     // right part
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y);
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y+1024);
-
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y+2048);
 
     ctx.fillStyle = "red";
     ctx.globalAlpha = 0.5;
     ctx.fillRect(window.innerWidth/2-myGamePiece.x-5, window.innerHeight/2-myGamePiece.y, 3072+10, -5);
-    ctx.fillRect(window.innerWidth/2-myGamePiece.x-5, window.innerHeight/2-myGamePiece.y+2048, 3072+10, 5);
-    ctx.fillRect(window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y, -5, 2048);
-    ctx.fillRect(window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y, 5, 2048);
+    ctx.fillRect(window.innerWidth/2-myGamePiece.x-5, window.innerHeight/2-myGamePiece.y+3072, 3072+10, 5);
+    ctx.fillRect(window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y, -5, 3072);
+    ctx.fillRect(window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y, 5, 3072);
     ctx.globalAlpha = 1;
 
 
@@ -161,8 +165,8 @@ function updateGameArea() {
     if(showMinimap){
       //ctx.globalAlpha = 0.2;
       ctx = myGameArea.context;
-      ctx.fillStyle = "blue";
-      ctx.fillRect(window.innerWidth/2 - 450 ,window.innerHeight/2 - 300, 900, 600);
+      ctx.fillStyle = "SlateGray";
+      ctx.fillRect(window.innerWidth/2 - 300 ,window.innerHeight/2 - 300, 600, 600);
       //ctx.globalAlpha = 1;
 
       // showing ai position
@@ -170,40 +174,40 @@ function updateGameArea() {
       if(ai1.hp==0){
         ctx.fillStyle = "black";
       }
-      ctx.fillRect(window.innerWidth/2 - 450 + (ai1.x/3072*900) -5,
-      window.innerHeight/2 - 300 + (ai1.y/2048*600) -5,
+      ctx.fillRect(window.innerWidth/2 - 300 + (ai1.x/3072*600) -5,
+      window.innerHeight/2 - 300 + (ai1.y/3072*600) -5,
       10, 10);
 
       ctx.fillStyle = "red";
       if(ai2.hp==0){
         ctx.fillStyle = "black";
       }
-      ctx.fillRect(window.innerWidth/2 - 450 + (ai2.x/3072*900) -5,
-      window.innerHeight/2 - 300 + (ai2.y/2048*600) -5,
+      ctx.fillRect(window.innerWidth/2 - 300 + (ai2.x/3072*600) -5,
+      window.innerHeight/2 - 300 + (ai2.y/3072*600) -5,
       10, 10);
 
       ctx.fillStyle = "red";
       if(ai3.hp==0){
         ctx.fillStyle = "black";
       }
-      ctx.fillRect(window.innerWidth/2 - 450 + (ai3.x/3072*900) -5,
-      window.innerHeight/2 - 300 + (ai3.y/2048*600) -5,
+      ctx.fillRect(window.innerWidth/2 - 300 + (ai3.x/3072*600) -5,
+      window.innerHeight/2 - 300 + (ai3.y/3072*600) -5,
       10, 10);
 
       ctx.fillStyle = "red";
       if(ai4.hp==0){
         ctx.fillStyle = "black";
       }
-      ctx.fillRect(window.innerWidth/2 - 450 + (ai4.x/3072*900) -5,
-      window.innerHeight/2 - 300 + (ai4.y/2048*600) -5,
+      ctx.fillRect(window.innerWidth/2 - 300 + (ai4.x/3072*600) -5,
+      window.innerHeight/2 - 300 + (ai4.y/3072*600) -5,
       10, 10);
 
       ctx.fillStyle = "red";
       if(ai5.hp==0){
         ctx.fillStyle = "black";
       }
-      ctx.fillRect(window.innerWidth/2 - 450 + (ai5.x/3072*900) -5,
-      window.innerHeight/2 - 300 + (ai5.y/2048*600) -5,
+      ctx.fillRect(window.innerWidth/2 - 300 + (ai5.x/3072*600) -5,
+      window.innerHeight/2 - 300 + (ai5.y/3072*600) -5,
       10, 10);
 
       // showing other ships position
@@ -214,8 +218,8 @@ function updateGameArea() {
           }else{
             ctx.fillStyle = "orange";
           }
-          ctx.fillRect(window.innerWidth/2 - 450 + (otherShips[x].x/3072*900) -5,
-          window.innerHeight/2 - 300 + (otherShips[x].y/2048*600) -5,
+          ctx.fillRect(window.innerWidth/2 - 300 + (otherShips[x].x/3072*600) -5,
+          window.innerHeight/2 - 300 + (otherShips[x].y/3072*600) -5,
           10, 10);
         }
       }
@@ -231,8 +235,8 @@ function updateGameArea() {
         ctx.fillStyle = "black";
       }
 
-      ctx.fillRect(window.innerWidth/2 - 450 + (myGamePiece.x/3072*900) -5,
-      window.innerHeight/2 - 300 + (myGamePiece.y/2048*600) -5,
+      ctx.fillRect(window.innerWidth/2 - 300 + (myGamePiece.x/3072*600) -5,
+      window.innerHeight/2 - 300 + (myGamePiece.y/3072*600) -5,
        10, 10);
 
 
@@ -244,46 +248,131 @@ function updateGameArea() {
 
       // ai
       ctx.fillText(ai1.name,
-        window.innerWidth/2 - 450 + (ai1.x/3072*900) -5,
-        window.innerHeight/2 - 300 + (ai1.y/2048*600) -5-5);
+        window.innerWidth/2 - 300 + (ai1.x/3072*600) -5,
+        window.innerHeight/2 - 300 + (ai1.y/3072*600) -5-5);
       ctx.fillText(ai2.name,
-        window.innerWidth/2 - 450 + (ai2.x/3072*900) -5,
-        window.innerHeight/2 - 300 + (ai2.y/2048*600) -5-5);
+        window.innerWidth/2 - 300 + (ai2.x/3072*600) -5,
+        window.innerHeight/2 - 300 + (ai2.y/3072*600) -5-5);
       ctx.fillText(ai3.name,
-        window.innerWidth/2 - 450 + (ai3.x/3072*900) -5,
-        window.innerHeight/2 - 300 + (ai3.y/2048*600) -5-5);
+        window.innerWidth/2 - 300 + (ai3.x/3072*600) -5,
+        window.innerHeight/2 - 300 + (ai3.y/3072*600) -5-5);
       ctx.fillText(ai4.name,
-        window.innerWidth/2 - 450 + (ai4.x/3072*900) -5,
-        window.innerHeight/2 - 300 + (ai4.y/2048*600) -5-5);
+        window.innerWidth/2 - 300 + (ai4.x/3072*600) -5,
+        window.innerHeight/2 - 300 + (ai4.y/3072*600) -5-5);
       ctx.fillText(ai5.name,
-        window.innerWidth/2 - 450 + (ai5.x/3072*900) -5,
-        window.innerHeight/2 - 300 + (ai5.y/2048*600) -5-5);
+        window.innerWidth/2 - 300 + (ai5.x/3072*600) -5,
+        window.innerHeight/2 - 300 + (ai5.y/3072*600) -5-5);
 
       // other players
       if(otherShips.length>0){
         for(var x=0; x<otherShips.length; x++){
           ctx.fillText(otherShips[x].name,
-            window.innerWidth/2 - 450 + (otherShips[x].x/3072*900) -5,
-            window.innerHeight/2 - 300 + (otherShips[x].y/2048*600) -5-5);
+            window.innerWidth/2 - 300 + (otherShips[x].x/3072*600) -5,
+            window.innerHeight/2 - 300 + (otherShips[x].y/3072*600) -5-5);
           }
         }
 
       // player
       ctx.fillText(myGamePiece.name,
-        window.innerWidth/2 - 450 + (myGamePiece.x/3072*900) -5,
-        window.innerHeight/2 - 300 + (myGamePiece.y/2048*600) -5-5);
+        window.innerWidth/2 - 300 + (myGamePiece.x/3072*600) -5,
+        window.innerHeight/2 - 300 + (myGamePiece.y/3072*600) -5-5);
 
 
       // showing bullets
       if(balls.length>0){
         ctx.fillStyle = "black";
         for(var x=0; x<balls.length; x++){
-          ctx.fillRect(window.innerWidth/2 - 450 + (balls[x].x/3072*900) -1,
-          window.innerHeight/2 - 300 + (balls[x].y/2048*600) -1,
+          ctx.fillRect(window.innerWidth/2 - 300 + (balls[x].x/3072*600) -1,
+          window.innerHeight/2 - 300 + (balls[x].y/3072*600) -1,
           2, 2);
         }
       }
 
+    }else{ // showing small minimap
+
+      ctx = myGameArea.context;
+      ctx.fillStyle = "SlateGray";
+      ctx.fillRect(window.innerWidth - 160 ,window.innerHeight - 160, 150, 150);
+
+      // showing ai position
+      ctx.fillStyle = "red";
+      if(ai1.hp==0){
+        ctx.fillStyle = "black";
+      }
+      ctx.fillRect(window.innerWidth - 160 + (ai1.x/3072*150) -3,
+      window.innerHeight - 160 + (ai1.y/3072*150) -3,
+      6, 6);
+
+      ctx.fillStyle = "red";
+      if(ai2.hp==0){
+        ctx.fillStyle = "black";
+      }
+      ctx.fillRect(window.innerWidth - 160 + (ai2.x/3072*150) -3,
+      window.innerHeight - 160 + (ai2.y/3072*150) -3,
+      6, 6);
+
+      ctx.fillStyle = "red";
+      if(ai3.hp==0){
+        ctx.fillStyle = "black";
+      }
+      ctx.fillRect(window.innerWidth - 160 + (ai3.x/3072*150) -3,
+      window.innerHeight - 160 + (ai3.y/3072*150) -3,
+      6, 6);
+
+      ctx.fillStyle = "red";
+      if(ai4.hp==0){
+        ctx.fillStyle = "black";
+      }
+      ctx.fillRect(window.innerWidth - 160 + (ai4.x/3072*150) -3,
+      window.innerHeight - 160 + (ai4.y/3072*150) -3,
+      6, 6);
+
+      ctx.fillStyle = "red";
+      if(ai5.hp==0){
+        ctx.fillStyle = "black";
+      }
+      ctx.fillRect(window.innerWidth - 160 + (ai5.x/3072*150) -3,
+      window.innerHeight - 160 + (ai5.y/3072*150) -3,
+      6, 6);
+
+      // showing other ships position
+      if(otherShips.length>0){
+        for(var x=0; x<otherShips.length; x++){
+          if(otherShips[x].hp==0){
+            ctx.fillStyle = "black";
+          }else{
+            ctx.fillStyle = "orange";
+          }
+          ctx.fillRect(window.innerWidth - 160 + (otherShips[x].x/3072*150) -3,
+          window.innerHeight - 160 + (otherShips[x].y/3072*150) -3,
+          6, 6);
+        }
+      }
+
+      // showing player position
+      if(myGamePiece.inGame){
+        ctx.fillStyle = "lime";
+      }else{
+        ctx.fillStyle = "white";
+      }
+
+      if(myGamePiece.hp==0){
+        ctx.fillStyle = "black";
+      }
+
+      ctx.fillRect(window.innerWidth - 160 + (myGamePiece.x/3072*150) -3,
+      window.innerHeight - 160 + (myGamePiece.y/3072*150) -3,
+       6, 6);
+
+       // showing bullets
+       if(balls.length>0){
+         ctx.fillStyle = "black";
+         for(var x=0; x<balls.length; x++){
+           ctx.fillRect(window.innerWidth - 160 + (balls[x].x/3072*150) ,
+           window.innerHeight - 160 + (balls[x].y/3072*150) ,
+            1, 1);
+         }
+       }
     }
 
 
@@ -414,7 +503,7 @@ function updateGameArea() {
       if(myGamePiece.deadTimer==0){
         // respawn
         var newPosX=Math.floor(Math.random()*3072+1)
-        var newPosY=Math.floor(Math.random()*2048+1);
+        var newPosY=Math.floor(Math.random()*3072+1);
         myGamePiece = new myShip(newPosX, newPosY, person, tempId, 1);
       }
     }

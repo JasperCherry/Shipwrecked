@@ -1,5 +1,25 @@
-names in minimap
 
+
+
+color of water
+
+
+
+
+sounds:
+-shot
+-hit
+-sink
+-chat
+-background music
+
+
+-------------- other -------------------------------
+
+
+music / sounds
+
+chat working 100 procent properly
 
 
 upgrades (on the run) / get icons
@@ -8,19 +28,6 @@ upgrades (on the run) / get icons
 -hp
 -self repair
 -number of bullets
-
-
-
-
--------------- other -------------------------------
-
-
-chat working 100 procent properly
-
-
-
-music / sounds / graphics
-
 
 
 

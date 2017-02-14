@@ -338,9 +338,9 @@ function aiShip(newName, newId) {
     this.name=newName;
     this.id=newId;
     this.x = Math.floor(Math.random()*3072+1);
-    this.y = Math.floor(Math.random()*2048+1);
+    this.y = Math.floor(Math.random()*3072+1);
     this.targetX = Math.floor(Math.random()*3072+1);
-    this.targetY = Math.floor(Math.random()*2048+1);
+    this.targetY = Math.floor(Math.random()*3072+1);
 
     this.hp=100; // to fix
     this.lastHit;
@@ -629,7 +629,7 @@ function aiShip(newName, newId) {
         if(this.deadTimer==0){
           this.deadTimer=250;
           this.x = Math.floor(Math.random()*3072+1);
-          this.y = Math.floor(Math.random()*2048+1);
+          this.y = Math.floor(Math.random()*3072+1);
           this.alive=true;
           this.hp=100; // to fix
           this.lastInfo=true;
@@ -726,15 +726,15 @@ function aiShip(newName, newId) {
       if(this.y<0){
         this.y=0;
       }
-      if(this.y>2048){
-        this.y=2048;
+      if(this.y>3072){
+        this.y=3072;
       }
 
       // changing the target from time to time
       if(this.alive){
         if(this.targetTimer2==this.targetChange){
-          this.targetX = Math.floor(Math.random()*2048+1);
-          this.targetY = Math.floor(Math.random()*2048+1);
+          this.targetX = Math.floor(Math.random()*3072+1);
+          this.targetY = Math.floor(Math.random()*3072+1);
           this.targetTimer2=0;
         }else{
           this.targetTimer2++;
@@ -745,8 +745,8 @@ function aiShip(newName, newId) {
 
       // if target has been reached
       if(Math.abs(this.targetX-this.x)<50 && Math.abs(this.targetY-this.y)<50){
-        this.targetX = Math.floor(Math.random()*2048+1);
-        this.targetY = Math.floor(Math.random()*2048+1);
+        this.targetX = Math.floor(Math.random()*3072+1);
+        this.targetY = Math.floor(Math.random()*3072+1);
       }
 
       // checking for targets to open fire
