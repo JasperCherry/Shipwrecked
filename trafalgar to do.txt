@@ -3,6 +3,7 @@
 
 -------------- other -------------------------------
 
+reload sounds before project starts
 
 sounds:
 -background music
