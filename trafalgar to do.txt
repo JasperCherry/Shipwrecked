@@ -1,34 +1,13 @@
 
 
 
-color of water
-
-
-
-
-sounds:
--shot
--hit
--sink
--chat
--background music
-
-
 -------------- other -------------------------------
 
 
-music / sounds
-
-chat working 100 procent properly
-
-
-upgrades (on the run) / get icons
--damage
--reload time
--hp
--self repair
--number of bullets
+sounds:
+-background music
 
 
+name of the project, new repo with git history
 
 

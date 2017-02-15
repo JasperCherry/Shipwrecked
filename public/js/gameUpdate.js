@@ -165,6 +165,8 @@ function updateGameArea() {
     if(showMinimap){
       //ctx.globalAlpha = 0.2;
       ctx = myGameArea.context;
+      ctx.fillStyle = "black";
+      ctx.fillRect(window.innerWidth/2 - 300-2 ,window.innerHeight/2 - 300-2, 604, 604);
       ctx.fillStyle = "SlateGray";
       ctx.fillRect(window.innerWidth/2 - 300 ,window.innerHeight/2 - 300, 600, 600);
       //ctx.globalAlpha = 1;
@@ -291,6 +293,8 @@ function updateGameArea() {
     }else{ // showing small minimap
 
       ctx = myGameArea.context;
+      ctx.fillStyle = "black";
+      ctx.fillRect(window.innerWidth - 160-1 ,window.innerHeight - 160-1, 152, 152);
       ctx.fillStyle = "SlateGray";
       ctx.fillRect(window.innerWidth - 160 ,window.innerHeight - 160, 150, 150);
 

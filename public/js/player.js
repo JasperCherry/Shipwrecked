@@ -19,17 +19,83 @@ function myShip( x, y, name, id, shipType) {
     this.x = x;
     this.y = y;
 
-    // upgrades
-    // 50 = 1 second
-    this.hp=100;
-    this.hpLimit=this.hp;
+    // level
+    if(kills<1){
+      this.level=1;
+      this.ballDamage=3;
+      this.selfRepair=200;
+      this.numCannons=10;
+      this.hp=100;
+      this.hpLimit=100;
+    }else if(kills<3){
+      this.level=2;
+      this.ballDamage=3;
+      this.selfRepair=180;
+      this.numCannons=10;
+      this.hp=110;
+      this.hpLimit=110;
+    }else if(kills<5){
+      this.level=3;
+      this.ballDamage=3;
+      this.selfRepair=170;
+      this.numCannons=12;
+      this.hp=110;
+      this.hpLimit=110;
+    }else if(kills<8){
+      this.level=4;
+      this.ballDamage=4;
+      this.selfRepair=160;
+      this.numCannons=12;
+      this.hp=130;
+      this.hpLimit=130;
+    }else if(kills<12){
+      this.level=5;
+      this.ballDamage=4;
+      this.selfRepair=150;
+      this.numCannons=14;
+      this.hp=150;
+      this.hpLimit=150;
+    }else if(kills<18){
+      this.level=6;
+      this.ballDamage=4;
+      this.selfRepair=140;
+      this.numCannons=16;
+      this.hp=160;
+      this.hpLimit=160;
+    }else if(kills<25){
+      this.level=7;
+      this.ballDamage=4;
+      this.selfRepair=130;
+      this.numCannons=20;
+      this.hp=170;
+      this.hpLimit=170;
+    }else  if(kills<35){
+      this.level=8;
+      this.ballDamage=4;
+      this.selfRepair=120;
+      this.numCannons=22;
+      this.hp=200;
+      this.hpLimit=200;
+    }else if(kills<50){
+      this.level=9;
+      this.ballDamage=5;
+      this.selfRepair=110;
+      this.numCannons=24;
+      this.hp=200;
+      this.hpLimit=200;
+    }else if(kills>=50){
+      this.level=10;
+      this.ballDamage=5;
+      this.selfRepair=100;
+      this.numCannons=30;
+      this.hp=200;
+      this.hpLimit=200;
+    }
 
-    this.type=shipType;
-    this.ballDamage=3;
-    this.selfRepair=200;
+    // those will remain constant
     this.loadGap=150;
     this.fireGap=15;
-    this.numCannons=10;
+    this.type=shipType;
 
     // shooting
     this.leftAmmo=this.numCannons;
@@ -143,6 +209,79 @@ function myShip( x, y, name, id, shipType) {
 
     // main ship behaviour function
     this.update = function() {
+
+      // level
+      if(kills<1){
+        this.level=1;
+        this.ballDamage=3;
+        this.selfRepair=200;
+        this.numCannons=10;
+        //this.hp=100;
+        this.hpLimit=100;
+      }else if(kills<3){
+        this.level=2;
+        this.ballDamage=3;
+        this.selfRepair=180;
+        this.numCannons=10;
+        //this.hp=110;
+        this.hpLimit=110;
+      }else if(kills<5){
+        this.level=3;
+        this.ballDamage=3;
+        this.selfRepair=170;
+        this.numCannons=12;
+        //this.hp=110;
+        this.hpLimit=110;
+      }else if(kills<8){
+        this.level=4;
+        this.ballDamage=4;
+        this.selfRepair=160;
+        this.numCannons=12;
+        //this.hp=130;
+        this.hpLimit=130;
+      }else if(kills<12){
+        this.level=5;
+        this.ballDamage=4;
+        this.selfRepair=150;
+        this.numCannons=14;
+        //this.hp=150;
+        this.hpLimit=150;
+      }else if(kills<18){
+        this.level=6;
+        this.ballDamage=4;
+        this.selfRepair=140;
+        this.numCannons=16;
+        //this.hp=160;
+        this.hpLimit=160;
+      }else if(kills<25){
+        this.level=7;
+        this.ballDamage=4;
+        this.selfRepair=130;
+        this.numCannons=20;
+        //this.hp=170;
+        this.hpLimit=170;
+      }else  if(kills<35){
+        this.level=8;
+        this.ballDamage=4;
+        this.selfRepair=120;
+        this.numCannons=22;
+        //this.hp=200;
+        this.hpLimit=200;
+      }else if(kills<50){
+        this.level=9;
+        this.ballDamage=5;
+        this.selfRepair=110;
+        this.numCannons=24;
+        //this.hp=200;
+        this.hpLimit=200;
+      }else if(kills>=50){
+        this.level=10;
+        this.ballDamage=5;
+        this.selfRepair=100;
+        this.numCannons=30;
+        //this.hp=200;
+        this.hpLimit=200;
+      }
 
         // checking if ship should be able to take part in action
         if(this.id!=100){
@@ -455,7 +594,7 @@ function myShip( x, y, name, id, shipType) {
         // self repair
         if(this.hp<this.hpLimit){
           this.timerR++;
-          if(this.timerR==this.selfRepair){
+          if(this.timerR>=this.selfRepair){
             this.timerR=0;
             this.hp++;
           }
@@ -666,7 +805,13 @@ function myShip( x, y, name, id, shipType) {
           ctx.fillText("press M for minimap",window.innerWidth/2 + 100,250);
 
           ctx.fillText("Destroy other ships",window.innerWidth/2 + 100,310);
-          ctx.fillText("to earn points",window.innerWidth/2 + 100,340);
+          ctx.fillText("to earn levels and upgrades",window.innerWidth/2 + 100,340);
+
+          ctx.fillText("Your level : "+this.level+" / 10",window.innerWidth/2 - 350,100);
+          ctx.fillText("HP limit : "+this.hpLimit,window.innerWidth/2 - 350,140);
+          ctx.fillText("Selfrepair time : "+round(this.selfRepair/50, 2)+" sec",window.innerWidth/2 - 350,170);
+          ctx.fillText("Damage : "+this.ballDamage,window.innerWidth/2 - 350,200);
+          ctx.fillText("Number of cannons : "+this.numCannons,window.innerWidth/2 - 350,230);
         }
 
         if(!showMinimap){

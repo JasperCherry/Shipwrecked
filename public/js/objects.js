@@ -147,6 +147,30 @@ function ball( x, y, a, id, d) {
     this.y = y;
     this.damage=d;
 
+    this.shot1 = new Audio('sounds/shot1.mp3');
+    this.shot2 = new Audio('sounds/shot2.mp3');
+    this.shot3 = new Audio('sounds/shot3.mp3');
+
+    this.pickShot=Math.floor(Math.random()*3);
+    this.playSound=true;
+
+    //checking if shot is on the screen
+    if( Math.abs(this.x-myGamePiece.x)<window.innerWidth/2 &&
+     Math.abs(this.y-myGamePiece.y)<window.innerHeight/2 ){
+
+    if(this.playSound){
+      if(this.pickShot==0){
+        this.shot1.play();
+      }else if(this.pickShot==1){
+        this.shot2.play();
+      }else if(this.pickShot==2){
+        this.shot3.play();
+      }
+      this.playSound=false;
+    }
+
+    }
+
     this.show = function() {
 
       this.x += this.speed * Math.sin(this.angle);
