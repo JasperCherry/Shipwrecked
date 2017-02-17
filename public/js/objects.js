@@ -10,6 +10,7 @@ function otherShip(x, y, a, id, name, hp, shipType) {
     this.speed=1;
     this.angle = a;
     this.moveAngle = 0;
+    this.level=1;
 
     this.x = x;
     this.y = y;
@@ -28,7 +29,7 @@ function otherShip(x, y, a, id, name, hp, shipType) {
       this.targetY = newY;
       this.targetA = newA;
       this.hp=newHp;
-      this.kills=newK;
+      this.level=newK;
       this.name=newN;
       this.type=newT;
 
@@ -124,7 +125,7 @@ function otherShip(x, y, a, id, name, hp, shipType) {
       ctx.font = "bold 18px Courier New";
       ctx.fillStyle = "white";
       ctx.fillText("HP:"+this.hp,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-50);
-      ctx.fillText("Kills:"+this.kills,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
+      ctx.fillText("Level:"+this.level,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-80);
       ctx.fillText(this.name,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-110);
       // hide in game
       //ctx.fillText("ID:"+this.id,window.innerWidth/2-myGamePiece.x+this.x-30,window.innerHeight/2-myGamePiece.y+this.y-140);
@@ -158,7 +159,7 @@ function ball( x, y, a, id, d) {
     if( Math.abs(this.x-myGamePiece.x)<window.innerWidth/2 &&
      Math.abs(this.y-myGamePiece.y)<window.innerHeight/2 ){
 
-    if(this.playSound){
+    if(this.playSound&&soundState!=2){
       if(this.pickShot==0){
         this.shot1.play();
       }else if(this.pickShot==1){

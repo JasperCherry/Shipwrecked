@@ -30,64 +30,99 @@ function myShip( x, y, name, id, shipType) {
     }else if(kills<3){
       this.level=2;
       this.ballDamage=3;
-      this.selfRepair=180;
+      this.selfRepair=190;
       this.numCannons=10;
       this.hp=110;
       this.hpLimit=110;
     }else if(kills<5){
       this.level=3;
       this.ballDamage=3;
-      this.selfRepair=170;
+      this.selfRepair=180;
       this.numCannons=12;
-      this.hp=110;
-      this.hpLimit=110;
+      this.hp=120;
+      this.hpLimit=120;
     }else if(kills<8){
       this.level=4;
       this.ballDamage=4;
-      this.selfRepair=160;
+      this.selfRepair=170;
       this.numCannons=12;
-      this.hp=130;
-      this.hpLimit=130;
+      this.hp=120;
+      this.hpLimit=120;
     }else if(kills<12){
       this.level=5;
       this.ballDamage=4;
+      this.selfRepair=160;
+      this.numCannons=14;
+      this.hp=130;
+      this.hpLimit=130;
+    }else if(kills<16){
+      this.level=6;
+      this.ballDamage=5;
       this.selfRepair=150;
       this.numCannons=14;
+      this.hp=140;
+      this.hpLimit=140;
+    }else if(kills<20){
+      this.level=7;
+      this.ballDamage=5;
+      this.selfRepair=140;
+      this.numCannons=14;
+      this.hp=140;
+      this.hpLimit=140;
+    }else  if(kills<24){
+      this.level=8;
+      this.ballDamage=5;
+      this.selfRepair=130;
+      this.numCannons=16;
       this.hp=150;
       this.hpLimit=150;
-    }else if(kills<18){
-      this.level=6;
-      this.ballDamage=4;
-      this.selfRepair=140;
+    }else if(kills<30){
+      this.level=9;
+      this.ballDamage=6;
+      this.selfRepair=120;
       this.numCannons=16;
       this.hp=160;
       this.hpLimit=160;
-    }else if(kills<25){
-      this.level=7;
-      this.ballDamage=4;
-      this.selfRepair=130;
-      this.numCannons=20;
+    }else if(kills<36){
+      this.level=10;
+      this.ballDamage=6;
+      this.selfRepair=120;
+      this.numCannons=16;
+      this.hp=160;
+      this.hpLimit=160;
+    }else if(kills<42){
+      this.level=11;
+      this.ballDamage=6;
+      this.selfRepair=120;
+      this.numCannons=18;
       this.hp=170;
       this.hpLimit=170;
-    }else  if(kills<35){
-      this.level=8;
-      this.ballDamage=4;
+    }else if(kills<48){
+      this.level=12;
+      this.ballDamage=6;
       this.selfRepair=120;
-      this.numCannons=22;
+      this.numCannons=18;
+      this.hp=180;
+      this.hpLimit=180;
+    }else if(kills<54){
+      this.level=13;
+      this.ballDamage=6;
+      this.selfRepair=120;
+      this.numCannons=20;
       this.hp=200;
       this.hpLimit=200;
-    }else if(kills<50){
-      this.level=9;
-      this.ballDamage=5;
-      this.selfRepair=110;
+    }else if(kills<60){
+      this.level=14;
+      this.ballDamage=7;
+      this.selfRepair=120;
+      this.numCannons=20;
+      this.hp=200;
+      this.hpLimit=200;
+    }else if(kills>=60){
+      this.level=15;
+      this.ballDamage=7;
+      this.selfRepair=120;
       this.numCannons=24;
-      this.hp=200;
-      this.hpLimit=200;
-    }else if(kills>=50){
-      this.level=10;
-      this.ballDamage=5;
-      this.selfRepair=100;
-      this.numCannons=30;
       this.hp=200;
       this.hpLimit=200;
     }
@@ -114,6 +149,32 @@ function myShip( x, y, name, id, shipType) {
     this.windTimer=0;
     this.windC=this.windT;
 
+    // show help as first
+    this.manual = function() {
+      // show info about game
+      if(showInfo){
+        ctx = myGameArea.context;
+        ctx.font = "20px Courier New";
+        ctx.fillStyle = "white";
+        ctx.fillText("GAME MANUAL:",window.innerWidth/2 + 100,100);
+        ctx.fillText("moving : W,A,S,D",window.innerWidth/2 + 100,130);
+        ctx.fillText("shooting :",window.innerWidth/2 + 100,160);
+        ctx.fillText("I-left P-right O-both sides",window.innerWidth/2 + 100,190);
+        ctx.fillText("press ENTER to chat",window.innerWidth/2 + 100,220);
+        ctx.fillText("press M for minimap",window.innerWidth/2 + 100,250);
+        ctx.fillText("press N to change sound settings",window.innerWidth/2 + 100,280);
+
+        ctx.fillText("Destroy other ships",window.innerWidth/2 + 100,340);
+        ctx.fillText("to earn levels and upgrades",window.innerWidth/2 + 100,370);
+
+        ctx.fillText("Level : "+this.level+" / 15",window.innerWidth/2 - 350,100);
+        ctx.fillText("Kills : "+kills,window.innerWidth/2 - 350,130);
+        ctx.fillText("HP : "+this.hpLimit,window.innerWidth/2 - 350,170);
+        ctx.fillText("Selfrepair : "+round(this.selfRepair/50, 2)+" sec",window.innerWidth/2 - 350,200);
+        ctx.fillText("Damage : "+this.ballDamage,window.innerWidth/2 - 350,230);
+        ctx.fillText("Cannons : "+this.numCannons,window.innerWidth/2 - 350,260);
+      }
+    }
 
     // collision detection function
     this.ifCollide = function(element) {
@@ -221,64 +282,99 @@ function myShip( x, y, name, id, shipType) {
       }else if(kills<3){
         this.level=2;
         this.ballDamage=3;
-        this.selfRepair=180;
+        this.selfRepair=190;
         this.numCannons=10;
         //this.hp=110;
         this.hpLimit=110;
       }else if(kills<5){
         this.level=3;
         this.ballDamage=3;
-        this.selfRepair=170;
+        this.selfRepair=180;
         this.numCannons=12;
-        //this.hp=110;
-        this.hpLimit=110;
+        //this.hp=120;
+        this.hpLimit=120;
       }else if(kills<8){
         this.level=4;
         this.ballDamage=4;
-        this.selfRepair=160;
+        this.selfRepair=170;
         this.numCannons=12;
-        //this.hp=130;
-        this.hpLimit=130;
+        //this.hp=120;
+        this.hpLimit=120;
       }else if(kills<12){
         this.level=5;
         this.ballDamage=4;
+        this.selfRepair=160;
+        this.numCannons=14;
+        //this.hp=130;
+        this.hpLimit=130;
+      }else if(kills<16){
+        this.level=6;
+        this.ballDamage=5;
         this.selfRepair=150;
         this.numCannons=14;
+        //this.hp=140;
+        this.hpLimit=140;
+      }else if(kills<20){
+        this.level=7;
+        this.ballDamage=5;
+        this.selfRepair=140;
+        this.numCannons=14;
+        //this.hp=140;
+        this.hpLimit=140;
+      }else  if(kills<24){
+        this.level=8;
+        this.ballDamage=5;
+        this.selfRepair=130;
+        this.numCannons=16;
         //this.hp=150;
         this.hpLimit=150;
-      }else if(kills<18){
-        this.level=6;
-        this.ballDamage=4;
-        this.selfRepair=140;
+      }else if(kills<30){
+        this.level=9;
+        this.ballDamage=6;
+        this.selfRepair=120;
         this.numCannons=16;
         //this.hp=160;
         this.hpLimit=160;
-      }else if(kills<25){
-        this.level=7;
-        this.ballDamage=4;
-        this.selfRepair=130;
-        this.numCannons=20;
+      }else if(kills<36){
+        this.level=10;
+        this.ballDamage=6;
+        this.selfRepair=120;
+        this.numCannons=16;
+        //this.hp=160;
+        this.hpLimit=160;
+      }else if(kills<42){
+        this.level=11;
+        this.ballDamage=6;
+        this.selfRepair=120;
+        this.numCannons=18;
         //this.hp=170;
         this.hpLimit=170;
-      }else  if(kills<35){
-        this.level=8;
-        this.ballDamage=4;
+      }else if(kills<48){
+        this.level=12;
+        this.ballDamage=6;
         this.selfRepair=120;
-        this.numCannons=22;
+        this.numCannons=18;
+        //this.hp=180;
+        this.hpLimit=180;
+      }else if(kills<54){
+        this.level=13;
+        this.ballDamage=6;
+        this.selfRepair=120;
+        this.numCannons=20;
         //this.hp=200;
         this.hpLimit=200;
-      }else if(kills<50){
-        this.level=9;
-        this.ballDamage=5;
-        this.selfRepair=110;
+      }else if(kills<60){
+        this.level=14;
+        this.ballDamage=7;
+        this.selfRepair=120;
+        this.numCannons=20;
+        //this.hp=200;
+        this.hpLimit=200;
+      }else if(kills>=60){
+        this.level=15;
+        this.ballDamage=7;
+        this.selfRepair=120;
         this.numCannons=24;
-        //this.hp=200;
-        this.hpLimit=200;
-      }else if(kills>=50){
-        this.level=10;
-        this.ballDamage=5;
-        this.selfRepair=100;
-        this.numCannons=30;
         //this.hp=200;
         this.hpLimit=200;
       }
@@ -728,7 +824,7 @@ function myShip( x, y, name, id, shipType) {
         ctx.font = "bold 18px Courier New";
         ctx.fillStyle = "white";
         ctx.fillText("HP:"+this.hp,window.innerWidth/2-30,window.innerHeight/2-90);
-        ctx.fillText("Kills:"+kills,window.innerWidth/2-30,window.innerHeight/2-120);
+        ctx.fillText("Level:"+this.level,window.innerWidth/2-30,window.innerHeight/2-120);
         ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-150);
         // hide in game
         //ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-180);
@@ -790,28 +886,6 @@ function myShip( x, y, name, id, shipType) {
           ctx.font = "bold 15px Courier New";
           ctx.fillStyle = "white";
           ctx.fillText(textReady,20,window.innerHeight-20);
-        }
-
-        // show info about game
-        if(showInfo){
-          ctx = myGameArea.context;
-          ctx.font = "20px Courier New";
-          ctx.fillStyle = "white";
-          ctx.fillText("GAME MANUAL:",window.innerWidth/2 + 100,100);
-          ctx.fillText("moving : W,A,S,D",window.innerWidth/2 + 100,130);
-          ctx.fillText("shooting :",window.innerWidth/2 + 100,160);
-          ctx.fillText("I-left P-right O-both sides",window.innerWidth/2 + 100,190);
-          ctx.fillText("use ENTER to chat",window.innerWidth/2 + 100,220);
-          ctx.fillText("press M for minimap",window.innerWidth/2 + 100,250);
-
-          ctx.fillText("Destroy other ships",window.innerWidth/2 + 100,310);
-          ctx.fillText("to earn levels and upgrades",window.innerWidth/2 + 100,340);
-
-          ctx.fillText("Your level : "+this.level+" / 10",window.innerWidth/2 - 350,100);
-          ctx.fillText("HP limit : "+this.hpLimit,window.innerWidth/2 - 350,140);
-          ctx.fillText("Selfrepair time : "+round(this.selfRepair/50, 2)+" sec",window.innerWidth/2 - 350,170);
-          ctx.fillText("Damage : "+this.ballDamage,window.innerWidth/2 - 350,200);
-          ctx.fillText("Number of cannons : "+this.numCannons,window.innerWidth/2 - 350,230);
         }
 
         if(!showMinimap){

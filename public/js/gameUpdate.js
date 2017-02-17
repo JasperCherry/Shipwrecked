@@ -1,5 +1,15 @@
 ///////////////////////////////////// MAIN CANVAS INTERVAL FUNCTION
 function updateGameArea() {
+  setTimeout(function () {
+
+    CookieJS.set({name:'totalKills',value:kills,expires: 30});
+
+    if(soundState==0){
+      b.play();
+    }else{
+      b.load();
+    }
+
 
     myGameArea.clear();
 
@@ -379,13 +389,8 @@ function updateGameArea() {
        }
     }
 
-
-    // displaying info
-    // player
-
-    // other players
-
-    // ai
+    // displaying manual as priority
+    myGamePiece.manual();
 
 
     // checking if player was hit
@@ -514,5 +519,5 @@ function updateGameArea() {
 
 
 
-
+  }, 0)
 }/////////////////////////////////////////////////// end of game update

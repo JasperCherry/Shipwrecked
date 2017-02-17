@@ -3,12 +3,11 @@
 
 -------------- other -------------------------------
 
-reload sounds before project starts
 
-sounds:
--background music
 
 
 name of the project, new repo with git history
 
+
+add timouts in main interval - test it online
 

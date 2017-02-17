@@ -154,9 +154,20 @@ body {
 <script src="js/functions.js"></script>
 <script src="js/gameUpdate.js"></script>
 <script src="js/socket.js"></script>
+<script src="js/cookie.js"></script>
 
 
 <script>
+
+// preload sounds
+var s1=new Audio('sounds/shot1.mp3');
+s1.load();
+var s2=new Audio('sounds/shot2.mp3');
+s2.load();
+var s3=new Audio('sounds/shot3.mp3');
+s3.load();
+var b=new Audio('sounds/background.mp3');
+b.load();
 
 // GAME VARIABLES
 
@@ -175,6 +186,13 @@ person=person.substring(0, 20);
 
 // player kills
 var kills=0;
+
+if(CookieJS.get('totalKills')==null){
+  CookieJS.set({name:'totalKills',value:kills,expires: 30});
+}else{
+  kills=parseFloat(CookieJS.get('totalKills'));
+}
+
 // number of live players in game
 var livePlayers=0;
 
@@ -195,6 +213,9 @@ var balls=new Array();
 var exps=new Array();
 var hits=new Array();
 
+// sound variable
+var soundState=0;
+
 // showing manual for player
 var showInfo=false;
 
@@ -211,6 +232,16 @@ var preText="TEXT:";
 var textMsgArr=new Array();
 
 document.addEventListener('keydown', function(event) {
+
+  if(event.keyCode==78&&!writingMode){
+    if(soundState==0){
+      soundState=1;
+    }else if(soundState==1){
+      soundState=2;
+    }else if(soundState==2){
+      soundState=0;
+    }
+  }
 
   if(event.keyCode==72&&!writingMode){
     showInfo=!showInfo;
@@ -779,11 +810,11 @@ setInterval(function(){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
       var ship1={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":myGamePiece.level, "t":1};
       socket.emit('id1', ship1);
     }else{
       var ship1={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":myGamePiece.level, "t":1};
       socket.emit('id1', ship1);
     }
   }
@@ -792,11 +823,11 @@ setInterval(function(){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
       var ship2={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":myGamePiece.level, "t":1};
       socket.emit('id2', ship2);
     }else{
       var ship2={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":myGamePiece.level, "t":1};
       socket.emit('id2', ship2);
     }
   }
@@ -805,11 +836,11 @@ setInterval(function(){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
       var ship3={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":myGamePiece.level, "t":1};
       socket.emit('id3', ship3);
     }else{
       var ship3={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":myGamePiece.level, "t":1};
       socket.emit('id3', ship3);
     }
   }
@@ -818,11 +849,11 @@ setInterval(function(){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
       var ship4={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":myGamePiece.level, "t":1};
       socket.emit('id4', ship4);
     }else{
       var ship4={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":myGamePiece.level, "t":1};
       socket.emit('id4', ship4);
     }
   }
@@ -831,11 +862,11 @@ setInterval(function(){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
       var ship5={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":myGamePiece.level, "t":1};
       socket.emit('id5', ship5);
     }else{
       var ship5={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":myGamePiece.level, "t":1};
       socket.emit('id5', ship5);
     }
   }
@@ -844,11 +875,11 @@ setInterval(function(){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
       var ship6={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":myGamePiece.level, "t":1};
       socket.emit('id6', ship6);
     }else{
       var ship4={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":myGamePiece.level, "t":1};
       socket.emit('id6', ship4);
     }
   }
@@ -857,11 +888,11 @@ setInterval(function(){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
       var ship7={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":myGamePiece.level, "t":1};
       socket.emit('id7', ship7);
     }else{
       var ship7={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":myGamePiece.level, "t":1};
       socket.emit('id7', ship7);
     }
   }
@@ -870,11 +901,11 @@ setInterval(function(){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
       var ship8={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":myGamePiece.level, "t":1};
       socket.emit('id8', ship8);
     }else{
       var ship8={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":myGamePiece.level, "t":1};
       socket.emit('id8', ship8);
     }
   }
@@ -883,11 +914,11 @@ setInterval(function(){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
       var ship9={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":myGamePiece.level, "t":1};
       socket.emit('id9', ship9);
     }else{
       var ship9={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":myGamePiece.level, "t":1};
       socket.emit('id9', ship9);
     }
   }
@@ -896,11 +927,11 @@ setInterval(function(){
     if(myGamePiece.hp==0&&myGamePiece.lastInfo){
       myGamePiece.lastInfo=false;
       var ship10={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":"D"+myGamePiece.lastHit,"k":myGamePiece.level, "t":1};
       socket.emit('id10', ship10);
     }else{
       var ship10={"id":myGamePiece.id,"x":round(myGamePiece.x, 0),"y":round(myGamePiece.y, 0),
-      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":kills, "t":1};
+      "a":round(myGamePiece.angle, 4),"n":myGamePiece.name,"hp":myGamePiece.hp,"k":myGamePiece.level, "t":1};
       socket.emit('id10', ship10);
     }
   }
