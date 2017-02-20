@@ -1,6 +1,9 @@
 ///////////////////////////////////// MAIN CANVAS INTERVAL FUNCTION
 function updateGameArea() {
+
   setTimeout(function () {
+    // do nothing
+  }, 0)
 
     CookieJS.set({name:'totalKills',value:kills,expires: 30});
 
@@ -164,7 +167,7 @@ function updateGameArea() {
     // deleting messages
     if(textMsgArr.length>0){
       for(var x=0; x<textMsgArr.length; x++){
-          if(textMsgArr[x].timer==0){
+          if(textMsgArr[x].timer<=0){
             textMsgArr.splice(x,1);
           }
       }
@@ -518,6 +521,4 @@ function updateGameArea() {
     }
 
 
-
-  }, 0)
 }/////////////////////////////////////////////////// end of game update

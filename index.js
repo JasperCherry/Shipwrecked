@@ -280,6 +280,10 @@ io.on('connection', function(socket){
   function moveAi() {
     setInterval(function(){
 
+      setTimeout(function () {
+        // do nothing
+      }, 0)
+
       aiShip1.update();
       aiShip2.update();
       aiShip3.update();
@@ -318,18 +322,7 @@ io.on('connection', function(socket){
     }, 20);
   }
 
-
-
   moveAi();
-
-
-
-
-
-
-
-
-
 
 
 // ai ship object
@@ -342,11 +335,10 @@ function aiShip(newName, newId) {
     this.targetX = Math.floor(Math.random()*3072+1);
     this.targetY = Math.floor(Math.random()*3072+1);
 
-    this.hp=100; // to fix
+
     this.lastHit;
     this.lastInfo=true;
     this.alive=true;
-    this.selfRepair=100;
 
     this.angle=0;
     this.targetA=0;
@@ -356,9 +348,8 @@ function aiShip(newName, newId) {
     this.targetTimer2=0;
 
     this.speed=1;
-
+    this.timerR=0;
     this.targetChange=400;
-
     this.emitTimer=0;
 
     // every 20 ms update, every 200 ms send
@@ -366,7 +357,6 @@ function aiShip(newName, newId) {
 
     // shooting
     this.fireAngle;
-    this.ballDamage=5;
     this.fireGap=15;
     this.timerSR=0;
     this.timerSL=0;
@@ -378,6 +368,37 @@ function aiShip(newName, newId) {
     this.windSpeed=0.1;
     this.windTimer=0;
     this.windC=this.windT;
+
+
+    // upgrades variables - hp,hp limit,  damage, selfrepair,
+    // 3 levels of difficulty for ai ships
+    if(this.id==81){
+      this.ballDamage=5;
+      this.selfRepair=100;
+      this.hp=200;
+      this.hpLimit=this.hp;
+    }else if(this.id==82){
+      this.ballDamage=4;
+      this.selfRepair=150;
+      this.hp=150;
+      this.hpLimit=this.hp;
+    }else if(this.id==83){
+      this.ballDamage=4;
+      this.selfRepair=150;
+      this.hp=150;
+      this.hpLimit=this.hp;
+    }else if(this.id==84){
+      this.ballDamage=3;
+      this.selfRepair=200;
+      this.hp=100;
+      this.hpLimit=this.hp;
+    }else if(this.id==85){
+      this.ballDamage=3;
+      this.selfRepair=200;
+      this.hp=100;
+      this.hpLimit=this.hp;
+    }
+
 
     // collision detection
     this.ifCollide = function(element){
@@ -606,13 +627,13 @@ function aiShip(newName, newId) {
 
       // self repair
       if(this.alive){
-          if(this.hp<100){  // to fix
-            this.selfRepair--;
-            if(this.selfRepair==0){
-              this.selfRepair=100;
-              this.hp++;
-            }
+        if(this.hp<this.hpLimit){
+          this.timerR++;
+          if(this.timerR>=this.selfRepair){
+            this.timerR=0;
+            this.hp++;
           }
+        }
       }
 
 
@@ -631,7 +652,7 @@ function aiShip(newName, newId) {
           this.x = Math.floor(Math.random()*3072+1);
           this.y = Math.floor(Math.random()*3072+1);
           this.alive=true;
-          this.hp=100; // to fix
+          this.hp=100;
           this.lastInfo=true;
         }
       }
@@ -830,10 +851,10 @@ function aiShip(newName, newId) {
 function ball( x, y, a, id, d) {
 
     this.id=id;
-    this.speed = 5;
+    this.speed = 7;
     //this.speed = 0;
     this.angle = a;
-    this.timer=60
+    this.timer=40
     this.x = x;
     this.y = y;
     this.damage=d;

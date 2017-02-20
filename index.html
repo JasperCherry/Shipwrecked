@@ -155,6 +155,7 @@ body {
 <script src="js/gameUpdate.js"></script>
 <script src="js/socket.js"></script>
 <script src="js/cookie.js"></script>
+<script src="js/annyang.min.js"></script>
 
 
 <script>
@@ -944,7 +945,23 @@ dataS1();
 
 /////////////// END OF SHIP POSITION SENDING
 
+/*
+// voice steering
+if (annyang) {
 
+  var commands = {
+    'show me the map': function() {
+    showMinimap=!showMinimap;
+    }
+  };
+
+  // Add our commands to annyang
+  annyang.addCommands(commands);
+
+  // Start listening. You can call this here, or attach this call to an event, button, etc.
+  annyang.start();
+}
+*/
 </script>
 
 </body>

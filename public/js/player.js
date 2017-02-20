@@ -86,42 +86,42 @@ function myShip( x, y, name, id, shipType) {
     }else if(kills<36){
       this.level=10;
       this.ballDamage=6;
-      this.selfRepair=120;
+      this.selfRepair=110;
       this.numCannons=16;
       this.hp=160;
       this.hpLimit=160;
     }else if(kills<42){
       this.level=11;
       this.ballDamage=6;
-      this.selfRepair=120;
+      this.selfRepair=110;
       this.numCannons=18;
       this.hp=170;
       this.hpLimit=170;
     }else if(kills<48){
       this.level=12;
       this.ballDamage=6;
-      this.selfRepair=120;
+      this.selfRepair=100;
       this.numCannons=18;
       this.hp=180;
       this.hpLimit=180;
     }else if(kills<54){
       this.level=13;
       this.ballDamage=6;
-      this.selfRepair=120;
+      this.selfRepair=100;
       this.numCannons=20;
       this.hp=200;
       this.hpLimit=200;
     }else if(kills<60){
       this.level=14;
       this.ballDamage=7;
-      this.selfRepair=120;
-      this.numCannons=20;
+      this.selfRepair=100;
+      this.numCannons=22;
       this.hp=200;
       this.hpLimit=200;
     }else if(kills>=60){
       this.level=15;
       this.ballDamage=7;
-      this.selfRepair=120;
+      this.selfRepair=100;
       this.numCannons=24;
       this.hp=200;
       this.hpLimit=200;
@@ -162,7 +162,16 @@ function myShip( x, y, name, id, shipType) {
         ctx.fillText("I-left P-right O-both sides",window.innerWidth/2 + 100,190);
         ctx.fillText("press ENTER to chat",window.innerWidth/2 + 100,220);
         ctx.fillText("press M for minimap",window.innerWidth/2 + 100,250);
-        ctx.fillText("press N to change sound settings",window.innerWidth/2 + 100,280);
+        if(soundState==0){
+          ctx.fillText("press N to adjust sound: on",window.innerWidth/2 + 100,280);
+        }else if(soundState==1){
+          ctx.fillText("press N to adjust sound: only effects",window.innerWidth/2 + 100,280);
+        }else if(soundState==2){
+          ctx.fillText("press N to adjust sound: off",window.innerWidth/2 + 100,280);
+        }
+
+
+
 
         ctx.fillText("Destroy other ships",window.innerWidth/2 + 100,340);
         ctx.fillText("to earn levels and upgrades",window.innerWidth/2 + 100,370);

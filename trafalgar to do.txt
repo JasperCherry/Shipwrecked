@@ -1,13 +1,23 @@
 
 
+name - shipwrecked - change the repo
+
+
+
 
 -------------- other -------------------------------
 
 
 
 
-name of the project, new repo with git history
+sterowanie glosem
 
 
-add timouts in main interval - test it online
+sprawdzic zasieg kul i detekcje AI czy jest ok
 
+
+
+
+
+
+make it fullscreen without problems
