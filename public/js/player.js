@@ -81,49 +81,49 @@ function myShip( x, y, name, id, shipType) {
       this.level=9;
       this.ballDamage=6;
       this.selfRepair=120;
-      this.numCannons=16;
+      this.numCannons=18;
       this.hp=160;
       this.hpLimit=160;
     }else if(kills<36){
       this.level=10;
       this.ballDamage=6;
       this.selfRepair=110;
-      this.numCannons=16;
+      this.numCannons=20;
       this.hp=160;
       this.hpLimit=160;
     }else if(kills<42){
       this.level=11;
       this.ballDamage=6;
       this.selfRepair=110;
-      this.numCannons=18;
+      this.numCannons=22;
       this.hp=170;
       this.hpLimit=170;
     }else if(kills<48){
       this.level=12;
       this.ballDamage=6;
       this.selfRepair=100;
-      this.numCannons=18;
+      this.numCannons=24;
       this.hp=180;
       this.hpLimit=180;
     }else if(kills<54){
       this.level=13;
       this.ballDamage=6;
       this.selfRepair=100;
-      this.numCannons=20;
+      this.numCannons=26;
       this.hp=200;
       this.hpLimit=200;
     }else if(kills<60){
       this.level=14;
       this.ballDamage=7;
       this.selfRepair=100;
-      this.numCannons=22;
+      this.numCannons=28;
       this.hp=200;
       this.hpLimit=200;
     }else if(kills>=60){
       this.level=15;
       this.ballDamage=7;
       this.selfRepair=100;
-      this.numCannons=24;
+      this.numCannons=30;
       this.hp=200;
       this.hpLimit=200;
     }
@@ -217,49 +217,49 @@ function myShip( x, y, name, id, shipType) {
         this.level=9;
         this.ballDamage=6;
         this.selfRepair=120;
-        this.numCannons=16;
+        this.numCannons=18;
         //this.hp=160;
         this.hpLimit=160;
       }else if(kills<36){
         this.level=10;
         this.ballDamage=6;
-        this.selfRepair=120;
-        this.numCannons=16;
+        this.selfRepair=110;
+        this.numCannons=20;
         //this.hp=160;
         this.hpLimit=160;
       }else if(kills<42){
         this.level=11;
         this.ballDamage=6;
-        this.selfRepair=120;
-        this.numCannons=18;
+        this.selfRepair=110;
+        this.numCannons=22;
         //this.hp=170;
         this.hpLimit=170;
       }else if(kills<48){
         this.level=12;
         this.ballDamage=6;
-        this.selfRepair=120;
-        this.numCannons=18;
+        this.selfRepair=100;
+        this.numCannons=24;
         //this.hp=180;
         this.hpLimit=180;
       }else if(kills<54){
         this.level=13;
         this.ballDamage=6;
-        this.selfRepair=120;
-        this.numCannons=20;
+        this.selfRepair=100;
+        this.numCannons=26;
         //this.hp=200;
         this.hpLimit=200;
       }else if(kills<60){
         this.level=14;
         this.ballDamage=7;
-        this.selfRepair=120;
-        this.numCannons=20;
+        this.selfRepair=100;
+        this.numCannons=28;
         //this.hp=200;
         this.hpLimit=200;
       }else if(kills>=60){
         this.level=15;
         this.ballDamage=7;
-        this.selfRepair=120;
-        this.numCannons=24;
+        this.selfRepair=100;
+        this.numCannons=30;
         //this.hp=200;
         this.hpLimit=200;
       }
@@ -638,6 +638,21 @@ function myShip( x, y, name, id, shipType) {
 
         }
 
+        // moving the ship with voice control
+        if(voiceControl){
+
+          if(shipForward){
+            if(myGamePiece.speed>-1){
+              myGamePiece.speed-=myGamePiece.acc/2;
+            }
+          }else{
+            if(myGamePiece.speed<0){
+              myGamePiece.speed+=myGamePiece.acc;
+            }
+          }
+
+        }
+
         // changing angle with voice control
         if(voiceControl){
 
@@ -754,10 +769,14 @@ function myShip( x, y, name, id, shipType) {
             ctx.fillText("press B to change voice control : off",window.innerWidth/2 + 100,310);
           }
 
+          ctx.fillText("Voice commands:",window.innerWidth/2 + 100,370);
+          ctx.fillText("GO FORWARD, STOP, TURN LEFT/RIGHT <ANGLE>",window.innerWidth/2 + 100,400);
+          ctx.fillText("FIRE LEFT/RIGHT/BOTH SIDES, CEASE FIRE",window.innerWidth/2 + 100,430);
+          ctx.fillText("HELP, SHOW ME THE MAP, SHOW ME THE GAME",window.innerWidth/2 + 100,460);
+          ctx.fillText("SOUND ON/OFF, VOICE/KEYBOARD CONTROL",window.innerWidth/2 + 100,490);
 
-
-          ctx.fillText("Destroy other ships",window.innerWidth/2 - 350,340);
-          ctx.fillText("to earn levels and upgrades",window.innerWidth/2 - 350,370);
+          ctx.fillText("Destroy other ships",window.innerWidth/2 - 350,400);
+          ctx.fillText("to earn levels and upgrades",window.innerWidth/2 - 350,430);
 
           ctx.fillText("Level : "+this.level+" / 15",window.innerWidth/2 - 350,100);
           ctx.fillText("Kills : "+kills,window.innerWidth/2 - 350,130);

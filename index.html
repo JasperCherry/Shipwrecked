@@ -993,14 +993,14 @@ if (annyang) {
     showInfo=false;
     },
 
-    '45 left': function() {
+    'turn left *a': function(a) {
       shipLeft=true;
-      myGamePiece.targetAngle=myGamePiece.angle-45* Math.PI / 180;
+      myGamePiece.targetAngle=myGamePiece.angle-a* Math.PI / 180;
     },
 
-    '90 left': function() {
-      shipLeft=true;
-      myGamePiece.targetAngle=myGamePiece.angle-90* Math.PI / 180;
+    'turn right *a': function(a) {
+      shipRight=true;
+      myGamePiece.targetAngle=myGamePiece.angle+a* Math.PI / 180;
     },
 
     'rotate left': function() {
@@ -1008,39 +1008,40 @@ if (annyang) {
       myGamePiece.targetAngle=myGamePiece.angle-180* Math.PI / 180;
     },
 
-    '45 right': function() {
-      shipRight=true;
-      myGamePiece.targetAngle=myGamePiece.angle+45* Math.PI / 180;
-    },
-
-    '90 right': function() {
-      shipRight=true;
-      myGamePiece.targetAngle=myGamePiece.angle+90* Math.PI / 180;
-    },
-
     'rotate right': function() {
       shipRight=true;
       myGamePiece.targetAngle=myGamePiece.angle+180* Math.PI / 180;
     },
 
-    'left side': function() {
+    'fire left': function() {
       shootingDir=1;
+      shootingOrder=true;
     },
 
-    'right side': function() {
+    'fire right': function() {
       shootingDir=2;
+      shootingOrder=true;
     },
 
-    'both sides': function() {
+    'fire both sides': function() {
       shootingDir=0;
-    },
-
-    '(open) fire': function() {
       shootingOrder=true;
     },
 
     'stop shooting': function() {
       shootingOrder=false;
+    },
+
+    'cease fire': function() {
+      shootingOrder=false;
+    },
+
+    'voice control': function() {
+      voiceControl=true;
+    },
+
+    'keyboard control': function() {
+      voiceControl=false;
     }
 
   };
@@ -1048,6 +1049,8 @@ if (annyang) {
 
   // Add our commands to annyang
   annyang.addCommands(com);
+
+  annyang.start();
 
 }
 

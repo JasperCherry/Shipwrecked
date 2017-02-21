@@ -5,42 +5,14 @@ function updateGameArea() {
     // do nothing
   }, 0)
 
-  // voice control
 
   // changing voice control
-  if(voiceControl){
-    annyang.start();
-  }else{
-    annyang.pause();
+  if(!voiceControl){
     shipForward = false;
     shipLeft = false;
     shipRight = false;
     shootingOrder=false;
   }
-
-
-  // commands
-  if(voiceControl){
-
-
-    if(shipForward){
-      if(myGamePiece.speed>-1){
-        myGamePiece.speed-=myGamePiece.acc/2;
-      }
-    }else{
-      if(myGamePiece.speed<0){
-        myGamePiece.speed+=myGamePiece.acc;
-      }
-    }
-
-
-
-
-
-
-  }
-
-  // end of voice control
 
     CookieJS.set({name:'totalKills',value:kills,expires: 30});
 

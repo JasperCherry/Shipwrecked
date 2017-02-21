@@ -2,22 +2,7 @@
 
 
 
-voice / keyboard control
-
-- voice commands info
-
-
-
-
-
-
 -------------- other -------------------------------
-
-
-
-
-new name of the heroku url
-
 
 
 make it fullscreen without problems
