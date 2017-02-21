@@ -155,7 +155,7 @@ body {
 <script src="js/gameUpdate.js"></script>
 <script src="js/socket.js"></script>
 <script src="js/cookie.js"></script>
-<script src="js/annyang.min.js"></script>
+<script src="js/annyang.js"></script>
 
 
 <script>
@@ -242,6 +242,10 @@ document.addEventListener('keydown', function(event) {
     }else if(soundState==2){
       soundState=0;
     }
+  }
+
+  if(event.keyCode==66&&!writingMode){
+    voiceControl=!voiceControl;
   }
 
   if(event.keyCode==72&&!writingMode){
@@ -945,23 +949,108 @@ dataS1();
 
 /////////////// END OF SHIP POSITION SENDING
 
-/*
+var voiceControl = false;
+
+var shipForward = false;
+var shipLeft = false;
+var shipRight = false;
+
+var shootingOrder=false;
+var shootingDir=1;  // 0-all, 1-left, 2-right
+
 // voice steering
 if (annyang) {
 
-  var commands = {
-    'show me the map': function() {
-    showMinimap=!showMinimap;
+
+  var com = {
+
+    '(go) forward': function() {
+    shipForward=true;
+    },
+
+    'stop': function() {
+    shipForward=false;
+    },
+
+    'sound on': function() {
+    soundState=0;
+    },
+
+    'sound off': function() {
+    soundState=2;
+    },
+
+    '(show me the) map': function() {
+    showMinimap=true;
+    },
+
+    'help': function() {
+    showInfo=true;
+    },
+
+    'show me the game': function() {
+    showMinimap=false;
+    showInfo=false;
+    },
+
+    '45 left': function() {
+      shipLeft=true;
+      myGamePiece.targetAngle=myGamePiece.angle-45* Math.PI / 180;
+    },
+
+    '90 left': function() {
+      shipLeft=true;
+      myGamePiece.targetAngle=myGamePiece.angle-90* Math.PI / 180;
+    },
+
+    'rotate left': function() {
+      shipLeft=true;
+      myGamePiece.targetAngle=myGamePiece.angle-180* Math.PI / 180;
+    },
+
+    '45 right': function() {
+      shipRight=true;
+      myGamePiece.targetAngle=myGamePiece.angle+45* Math.PI / 180;
+    },
+
+    '90 right': function() {
+      shipRight=true;
+      myGamePiece.targetAngle=myGamePiece.angle+90* Math.PI / 180;
+    },
+
+    'rotate right': function() {
+      shipRight=true;
+      myGamePiece.targetAngle=myGamePiece.angle+180* Math.PI / 180;
+    },
+
+    'left side': function() {
+      shootingDir=1;
+    },
+
+    'right side': function() {
+      shootingDir=2;
+    },
+
+    'both sides': function() {
+      shootingDir=0;
+    },
+
+    '(open) fire': function() {
+      shootingOrder=true;
+    },
+
+    'stop shooting': function() {
+      shootingOrder=false;
     }
+
   };
 
-  // Add our commands to annyang
-  annyang.addCommands(commands);
 
-  // Start listening. You can call this here, or attach this call to an event, button, etc.
-  annyang.start();
+  // Add our commands to annyang
+  annyang.addCommands(com);
+
 }
-*/
+
 </script>
 
 </body>

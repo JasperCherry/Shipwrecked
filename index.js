@@ -854,7 +854,7 @@ function ball( x, y, a, id, d) {
     this.speed = 7;
     //this.speed = 0;
     this.angle = a;
-    this.timer=40
+    this.timer=45;
     this.x = x;
     this.y = y;
     this.damage=d;

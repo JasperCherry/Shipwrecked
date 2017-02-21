@@ -1,6 +1,12 @@
 
 
-name - shipwrecked - change the repo
+
+
+voice / keyboard control
+
+- voice commands info
+
+
 
 
 
@@ -10,13 +16,7 @@ name - shipwrecked - change the repo
 
 
 
-sterowanie glosem
-
-
-sprawdzic zasieg kul i detekcje AI czy jest ok
-
-
-
+new name of the heroku url
 
 
 

@@ -15,6 +15,7 @@ function myShip( x, y, name, id, shipType) {
 
     this.angle = 0;
     this.moveAngle = 0;
+    this.targetAngle = 0;
 
     this.x = x;
     this.y = y;
@@ -149,136 +150,11 @@ function myShip( x, y, name, id, shipType) {
     this.windTimer=0;
     this.windC=this.windT;
 
-    // show help as first
-    this.manual = function() {
-      // show info about game
-      if(showInfo){
-        ctx = myGameArea.context;
-        ctx.font = "20px Courier New";
-        ctx.fillStyle = "white";
-        ctx.fillText("GAME MANUAL:",window.innerWidth/2 + 100,100);
-        ctx.fillText("moving : W,A,S,D",window.innerWidth/2 + 100,130);
-        ctx.fillText("shooting :",window.innerWidth/2 + 100,160);
-        ctx.fillText("I-left P-right O-both sides",window.innerWidth/2 + 100,190);
-        ctx.fillText("press ENTER to chat",window.innerWidth/2 + 100,220);
-        ctx.fillText("press M for minimap",window.innerWidth/2 + 100,250);
-        if(soundState==0){
-          ctx.fillText("press N to adjust sound: on",window.innerWidth/2 + 100,280);
-        }else if(soundState==1){
-          ctx.fillText("press N to adjust sound: only effects",window.innerWidth/2 + 100,280);
-        }else if(soundState==2){
-          ctx.fillText("press N to adjust sound: off",window.innerWidth/2 + 100,280);
-        }
-
-
-
-
-        ctx.fillText("Destroy other ships",window.innerWidth/2 + 100,340);
-        ctx.fillText("to earn levels and upgrades",window.innerWidth/2 + 100,370);
-
-        ctx.fillText("Level : "+this.level+" / 15",window.innerWidth/2 - 350,100);
-        ctx.fillText("Kills : "+kills,window.innerWidth/2 - 350,130);
-        ctx.fillText("HP : "+this.hpLimit,window.innerWidth/2 - 350,170);
-        ctx.fillText("Selfrepair : "+round(this.selfRepair/50, 2)+" sec",window.innerWidth/2 - 350,200);
-        ctx.fillText("Damage : "+this.ballDamage,window.innerWidth/2 - 350,230);
-        ctx.fillText("Cannons : "+this.numCannons,window.innerWidth/2 - 350,260);
-      }
-    }
-
-    // collision detection function
-    this.ifCollide = function(element) {
-    if(element.hp>0){
-      // first square
-      if(Math.abs(this.x-(element.x))<15
-      && Math.abs(this.y-(element.y))<15
-      ){
-        if(this.hp<=1){
-          this.lastHit=element.id;
-        }
-        this.hp--;
-      }else
-      if(Math.abs(this.x-(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
-      && Math.abs(this.y-(element.y-0+round((30 * Math.cos(element.angle)), 0)))<15
-      ){
-        if(this.hp<=1){
-          this.lastHit=element.id;
-        }
-        this.hp--;
-      }else
-      if(Math.abs(this.x-(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
-      && Math.abs(this.y-(element.y-0+round((-30 * Math.cos(element.angle)), 0)))<15
-      ){
-        if(this.hp<=1){
-          this.lastHit=element.id;
-        }
-        this.hp--;
-      }else
-
-      // second square
-      if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))-(element.x))<15
-      && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))-(element.y))<15
-      ){
-        if(this.hp<=1){
-          this.lastHit=element.id;
-        }
-        this.hp--;
-      }else
-      if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))
-      -(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
-      && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))
-      -(element.y-0+round((30 * Math.cos(element.angle)), 0)))<15
-      ){
-        if(this.hp<=1){
-          this.lastHit=element.id;
-        }
-        this.hp--;
-      }else
-      if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))
-      -(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
-      && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))
-      -(element.y-0+round((-30 * Math.cos(element.angle)), 0)))<15
-      ){
-        if(this.hp<=1){
-          this.lastHit=element.id;
-        }
-        this.hp--;
-      }else
-
-      // third square
-      if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))-(element.x))<15
-      && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))-(element.y))<15
-      ){
-        if(this.hp<=1){
-          this.lastHit=element.id;
-        }
-        this.hp--;
-      }else
-      if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))
-      -(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
-      && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))
-      -(element.y-0+round((30 * Math.cos(element.angle)), 0)))<15
-      ){
-        if(this.hp<=1){
-          this.lastHit=element.id;
-        }
-        this.hp--;
-      }else
-      if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))
-      -(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
-      && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))
-      -(element.y-0+round((-30 * Math.cos(element.angle)), 0)))<15
-      ){
-        if(this.hp<=1){
-          this.lastHit=element.id;
-        }
-        this.hp--;
-      }
-    }
-    }
 
 
     // main ship behaviour function
     this.update = function() {
+
 
       // level
       if(kills<1){
@@ -452,7 +328,8 @@ function myShip( x, y, name, id, shipType) {
         // if in game and alive
 
         // shooting both sides
-        if(!writingMode && myGameArea.keys && myGameArea.keys[79] && this.timerS==0){
+        if( (!writingMode && myGameArea.keys && myGameArea.keys[79] && !voiceControl && this.timerS==0)
+        || (voiceControl && this.timerS==0 && shootingDir==0 && shootingOrder) ){
 
           if(this.shootBoth && this.rightAmmo>0){
             this.shootBoth=false;
@@ -577,7 +454,8 @@ function myShip( x, y, name, id, shipType) {
         }
 
         // shooting right side
-        if(!writingMode && myGameArea.keys && myGameArea.keys[80] && this.timerS==0 && this.rightAmmo>0){
+        if( (!writingMode && myGameArea.keys && myGameArea.keys[80] && this.timerS==0 && !voiceControl && this.rightAmmo>0)
+        || (voiceControl && shootingOrder && shootingDir==2 && this.timerS==0 && this.rightAmmo>0) ){
           this.rightAmmo--;
           var shootingHole=Math.floor(Math.random()*5);
           if(shootingHole==0){
@@ -637,7 +515,8 @@ function myShip( x, y, name, id, shipType) {
         }
 
         // shooting left side
-        if(!writingMode && myGameArea.keys && myGameArea.keys[73] && this.timerS==0 && this.leftAmmo>0){
+        if( (!writingMode && myGameArea.keys && myGameArea.keys[73] && this.timerS==0 && !voiceControl && this.leftAmmo>0)
+        || (voiceControl && shootingOrder && shootingDir==1 && this.leftAmmo>0 && this.timerS==0) ){
           this.leftAmmo--;
           var shootingHole=Math.floor(Math.random()*5);
           if(shootingHole==0){
@@ -736,6 +615,8 @@ function myShip( x, y, name, id, shipType) {
         this.moveAngle=0;
 
         // moving the ship
+        if(!voiceControl){
+
         if(!writingMode &&  myGameArea.keys && myGameArea.keys[87]){
           if(this.speed>-1){
             this.speed-=this.acc/2;
@@ -753,6 +634,24 @@ function myShip( x, y, name, id, shipType) {
         }
         if(!writingMode &&  myGameArea.keys && myGameArea.keys[68] ){
           this.moveAngle=1;
+        }
+
+        }
+
+        // changing angle with voice control
+        if(voiceControl){
+
+          if(Math.abs(this.targetAngle-this.angle)>0.001){
+            if(shipRight){
+              this.moveAngle=+1;
+            }else if(shipLeft){
+              this.moveAngle=-1;
+            }
+          }else{
+            shipLeft=false;
+            shipRight=false;
+          }
+
         }
 
         if(this.speed>0){
@@ -824,6 +723,140 @@ function myShip( x, y, name, id, shipType) {
         //ctx.fillRect(30 / -2, 60 / -2, 30, 60);
         ctx.restore();
         }
+      }
+
+
+      // show help as first
+      this.manual = function() {
+        // show info about game
+        if(showInfo){
+          ctx = myGameArea.context;
+          ctx.font = "20px Courier New";
+          ctx.fillStyle = "white";
+          ctx.fillText("GAME MANUAL:",window.innerWidth/2 + 100,100);
+          ctx.fillText("moving : W,A,S,D",window.innerWidth/2 + 100,130);
+          ctx.fillText("shooting :",window.innerWidth/2 + 100,160);
+          ctx.fillText("I-left P-right O-both sides",window.innerWidth/2 + 100,190);
+          ctx.fillText("press ENTER to chat",window.innerWidth/2 + 100,220);
+          ctx.fillText("press M for minimap",window.innerWidth/2 + 100,250);
+
+          if(soundState==0){
+            ctx.fillText("press N to adjust sound: on",window.innerWidth/2 + 100,280);
+          }else if(soundState==1){
+            ctx.fillText("press N to adjust sound: only effects",window.innerWidth/2 + 100,280);
+          }else if(soundState==2){
+            ctx.fillText("press N to adjust sound: off",window.innerWidth/2 + 100,280);
+          }
+
+          if(voiceControl){
+            ctx.fillText("press B to change voice control : on",window.innerWidth/2 + 100,310);
+          }else{
+            ctx.fillText("press B to change voice control : off",window.innerWidth/2 + 100,310);
+          }
+
+
+
+          ctx.fillText("Destroy other ships",window.innerWidth/2 - 350,340);
+          ctx.fillText("to earn levels and upgrades",window.innerWidth/2 - 350,370);
+
+          ctx.fillText("Level : "+this.level+" / 15",window.innerWidth/2 - 350,100);
+          ctx.fillText("Kills : "+kills,window.innerWidth/2 - 350,130);
+          ctx.fillText("HP : "+this.hpLimit,window.innerWidth/2 - 350,170);
+          ctx.fillText("Selfrepair : "+round(this.selfRepair/50, 2)+" sec",window.innerWidth/2 - 350,200);
+          ctx.fillText("Damage : "+this.ballDamage,window.innerWidth/2 - 350,230);
+          ctx.fillText("Cannons : "+this.numCannons,window.innerWidth/2 - 350,260);
+        }
+      }
+
+      // collision detection function
+      this.ifCollide = function(element) {
+      if(element.hp>0){
+        // first square
+        if(Math.abs(this.x-(element.x))<15
+        && Math.abs(this.y-(element.y))<15
+        ){
+          if(this.hp<=1){
+            this.lastHit=element.id;
+          }
+          this.hp--;
+        }else
+        if(Math.abs(this.x-(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
+        && Math.abs(this.y-(element.y-0+round((30 * Math.cos(element.angle)), 0)))<15
+        ){
+          if(this.hp<=1){
+            this.lastHit=element.id;
+          }
+          this.hp--;
+        }else
+        if(Math.abs(this.x-(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
+        && Math.abs(this.y-(element.y-0+round((-30 * Math.cos(element.angle)), 0)))<15
+        ){
+          if(this.hp<=1){
+            this.lastHit=element.id;
+          }
+          this.hp--;
+        }else
+
+        // second square
+        if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))-(element.x))<15
+        && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))-(element.y))<15
+        ){
+          if(this.hp<=1){
+            this.lastHit=element.id;
+          }
+          this.hp--;
+        }else
+        if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))
+        -(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
+        && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))
+        -(element.y-0+round((30 * Math.cos(element.angle)), 0)))<15
+        ){
+          if(this.hp<=1){
+            this.lastHit=element.id;
+          }
+          this.hp--;
+        }else
+        if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))
+        -(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
+        && Math.abs((this.y-0+round((30 * Math.cos(this.angle)), 0))
+        -(element.y-0+round((-30 * Math.cos(element.angle)), 0)))<15
+        ){
+          if(this.hp<=1){
+            this.lastHit=element.id;
+          }
+          this.hp--;
+        }else
+
+        // third square
+        if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))-(element.x))<15
+        && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))-(element.y))<15
+        ){
+          if(this.hp<=1){
+            this.lastHit=element.id;
+          }
+          this.hp--;
+        }else
+        if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))
+        -(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
+        && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))
+        -(element.y-0+round((30 * Math.cos(element.angle)), 0)))<15
+        ){
+          if(this.hp<=1){
+            this.lastHit=element.id;
+          }
+          this.hp--;
+        }else
+        if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))
+        -(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
+        && Math.abs((this.y-0+round((-30 * Math.cos(this.angle)), 0))
+        -(element.y-0+round((-30 * Math.cos(element.angle)), 0)))<15
+        ){
+          if(this.hp<=1){
+            this.lastHit=element.id;
+          }
+          this.hp--;
+        }
+      }
       }
 
       this.info = function() {
