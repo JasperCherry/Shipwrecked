@@ -243,6 +243,11 @@ document.addEventListener('keydown', function(event) {
       soundState=0;
     }
   }
+  // temporary follow
+  if(event.keyCode==70&&!writingMode){
+    follow=!follow;
+    console.log(follow);
+  }
 
   if(event.keyCode==66&&!writingMode){
     voiceControl=!voiceControl;
@@ -958,6 +963,12 @@ var shipRight = false;
 var shootingOrder=false;
 var shootingDir=1;  // 0-all, 1-left, 2-right
 
+var follow=false;
+var sName; // for id of ship to follow
+
+var aimLeft=false;
+var aimRight=false;
+
 // voice steering
 if (annyang) {
 
@@ -968,8 +979,14 @@ if (annyang) {
     shipForward=true;
     },
 
-    'stop': function() {
+    'stop (moving)': function() {
     shipForward=false;
+    follow=false;
+    },
+
+    'hold': function() {
+    shipForward=false;
+    follow=false;
     },
 
     'sound on': function() {
@@ -1040,8 +1057,67 @@ if (annyang) {
       voiceControl=true;
     },
 
+    'stop rotating': function() {
+      shipLeft=false;
+      shipRight=false;
+    },
+
     'keyboard control': function() {
       voiceControl=false;
+    },
+
+    'aim left': function() {
+      aimRight=false;
+      aimLeft=true;
+    },
+
+    'aim right': function() {
+      aimLeft=false;
+      aimRight=true;
+    },
+
+    'follow *name': function(name) {
+
+      aimLeft=false;
+      aimRight=false;
+
+      var dist=1000;
+
+      if(lev(ai1.name, name)<dist){
+        sName=ai1.id;
+        dist=lev(ai1.name, name);
+      }
+
+      if(lev(ai2.name, name)<dist){
+        sName=ai2.id;
+        dist=lev(ai2.name, name);
+      }
+
+      if(lev(ai3.name, name)<dist){
+        sName=ai3.id;
+        dist=lev(ai3.name, name);
+      }
+
+      if(lev(ai4.name, name)<dist){
+        sName=ai4.id;
+        dist=lev(ai4.name, name);
+      }
+
+      if(lev(ai5.name, name)<dist){
+        sName=ai5.id;
+        dist=lev(ai5.name, name);
+      }
+
+      if(otherShips.length>0){
+        for(var z=0; z<otherShips.length;z++){
+          if(lev(otherShips[z].name, name)<dist){
+            sName=otherShips[z].id;
+            dist=lev(otherShips[z].name, name);
+          }
+        }
+      }
+
+      follow=true;
     }
 
   };

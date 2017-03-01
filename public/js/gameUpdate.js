@@ -12,6 +12,10 @@ function updateGameArea() {
     shipLeft = false;
     shipRight = false;
     shootingOrder=false;
+    follow=false;
+    sName=null;
+    aimLeft=false;
+    aimRight=false;
   }
 
     CookieJS.set({name:'totalKills',value:kills,expires: 30});

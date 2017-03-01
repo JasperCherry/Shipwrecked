@@ -269,10 +269,10 @@ io.on('connection', function(socket){
 }); ///////////////////// end of sockets connection
 
   var aiShip1 = new aiShip("Flying Dutchman",81);
-  var aiShip2 = new aiShip("Mary Celeste",82);
-  var aiShip3 = new aiShip("Lady Lovibond",83);
+  var aiShip2 = new aiShip("Aurora",82);
+  var aiShip3 = new aiShip("Valklyrie",83);
   var aiShip4 = new aiShip("Octavius",84);
-  var aiShip5 = new aiShip("Caleuche",85);
+  var aiShip5 = new aiShip("Avenger",85);
 
 
 
@@ -652,7 +652,7 @@ function aiShip(newName, newId) {
           this.x = Math.floor(Math.random()*3072+1);
           this.y = Math.floor(Math.random()*3072+1);
           this.alive=true;
-          this.hp=100;
+          this.hp=this.hpLimit;
           this.lastInfo=true;
         }
       }

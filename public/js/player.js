@@ -17,6 +17,11 @@ function myShip( x, y, name, id, shipType) {
     this.moveAngle = 0;
     this.targetAngle = 0;
 
+    this.followTimer=0;
+    this.followAngle = 0;
+    this.targetX=0;
+    this.targetY=0;
+
     this.x = x;
     this.y = y;
 
@@ -669,6 +674,71 @@ function myShip( x, y, name, id, shipType) {
 
         }
 
+        // following script
+        if(voiceControl){
+          if(follow){
+
+            if(sName==ai1.id){
+              this.targetX=ai1.x;
+              this.targetY=ai1.y;
+            }
+            if(sName==ai2.id){
+              this.targetX=ai2.x;
+              this.targetY=ai2.y;
+            }
+            if(sName==ai3.id){
+              this.targetX=ai3.x;
+              this.targetY=ai3.y;
+            }
+            if(sName==ai4.id){
+              this.targetX=ai4.x;
+              this.targetY=ai4.y;
+            }
+            if(sName==ai5.id){
+              this.targetX=ai5.x;
+              this.targetY=ai5.y;
+            }
+
+            if(otherShips.length>0){
+              console.log("yey theres someone in the game");
+              for(var z=0; z<otherShips.length; z++){
+                if(otherShips[z].id==sName){
+                  console.log("yey ass");
+                  this.targetX=otherShips[z].x;
+                  this.targetY=otherShips[z].y;
+                }
+              }
+            }
+
+            shipForward=true;
+
+            if(Math.abs(this.followAngle-this.angle)>0.05){
+              if(this.followAngle>this.angle){
+                this.moveAngle=+1;
+              }
+              if(this.followAngle<this.angle){
+                this.moveAngle=-1;
+              }
+            }else{
+              this.moveAngle=0;
+            }
+
+            if(!aimLeft&&!aimRight){
+              this.followAngle=Math.atan2( this.targetY - this.y, this.targetX - this.x)+(90 * Math.PI / 180);
+            }else if(aimLeft&&!aimRight){
+              this.followAngle=Math.atan2( this.targetY - this.y, this.targetX - this.x)+(180 * Math.PI / 180);
+            }else if(!aimLeft&&aimRight){
+              this.followAngle=Math.atan2( this.targetY - this.y, this.targetX - this.x)+(0 * Math.PI / 180);
+            }
+
+          }
+        }
+
+
+
+
+
+
         if(this.speed>0){
           this.speed=0;
         }
@@ -773,7 +843,7 @@ function myShip( x, y, name, id, shipType) {
           ctx.fillText("GO FORWARD, STOP, TURN LEFT/RIGHT <ANGLE>",window.innerWidth/2 + 100,400);
           ctx.fillText("FIRE LEFT/RIGHT/BOTH SIDES, CEASE FIRE",window.innerWidth/2 + 100,430);
           ctx.fillText("HELP, SHOW ME THE MAP, SHOW ME THE GAME",window.innerWidth/2 + 100,460);
-          ctx.fillText("SOUND ON/OFF, VOICE/KEYBOARD CONTROL",window.innerWidth/2 + 100,490);
+          ctx.fillText("FOLLOW <SHIP>, AIM LEFT/RIGHT",window.innerWidth/2 + 100,490);
 
           ctx.fillText("Destroy other ships",window.innerWidth/2 - 350,400);
           ctx.fillText("to earn levels and upgrades",window.innerWidth/2 - 350,430);
