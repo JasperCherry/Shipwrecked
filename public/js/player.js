@@ -304,6 +304,8 @@ function myShip( x, y, name, id, shipType) {
         // trrigering the sound
         if(this.hp>0 && this.cracking){
           crush.play();
+        }else{
+          crush.load();
         }
 
         }

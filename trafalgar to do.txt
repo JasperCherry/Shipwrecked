@@ -1,11 +1,7 @@
 
 
 
-
-
-dopracowac natezenie dzwieku kolizji
-
-
+bullet speed
 
 
 
@@ -14,12 +10,12 @@ dopracowac natezenie dzwieku kolizji
 
 
 
-
-make it go fullscreen without problems
-
-
 try to fix bug with big angles - to many rotations
 
+
+
+
+dzwieki zatopienia lodzi ai oraz innych graczy
 
 
 separated instructions for voice

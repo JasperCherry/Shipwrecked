@@ -458,39 +458,28 @@ function updateGameArea() {
       }
     }
 
-    // checking if other ship was hit
-    // checking 3 squares
-    if(balls.length>0&&otherShips.length>0){
-      for(var z=0; z<otherShips.length; z++){
-        if(otherShips[z].hp>0){
-        for(var x=0; x<balls.length; x++){
-          if(Math.abs(balls[x].x-(otherShips[z].x))<15
-          && Math.abs(balls[x].y-(otherShips[z].y))<15
-          &&balls[x].id!=otherShips[z].id){
-            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
-            balls.splice(x,1);
-          }else
-          if(Math.abs(balls[x].x-(otherShips[z].x-0+round((-30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs(balls[x].y-(otherShips[z].y-0+round((30 * Math.cos(otherShips[z].angle)), 0)))<15
-          &&balls[x].id!=otherShips[z].id){
-            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
-            balls.splice(x,1);
-          }else
-          if(Math.abs(balls[x].x-(otherShips[z].x-0+round((30 * Math.sin(otherShips[z].angle)), 0)))<15
-          && Math.abs(balls[x].y-(otherShips[z].y-0+round((-30 * Math.cos(otherShips[z].angle)), 0)))<15
-          &&balls[x].id!=otherShips[z].id){
-            hits.push(new hit(balls[x].x, balls[x].y, balls[x].a));
-            balls.splice(x,1);
-          }
-        }
-        }
-      }
-    }
-
-
 
     // checking if player died
     if(myGamePiece.hp<=0){
+
+      // last sound
+      if(myGamePiece.lastInfo){
+
+        var pickDeathSound=Math.floor(Math.random()*4);
+
+      }
+
+      if(soundState!=2){
+        if(pickDeathSound==0){
+          sd1.play();
+        }else if(pickDeathSound==1){
+          sd2.play();
+        }else if(pickDeathSound==2){
+          sd3.play();
+        }else if(pickDeathSound==3){
+          sd4.play();
+        }
+      }
 
       if(myGamePiece.lastHit.toString()=="ai1"&&myGamePiece.lastInfo==true){
         myGamePiece.lastInfo=false;
