@@ -3,18 +3,29 @@
 
 
 
+dopracowac natezenie dzwieku kolizji
+
+
+
+
 
 
 -------------- other -------------------------------
 
 
-make it fullscreen without problems
 
 
-dzwiek kolizji
+make it go fullscreen without problems
 
 
-front page
+try to fix bug with big angles - to many rotations
 
 
 
+separated instructions for voice
+
+
+documentation
+
+
+water / water effects
