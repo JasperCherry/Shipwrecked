@@ -169,6 +169,8 @@ var s3=new Audio('sounds/shot3.mp3');
 s3.load();
 var b=new Audio('sounds/background.mp3');
 b.load();
+var crush=new Audio('sounds/crush.mp3');
+crush.load();
 
 // GAME VARIABLES
 
@@ -191,7 +193,7 @@ var kills=0;
 if(CookieJS.get('totalKills')==null){
   CookieJS.set({name:'totalKills',value:kills,expires: 30});
 }else{
-  kills=parseFloat(CookieJS.get('totalKills'));
+  kills=parseInt(CookieJS.get('totalKills'));
 }
 
 // number of live players in game
@@ -242,11 +244,6 @@ document.addEventListener('keydown', function(event) {
     }else if(soundState==2){
       soundState=0;
     }
-  }
-  // temporary follow
-  if(event.keyCode==70&&!writingMode){
-    follow=!follow;
-    console.log(follow);
   }
 
   if(event.keyCode==66&&!writingMode){
@@ -969,6 +966,8 @@ var sName; // for id of ship to follow
 var aimLeft=false;
 var aimRight=false;
 
+var collide=false;
+
 // voice steering
 if (annyang) {
 
@@ -977,107 +976,113 @@ if (annyang) {
 
     '(go) forward': function() {
     shipForward=true;
+    aimLeft=false;
+    aimRight=false;
+    follow=false;
     },
 
+
+    // ship stops following
+    'full stop': function() {
+    shipForward=false;
+    follow=false;
+    aimLeft=false;
+    aimRight=false;
+    },
+
+    // ship still aims / follows
     'stop (moving)': function() {
     shipForward=false;
-    follow=false;
     },
-
     'hold': function() {
     shipForward=false;
-    follow=false;
     },
 
+    // general game controls
     'sound on': function() {
     soundState=0;
     },
-
     'sound off': function() {
     soundState=2;
     },
-
     '(show me the) map': function() {
     showMinimap=true;
     },
-
     'help': function() {
     showInfo=true;
     },
-
     'show me the game': function() {
     showMinimap=false;
     showInfo=false;
     },
+    'voice control': function() {
+      voiceControl=true;
+    },
+    'keyboard control': function() {
+      voiceControl=false;
+    },
 
+    // ship manual control
     'turn left *a': function(a) {
       shipLeft=true;
       myGamePiece.targetAngle=myGamePiece.angle-a* Math.PI / 180;
     },
-
     'turn right *a': function(a) {
       shipRight=true;
       myGamePiece.targetAngle=myGamePiece.angle+a* Math.PI / 180;
     },
-
     'rotate left': function() {
       shipLeft=true;
       myGamePiece.targetAngle=myGamePiece.angle-180* Math.PI / 180;
     },
-
     'rotate right': function() {
       shipRight=true;
       myGamePiece.targetAngle=myGamePiece.angle+180* Math.PI / 180;
     },
-
-    'fire left': function() {
-      shootingDir=1;
-      shootingOrder=true;
-    },
-
-    'fire right': function() {
-      shootingDir=2;
-      shootingOrder=true;
-    },
-
-    'fire both sides': function() {
-      shootingDir=0;
-      shootingOrder=true;
-    },
-
-    'stop shooting': function() {
-      shootingOrder=false;
-    },
-
-    'cease fire': function() {
-      shootingOrder=false;
-    },
-
-    'voice control': function() {
-      voiceControl=true;
-    },
-
     'stop rotating': function() {
       shipLeft=false;
       shipRight=false;
     },
 
-    'keyboard control': function() {
-      voiceControl=false;
+    // arms use
+    'fire left': function() {
+      shootingDir=1;
+      shootingOrder=true;
     },
-
-    'aim left': function() {
+    'fire right': function() {
+      shootingDir=2;
+      shootingOrder=true;
+    },
+    'fire both sides': function() {
+      shootingDir=0;
+      shootingOrder=true;
+    },
+    'stop firing': function() {
+      shootingOrder=false;
+    },
+    'stop shooting': function() {
+      shootingOrder=false;
+    },
+    'cease fire': function() {
+      shootingOrder=false;
+    },
+    'collide': function() { // collide relfects only to follow and aiming functions
+      collide=true;
+    },
+    'target left': function() {
+      collide=false;
       aimRight=false;
       aimLeft=true;
     },
-
-    'aim right': function() {
+    'target right': function() {
+      collide=false;
       aimLeft=false;
       aimRight=true;
     },
 
+    // follow command
     'follow *name': function(name) {
-
+      collide=false;
       aimLeft=false;
       aimRight=false;
 

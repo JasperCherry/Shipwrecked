@@ -155,11 +155,11 @@ function myShip( x, y, name, id, shipType) {
     this.windTimer=0;
     this.windC=this.windT;
 
-
+    // sound of cracking when colliding with other ships
+    this.cracking=false;
 
     // main ship behaviour function
     this.update = function() {
-
 
       // level
       if(kills<1){
@@ -286,6 +286,8 @@ function myShip( x, y, name, id, shipType) {
         // live ships collision detection
         if(this.inGame){
 
+        this.cracking=false;
+
         if(otherShips.length>0){
           for(var z=0; z<otherShips.length; z++){
             this.ifCollide(otherShips[z]);
@@ -298,6 +300,11 @@ function myShip( x, y, name, id, shipType) {
         this.ifCollide(ai3);
         this.ifCollide(ai4);
         this.ifCollide(ai5);
+
+        // trrigering the sound
+        if(this.hp>0 && this.cracking){
+          crush.play();
+        }
 
         }
 
@@ -710,7 +717,7 @@ function myShip( x, y, name, id, shipType) {
               }
             }
 
-            shipForward=true;
+
 
             if(Math.abs(this.followAngle-this.angle)>0.05){
               if(this.followAngle>this.angle){
@@ -731,12 +738,16 @@ function myShip( x, y, name, id, shipType) {
               this.followAngle=Math.atan2( this.targetY - this.y, this.targetX - this.x)+(0 * Math.PI / 180);
             }
 
+
+            // controling collision
+              if(Math.abs(this.x-this.targetX)<100 && Math.abs(this.y-this.targetY)<100 && !collide){
+                shipForward=false;
+              }else{
+                shipForward=true;
+              }
+
           }
         }
-
-
-
-
 
 
         if(this.speed>0){
@@ -868,6 +879,7 @@ function myShip( x, y, name, id, shipType) {
             this.lastHit=element.id;
           }
           this.hp--;
+          this.cracking=true;
         }else
         if(Math.abs(this.x-(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
         && Math.abs(this.y-(element.y-0+round((30 * Math.cos(element.angle)), 0)))<15
@@ -876,6 +888,7 @@ function myShip( x, y, name, id, shipType) {
             this.lastHit=element.id;
           }
           this.hp--;
+          this.cracking=true;
         }else
         if(Math.abs(this.x-(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
         && Math.abs(this.y-(element.y-0+round((-30 * Math.cos(element.angle)), 0)))<15
@@ -884,6 +897,7 @@ function myShip( x, y, name, id, shipType) {
             this.lastHit=element.id;
           }
           this.hp--;
+          this.cracking=true;
         }else
 
         // second square
@@ -894,6 +908,7 @@ function myShip( x, y, name, id, shipType) {
             this.lastHit=element.id;
           }
           this.hp--;
+          this.cracking=true;
         }else
         if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))
         -(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
@@ -904,6 +919,7 @@ function myShip( x, y, name, id, shipType) {
             this.lastHit=element.id;
           }
           this.hp--;
+          this.cracking=true;
         }else
         if(Math.abs((this.x-0+round((-30 * Math.sin(this.angle)), 0))
         -(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
@@ -914,6 +930,7 @@ function myShip( x, y, name, id, shipType) {
             this.lastHit=element.id;
           }
           this.hp--;
+          this.cracking=true;
         }else
 
         // third square
@@ -924,6 +941,7 @@ function myShip( x, y, name, id, shipType) {
             this.lastHit=element.id;
           }
           this.hp--;
+          this.cracking=true;
         }else
         if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))
         -(element.x-0+round((-30 * Math.sin(element.angle)), 0)))<15
@@ -934,6 +952,7 @@ function myShip( x, y, name, id, shipType) {
             this.lastHit=element.id;
           }
           this.hp--;
+          this.cracking=true;
         }else
         if(Math.abs((this.x-0+round((30 * Math.sin(this.angle)), 0))
         -(element.x-0+round((30 * Math.sin(element.angle)), 0)))<15
@@ -944,6 +963,7 @@ function myShip( x, y, name, id, shipType) {
             this.lastHit=element.id;
           }
           this.hp--;
+          this.cracking=true;
         }
       }
       }
