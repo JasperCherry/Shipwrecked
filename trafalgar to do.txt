@@ -1,7 +1,7 @@
 
 
 
-water / water effects
+water spiral efect, use it somehow
 
 
 
@@ -13,6 +13,10 @@ try to fix bug with big angles - to many rotations
 
 dopracowac komendy glosowe i osobna instrukcja dla nich 
 
-documentation
+
+
+
+
+documentation / references
 
 

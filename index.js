@@ -971,7 +971,7 @@ setInterval(function(){
   if(ship1b==true&&ship1a==false){
     ship1b=false;
 
-    if(ship1total.n!=null){
+    if(ship1total!=null){
     var txt={"p":"" ,"t":ship1total.n+" has left the game", "c":1};
     io.emit('chat', txt);
     }
@@ -987,7 +987,7 @@ setInterval(function(){
   if(ship2b==true&&ship2a==false){
     ship2b=false;
 
-    if(ship2total.n!=null){
+    if(ship2total!=null){
     var txt={"p":"" ,"t":ship2total.n+" has left the game", "c":1};
     io.emit('chat', txt);
     }
@@ -1003,7 +1003,7 @@ setInterval(function(){
   if(ship3b==true&&ship3a==false){
     ship3b=false;
 
-    if(ship3total.n!=null){
+    if(ship3total!=null){
     var txt={"p":"" ,"t":ship3total.n+" has left the game", "c":1};
     io.emit('chat', txt);
     }
@@ -1019,7 +1019,7 @@ setInterval(function(){
   if(ship4b==true&&ship4a==false){
     ship4b=false;
 
-    if(ship4total.n!=null){
+    if(ship4total!=null){
     var txt={"p":"" ,"t":ship4total.n+" has left the game", "c":1};
     io.emit('chat', txt);
     }
@@ -1035,7 +1035,7 @@ setInterval(function(){
   if(ship5b==true&&ship5a==false){
     ship5b=false;
 
-    if(ship5total.n!=null){
+    if(ship5total!=null){
     var txt={"p":"" ,"t":ship5total.n+" has left the game", "c":1};
     io.emit('chat', txt);
     }
@@ -1051,7 +1051,7 @@ setInterval(function(){
   if(ship6b==true&&ship6a==false){
     ship6b=false;
 
-    if(ship6total.n!=null){
+    if(ship6total!=null){
     var txt={"p":"" ,"t":ship6total.n+" has left the game", "c":1};
     io.emit('chat', txt);
     }
@@ -1067,7 +1067,7 @@ setInterval(function(){
   if(ship7b==true&&ship7a==false){
     ship7b=false;
 
-    if(ship7total.n!=null){
+    if(ship7total!=null){
     var txt={"p":"" ,"t":ship7total.n+" has left the game", "c":1};
     io.emit('chat', txt);
     }
@@ -1083,7 +1083,7 @@ setInterval(function(){
   if(ship8b==true&&ship8a==false){
     ship8b=false;
 
-    if(ship8total.n!=null){
+    if(ship8total!=null){
     var txt={"p":"" ,"t":ship8total.n+" has left the game", "c":1};
     io.emit('chat', txt);
     }
@@ -1099,7 +1099,7 @@ setInterval(function(){
   if(ship9b==true&&ship9a==false){
     ship9b=false;
 
-    if(ship9total.n!=null){
+    if(ship9total!=null){
     var txt={"p":"" ,"t":ship9total.n+" has left the game", "c":1};
     io.emit('chat', txt);
     }
@@ -1115,7 +1115,7 @@ setInterval(function(){
   if(ship10b==true&&ship10a==false){
     ship10b=false;
 
-    if(ship10total.n!=null){
+    if(ship10total!=null){
     var txt={"p":"" ,"t":ship10total.n+" has left the game", "c":1};
     io.emit('chat', txt);
     }
