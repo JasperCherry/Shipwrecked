@@ -851,10 +851,10 @@ function aiShip(newName, newId) {
 function ball( x, y, a, id, d) {
 
     this.id=id;
-    this.speed = 7;
+    this.speed = 8;
     //this.speed = 0;
     this.angle = a;
-    this.timer=45;
+    this.timer=40;
     this.x = x;
     this.y = y;
     this.damage=d;

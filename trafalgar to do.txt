@@ -1,8 +1,7 @@
 
 
 
-bullet speed
-
+water / water effects
 
 
 
@@ -12,16 +11,8 @@ bullet speed
 
 try to fix bug with big angles - to many rotations
 
-
-
-
-dzwieki zatopienia lodzi ai oraz innych graczy
-
-
-separated instructions for voice
-
+dopracowac komendy glosowe i osobna instrukcja dla nich 
 
 documentation
 
 
-water / water effects

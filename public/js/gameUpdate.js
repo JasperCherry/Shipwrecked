@@ -464,9 +464,7 @@ function updateGameArea() {
 
       // last sound
       if(myGamePiece.lastInfo){
-
         var pickDeathSound=Math.floor(Math.random()*4);
-
       }
 
       if(soundState!=2){

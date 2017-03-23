@@ -11,6 +11,7 @@ function otherShip(x, y, a, id, name, hp, shipType) {
     this.angle = a;
     this.moveAngle = 0;
     this.level=1;
+    this.alive=true;
 
     this.x = x;
     this.y = y;
@@ -103,6 +104,31 @@ function otherShip(x, y, a, id, name, hp, shipType) {
           }
       }
 
+      // sound of sinking
+        // if ship died and effects sound is on
+        if(this.alive&&this.hp==0&&soundState!=2){
+          this.alive=false;
+          var sd1=new Audio('sounds/sd1.wav');
+          var sd2=new Audio('sounds/sd2.wav');
+          var sd3=new Audio('sounds/sd3.wav');
+          var sd4=new Audio('sounds/sd4.wav');
+          var pickDeathSound=Math.floor(Math.random()*4);
+        // checking if ship is on player screen
+        if( Math.abs(this.x-myGamePiece.x)<window.innerWidth/2 &&
+        Math.abs(this.y-myGamePiece.y)<window.innerHeight/2 ){
+          if(pickDeathSound==0){
+            sd1.play();
+          }else if(pickDeathSound==1){
+            sd2.play();
+          }else if(pickDeathSound==2){
+            sd3.play();
+          }else if(pickDeathSound==3){
+            sd4.play();
+          }
+        }
+      }
+
+
       // drawing
       ctx = myGameArea.context;
       ctx.save();
@@ -111,6 +137,7 @@ function otherShip(x, y, a, id, name, hp, shipType) {
 
       if(this.hp>0){
         this.deadTimer=250;
+        this.alive=true;
       }
 
       if(this.hp==0&&this.deadTimer>0){
@@ -168,10 +195,10 @@ function otherShip(x, y, a, id, name, hp, shipType) {
 function ball( x, y, a, id, d) {
 
     this.id=id;
-    this.speed = 7;
+    this.speed = 8;
     //this.speed = 0;
     this.angle = a;
-    this.timer=45;
+    this.timer=40;
     this.x = x;
     this.y = y;
     this.damage=d;
@@ -339,6 +366,7 @@ function aiShip(x, y, a, newHp, newId) {
     this.speed=1;
     this.timer=50;
     this.deadTimer=250;
+    this.alive=true;
 
     this.update = function(newName, newX, newY, newA, d1, d2, newHp) {
 
@@ -390,8 +418,33 @@ function aiShip(x, y, a, newHp, newId) {
         }
       }
 
+      // sound of sinking
+        // if ship died and effects sound is on
+        if(this.alive&&this.hp==0&&soundState!=2){
+          this.alive=false;
+          var sd1=new Audio('sounds/sd1.wav');
+          var sd2=new Audio('sounds/sd2.wav');
+          var sd3=new Audio('sounds/sd3.wav');
+          var sd4=new Audio('sounds/sd4.wav');
+          var pickDeathSound=Math.floor(Math.random()*4);
+        // checking if ship is on player screen
+        if( Math.abs(this.x-myGamePiece.x)<window.innerWidth/2 &&
+        Math.abs(this.y-myGamePiece.y)<window.innerHeight/2 ){
+          if(pickDeathSound==0){
+            sd1.play();
+          }else if(pickDeathSound==1){
+            sd2.play();
+          }else if(pickDeathSound==2){
+            sd3.play();
+          }else if(pickDeathSound==3){
+            sd4.play();
+          }
+        }
+      }
+
       if(this.hp>0){
         this.deadTimer=250;
+        this.alive=true;
       }
 
       if(this.hp==0&&this.deadTimer>0){
