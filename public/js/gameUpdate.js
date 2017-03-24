@@ -32,6 +32,10 @@ function updateGameArea() {
     var ctx = myGameArea.context;
 
     // playing area
+    // one pic for better dispay (problem on macs with display)
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor-1024, window.innerHeight/2-myGamePiece.y*bottomFactor-1024);
+    // old type
+    /*
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor, window.innerHeight/2-myGamePiece.y*bottomFactor);
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+1024, window.innerHeight/2-myGamePiece.y*bottomFactor);
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+2048, window.innerHeight/2-myGamePiece.y*bottomFactor);
@@ -65,6 +69,7 @@ function updateGameArea() {
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+3072, window.innerHeight/2-myGamePiece.y*bottomFactor);
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+3072, window.innerHeight/2-myGamePiece.y*bottomFactor+1024);
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+3072, window.innerHeight/2-myGamePiece.y*bottomFactor+2048);
+    */
 
     if(traces.length>0){
       for(var x=0; x<traces.length; x++){
