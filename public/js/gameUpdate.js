@@ -71,14 +71,7 @@ function updateGameArea() {
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+3072, window.innerHeight/2-myGamePiece.y*bottomFactor+2048);
     */
 
-    if(traces.length>0){
-      for(var x=0; x<traces.length; x++){
-          traces[x].show();
-          if(traces[x].timeAlive<=0){
-            traces.splice(x,1);
-          }
-      }
-    }
+
 
     ctx.fillStyle = "red";
     ctx.globalAlpha = 0.2;
@@ -88,6 +81,15 @@ function updateGameArea() {
     ctx.fillRect(window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y, 5, 3072);
     ctx.globalAlpha = 1;
 
+    // drawing water traces
+    if(traces.length>0){
+      for(var x=0; x<traces.length; x++){
+          traces[x].show();
+          if(traces[x].timeAlive<=0){
+            traces.splice(x,1);
+          }
+      }
+    }
 
 
     // showing ai ships
