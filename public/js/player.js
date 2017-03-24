@@ -634,14 +634,8 @@ function myShip( x, y, name, id, shipType) {
 
 
       // adjusting angle value for shorter rotations when following other ships
-      if(this.angle>=6.28){
-        this.angle=this.angle%6.28;
-      }else if(this.angle<0){
-        this.angle=6.28-this.angle;
-      }
+      this.angle=this.angle%6.28;
 
-
-      console.log(this.angle);
       if(this.inGame&&this.alive){
         // if in game and alive
         //this.speed=0;
