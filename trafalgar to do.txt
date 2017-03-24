@@ -4,13 +4,12 @@
 
 
 
+
+
+
 -------------- other -------------------------------
 
-
-
-try to fix bug with big angles - to many rotations
-
-osobna instrukcja dla komend glosowych
+overview
 
 documentation / references
 

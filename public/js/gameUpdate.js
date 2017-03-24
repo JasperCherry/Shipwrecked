@@ -76,7 +76,7 @@ function updateGameArea() {
     }
 
     ctx.fillStyle = "red";
-    ctx.globalAlpha = 0.5;
+    ctx.globalAlpha = 0.2;
     ctx.fillRect(window.innerWidth/2-myGamePiece.x-5, window.innerHeight/2-myGamePiece.y, 3072+10, -5);
     ctx.fillRect(window.innerWidth/2-myGamePiece.x-5, window.innerHeight/2-myGamePiece.y+3072, 3072+10, 5);
     ctx.fillRect(window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y, -5, 3072);

@@ -239,6 +239,8 @@ var showInfo=false;
 // showing mini map for player
 var showMinimap=false;
 
+// showing voice commands
+var showVoice=false;
 
 ///////////////////////////////  CHAT
 var text=new Array();
@@ -264,12 +266,29 @@ document.addEventListener('keydown', function(event) {
     voiceControl=!voiceControl;
   }
 
+  // scren showing voice commands, map and help
+  if(event.keyCode==86&&!writingMode){
+    showVoice=!showVoice;
+    if(showVoice){
+      showInfo=false;
+      showMinimap=false;
+    }
+  }
+
   if(event.keyCode==72&&!writingMode){
     showInfo=!showInfo;
+    if(showInfo){
+      showMinimap=false;
+      showVoice=false;
+    }
   }
 
   if(event.keyCode==77&&!writingMode){
     showMinimap=!showMinimap;
+    if(showMinimap){
+      showVoice=false;
+      showInfo=false;
+    }
   }
 
   if(event.keyCode==13&&myGamePiece.inGame){
@@ -996,20 +1015,12 @@ if (annyang) {
     follow=false;
     },
 
-    // ship stops following
-    'full stop': function() {
+    // ship stops
+    '(full) stop': function() {
     shipForward=false;
     follow=false;
     aimLeft=false;
     aimRight=false;
-    },
-
-    // ship still aims / follows
-    'stop (moving)': function() {
-    shipForward=false;
-    },
-    'hold': function() {
-    shipForward=false;
     },
 
     // general game controls
@@ -1020,20 +1031,30 @@ if (annyang) {
     soundState=2;
     },
     '(show me the) map': function() {
-    showMinimap=true;
+      showVoice=false;
+      showMinimap=true;
+      showInfo=false;
     },
     'help': function() {
-    showInfo=true;
+      showVoice=false;
+      showMinimap=false;
+      showInfo=true;
     },
     'show me the game': function() {
     showMinimap=false;
     showInfo=false;
+    showVoice=false;
     },
     'voice control': function() {
       voiceControl=true;
     },
     'keyboard control': function() {
       voiceControl=false;
+    },
+    'show me the voice commands': function() {
+      showVoice=true;
+      showMinimap=false;
+      showInfo=false;
     },
 
     // ship manual control
@@ -1063,7 +1084,7 @@ if (annyang) {
       shipRight=false;
     },
 
-    // arms use
+    // combat
     'fire left': function() {
       shootingDir=1;
       shootingOrder=true;

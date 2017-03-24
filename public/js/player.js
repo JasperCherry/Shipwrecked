@@ -304,7 +304,7 @@ function myShip( x, y, name, id, shipType) {
         this.ifCollide(ai5);
 
         // trrigering the sound
-        if(this.hp>0 && this.cracking){
+        if(this.hp>0 && this.cracking && soundState!=2){
           crush.play();
         }else{
           crush.load();
@@ -633,6 +633,15 @@ function myShip( x, y, name, id, shipType) {
       }// if in game and alive
 
 
+      // adjusting angle value for shorter rotations when following other ships
+      if(this.angle>=6.28){
+        this.angle=this.angle%6.28;
+      }else if(this.angle<0){
+        this.angle=6.28-this.angle;
+      }
+
+
+      console.log(this.angle);
       if(this.inGame&&this.alive){
         // if in game and alive
         //this.speed=0;
@@ -847,7 +856,6 @@ function myShip( x, y, name, id, shipType) {
           ctx.fillText("I-left P-right O-both sides",window.innerWidth/2 + 100,190);
           ctx.fillText("press ENTER to chat",window.innerWidth/2 + 100,220);
           ctx.fillText("press M for minimap",window.innerWidth/2 + 100,250);
-
           if(soundState==0){
             ctx.fillText("press N to adjust sound: on",window.innerWidth/2 + 100,280);
           }else if(soundState==1){
@@ -855,28 +863,50 @@ function myShip( x, y, name, id, shipType) {
           }else if(soundState==2){
             ctx.fillText("press N to adjust sound: off",window.innerWidth/2 + 100,280);
           }
-
           if(voiceControl){
             ctx.fillText("press B to change voice control : on",window.innerWidth/2 + 100,310);
           }else{
             ctx.fillText("press B to change voice control : off",window.innerWidth/2 + 100,310);
           }
-
-          ctx.fillText("Voice commands:",window.innerWidth/2 + 100,370);
-          ctx.fillText("GO FORWARD, STOP, TURN LEFT/RIGHT <ANGLE>",window.innerWidth/2 + 100,400);
-          ctx.fillText("FIRE LEFT/RIGHT/BOTH SIDES, CEASE FIRE",window.innerWidth/2 + 100,430);
-          ctx.fillText("HELP, SHOW ME THE MAP, SHOW ME THE GAME",window.innerWidth/2 + 100,460);
-          ctx.fillText("FOLLOW <SHIP>, AIM LEFT/RIGHT",window.innerWidth/2 + 100,490);
-
-          ctx.fillText("Destroy other ships",window.innerWidth/2 - 350,400);
-          ctx.fillText("to earn levels and upgrades",window.innerWidth/2 - 350,430);
-
+          ctx.fillText("press V to see voice commands",window.innerWidth/2 + 100,340);
+          ctx.fillText("Destroy other ships",window.innerWidth/2 - 350,420);
+          ctx.fillText("to earn levels and upgrades",window.innerWidth/2 - 350,450);
           ctx.fillText("Level : "+this.level+" / 15",window.innerWidth/2 - 350,100);
           ctx.fillText("Kills : "+kills,window.innerWidth/2 - 350,130);
           ctx.fillText("HP : "+this.hpLimit,window.innerWidth/2 - 350,170);
           ctx.fillText("Selfrepair : "+round(this.selfRepair/50, 2)+" sec",window.innerWidth/2 - 350,200);
           ctx.fillText("Damage : "+this.ballDamage,window.innerWidth/2 - 350,230);
           ctx.fillText("Cannons : "+this.numCannons,window.innerWidth/2 - 350,260);
+        }
+
+        if(showVoice){
+          ctx = myGameArea.context;
+          ctx.font = "20px Courier New";
+          ctx.fillStyle = "white";
+          ctx.fillText("VOICE COMMANDS",window.innerWidth/2 + 150,100);
+          ctx.fillText("Movement:",window.innerWidth/2 + 150,140);
+          ctx.fillText("Go forward",window.innerWidth/2 + 150,170);
+          ctx.fillText("Full stop",window.innerWidth/2 + 150,200);
+          ctx.fillText("Turn left / right + angle",window.innerWidth/2 + 150,230);
+          ctx.fillText("Rotate left / right",window.innerWidth/2 + 150,260);
+          ctx.fillText("Stop rotating",window.innerWidth/2 + 150,290);
+          ctx.fillText("Start following + name of the ship",window.innerWidth/2 + 150,320);
+
+          ctx.fillText("Combat:",window.innerWidth/2 + 150,380);
+          ctx.fillText("Fire left / right / both sides",window.innerWidth/2 + 150,410);
+          ctx.fillText("Stop shooitng",window.innerWidth/2 + 150,440);
+          ctx.fillText("Target left / right",window.innerWidth/2 + 150,470);
+          ctx.fillText("Collide",window.innerWidth/2 + 150,500);
+
+          ctx.fillText("Game control:",window.innerWidth/2 - 400,320);
+          ctx.fillText("Voice control",window.innerWidth/2 - 400,350);
+          ctx.fillText("Keyboard control",window.innerWidth/2 - 400,380);
+          ctx.fillText("Show me the game",window.innerWidth/2 - 400,410);
+          ctx.fillText("Show me the map",window.innerWidth/2 - 400,440);
+          ctx.fillText("Show me the voice commands",window.innerWidth/2 - 400,470);
+          ctx.fillText("Help",window.innerWidth/2 - 400,500);
+          ctx.fillText("Game control:",window.innerWidth/2 - 400,530);
+
         }
       }
 
