@@ -1,4 +1,57 @@
 
+function trace( x, y, a) {
+
+    this.angle = a;
+    this.x = x;
+    this.y = y;
+    this.timeAlive=300;
+    this.delayGo=3;
+
+    this.show = function() {
+
+      ctx = myGameArea.context;
+      ctx.save();
+      ctx.translate(window.innerWidth/2-myGamePiece.x+this.x,window.innerHeight/2-myGamePiece.y+this.y);
+      ctx.rotate(this.angle);
+
+      if(this.timeAlive>250){
+        ctx.lineWidth=4;
+      }else if(this.timeAlive>200){
+        ctx.lineWidth=4;
+      }else if(this.timeAlive>160){
+        ctx.lineWidth=4;
+      }else if(this.timeAlive>120){
+        ctx.lineWidth=4;
+      }else if(this.timeAlive>90){
+        ctx.lineWidth=5;
+      }else if(this.timeAlive>60){
+        ctx.lineWidth=6;
+      }else if(this.timeAlive>30){
+        ctx.lineWidth=7;
+      }
+
+      ctx.strokeStyle = 'white';
+      ctx.globalAlpha = this.timeAlive/300*0.5;
+      ctx.beginPath();
+      ctx.arc(0, 0, (((300-this.timeAlive)/2)*0.4)+10, (0)*Math.PI/180, (360)*Math.PI/180);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+      ctx.restore();
+
+      this.delayGo--;
+      if(this.delayGo<=0){
+        this.delayGo=2;
+        this.x -= 0 * Math.sin(this.angle);
+        this.y += 0 * Math.cos(this.angle);
+      }
+
+
+
+      this.timeAlive--;
+
+    }
+}
+
 function otherShip(x, y, a, id, name, hp, shipType) {
 
     this.id=id;
@@ -12,6 +65,8 @@ function otherShip(x, y, a, id, name, hp, shipType) {
     this.moveAngle = 0;
     this.level=1;
     this.alive=true;
+
+    this.tracesTimer=0;
 
     this.x = x;
     this.y = y;
@@ -64,6 +119,13 @@ function otherShip(x, y, a, id, name, hp, shipType) {
         this.y-=this.speed;
       }
 
+      if(this.hp>0){
+      this.tracesTimer++;
+      if(this.tracesTimer>10){
+          traces.push(new trace(this.x, this.y, this.angle + 0 * Math.PI / 180));
+        this.tracesTimer=0;
+      }
+      }
 
       if(this.targetA>this.angle){
         this.moveAngle=1;
@@ -367,6 +429,7 @@ function aiShip(x, y, a, newHp, newId) {
     this.timer=50;
     this.deadTimer=250;
     this.alive=true;
+    this.tracesTimer=0;
 
     this.update = function(newName, newX, newY, newA, d1, d2, newHp) {
 
@@ -406,6 +469,14 @@ function aiShip(x, y, a, newHp, newId) {
       }
       if(this.targetY<this.y){
         this.y-=this.speed;
+      }
+
+      if(this.hp>0){
+      this.tracesTimer++;
+      if(this.tracesTimer>10){
+          traces.push(new trace(this.x, this.y, this.angle + 0 * Math.PI / 180));
+        this.tracesTimer=0;
+      }
       }
 
       // changing the angle

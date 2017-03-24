@@ -32,39 +32,48 @@ function updateGameArea() {
     var ctx = myGameArea.context;
 
     // playing area
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y+1024);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y+1024);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y+1024);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y+2048);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y+2048);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y+2048);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor, window.innerHeight/2-myGamePiece.y*bottomFactor);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+1024, window.innerHeight/2-myGamePiece.y*bottomFactor);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+2048, window.innerHeight/2-myGamePiece.y*bottomFactor);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor, window.innerHeight/2-myGamePiece.y*bottomFactor+1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+1024, window.innerHeight/2-myGamePiece.y*bottomFactor+1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+2048, window.innerHeight/2-myGamePiece.y*bottomFactor+1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor, window.innerHeight/2-myGamePiece.y*bottomFactor+2048);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+1024, window.innerHeight/2-myGamePiece.y*bottomFactor+2048);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+2048, window.innerHeight/2-myGamePiece.y*bottomFactor+2048);
 
     // upper part
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y-1024);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y-1024);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y-1024);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y-1024);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y-1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor-1024, window.innerHeight/2-myGamePiece.y*bottomFactor-1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor, window.innerHeight/2-myGamePiece.y*bottomFactor-1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+1024, window.innerHeight/2-myGamePiece.y*bottomFactor-1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+2048, window.innerHeight/2-myGamePiece.y*bottomFactor-1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+3072, window.innerHeight/2-myGamePiece.y*bottomFactor-1024);
 
     // lower part
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y+3072);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x, window.innerHeight/2-myGamePiece.y+3072);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+1024, window.innerHeight/2-myGamePiece.y+3072);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+2048, window.innerHeight/2-myGamePiece.y+3072);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y+3072);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor-1024, window.innerHeight/2-myGamePiece.y*bottomFactor+3072);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor, window.innerHeight/2-myGamePiece.y*bottomFactor+3072);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+1024, window.innerHeight/2-myGamePiece.y*bottomFactor+3072);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+2048, window.innerHeight/2-myGamePiece.y*bottomFactor+3072);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+3072, window.innerHeight/2-myGamePiece.y*bottomFactor+3072);
 
     // left part
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y+1024);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x-1024, window.innerHeight/2-myGamePiece.y+2048);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor-1024, window.innerHeight/2-myGamePiece.y*bottomFactor);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor-1024, window.innerHeight/2-myGamePiece.y*bottomFactor+1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor-1024, window.innerHeight/2-myGamePiece.y*bottomFactor+2048);
 
     // right part
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y+1024);
-    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x+3072, window.innerHeight/2-myGamePiece.y+2048);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+3072, window.innerHeight/2-myGamePiece.y*bottomFactor);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+3072, window.innerHeight/2-myGamePiece.y*bottomFactor+1024);
+    ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+3072, window.innerHeight/2-myGamePiece.y*bottomFactor+2048);
+
+    if(traces.length>0){
+      for(var x=0; x<traces.length; x++){
+          traces[x].show();
+          if(traces[x].timeAlive<=0){
+            traces.splice(x,1);
+          }
+      }
+    }
 
     ctx.fillStyle = "red";
     ctx.globalAlpha = 0.5;

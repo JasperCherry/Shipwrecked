@@ -10,6 +10,8 @@ function myShip( x, y, name, id, shipType) {
     this.lastHit;
     this.deadTimer=250;
 
+    this.tracesTimer=0;
+
     this.speed = 0;
     this.acc = 0.05;
 
@@ -340,6 +342,14 @@ function myShip( x, y, name, id, shipType) {
         // shooting and sending data
         if(this.inGame&&this.alive){
         // if in game and alive
+
+        // drawing the traces on the water
+        this.tracesTimer++;
+        if(this.tracesTimer>10){
+            traces.push(new trace(this.x, this.y, this.angle + 0 * Math.PI / 180));
+          this.tracesTimer=0;
+        }
+
 
         // shooting both sides
         if( (!writingMode && myGameArea.keys && myGameArea.keys[79] && !voiceControl && this.timerS==0)

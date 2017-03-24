@@ -32,7 +32,7 @@ body {
 <img src="pic/ships/ship2d.png" id="ship2d" style="display: none;">
 <img src="pic/ships/ship2e.png" id="ship2e" style="display: none;">
 
-<img src="pic/texture/water.jpg" id="water" style="display: none;">
+<img src="pic/texture/waterS.jpg" id="water" style="display: none;">
 
 <img src="pic/exp/ex1.png" id="ex1" style="display: none;">
 <img src="pic/exp/ex2.png" id="ex2" style="display: none;">
@@ -192,13 +192,13 @@ var socket = io();
 var person = prompt("Please enter your name (max 20 characters)");
 //var person;
 //var person = "spectator";
-
 if(person==""||person==null){
   person="Player";
 }
-
 person=person.substring(0, 20);
 
+// 1 for standard movement, sea bottom is moving with players speed
+var bottomFactor=0.5;
 
 // player kills
 var kills=0;
@@ -228,6 +228,7 @@ var otherShips=new Array();
 var balls=new Array();
 var exps=new Array();
 var hits=new Array();
+var traces=new Array();
 
 // sound variable
 var soundState=0;
