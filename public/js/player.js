@@ -899,7 +899,6 @@ function myShip( x, y, name, id, shipType) {
           ctx.fillText("Show me the map",window.innerWidth/2 - 400,440);
           ctx.fillText("Show me the voice commands",window.innerWidth/2 - 400,470);
           ctx.fillText("Help",window.innerWidth/2 - 400,500);
-          ctx.fillText("Game control:",window.innerWidth/2 - 400,530);
 
         }
       }
