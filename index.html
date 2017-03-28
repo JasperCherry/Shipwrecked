@@ -20,6 +20,17 @@ body {
 
 <body onload="startGame()">
 
+<img src="pic/bottom/wreck1.png" id="wreck1" style="display: none;">
+<img src="pic/bottom/wreck2.png" id="wreck2" style="display: none;">
+<img src="pic/bottom/wreck3.png" id="wreck3" style="display: none;">
+<img src="pic/bottom/wreck4.png" id="wreck4" style="display: none;">
+<img src="pic/bottom/wreck5.png" id="wreck5" style="display: none;">
+<img src="pic/bottom/wreck6.png" id="wreck6" style="display: none;">
+
+<img src="pic/bottom/stone1.png" id="stone1" style="display: none;">
+<img src="pic/bottom/stone2.png" id="stone2" style="display: none;">
+<img src="pic/bottom/stone3.png" id="stone3" style="display: none;">
+
 <img src="pic/ships/ship1a.png" id="ship1a" style="display: none;">
 <img src="pic/ships/ship1b.png" id="ship1b" style="display: none;">
 <img src="pic/ships/ship1c.png" id="ship1c" style="display: none;">
@@ -192,6 +203,7 @@ var socket = io();
 var person = prompt("Please enter your name (max 20 characters)");
 //var person;
 //var person = "spectator";
+
 if(person==""||person==null){
   person="Player";
 }
@@ -229,6 +241,8 @@ var balls=new Array();
 var exps=new Array();
 var hits=new Array();
 var traces=new Array();
+var wrecks=new Array();
+wreckSet();
 
 // sound variable
 var soundState=0;

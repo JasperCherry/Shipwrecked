@@ -1,3 +1,37 @@
+// setting wrecks on the map for bottomFactor=0.5;  , bottom playing area : 1537x1537
+function wreckSet(){
+
+
+wrecks.push(new wreck(150, 1400, 232 * Math.PI / 180,1));
+wrecks.push(new wreck(1440, 130, 32 * Math.PI / 180,4));
+wrecks.push(new wreck(560, 230, 52 * Math.PI / 180,2));
+wrecks.push(new wreck(460, 990, 140 * Math.PI / 180,3));
+wrecks.push(new wreck(1420, 1400, 133 * Math.PI / 180,1));
+wrecks.push(new wreck(130, 675, 186 * Math.PI / 180,4));
+wrecks.push(new wreck(160, 560, 222 * Math.PI / 180,2));
+wrecks.push(new wreck(40, 810, 343 * Math.PI / 180,3));
+wrecks.push(new wreck(130, 15, 96 * Math.PI / 180,4));
+wrecks.push(new wreck(1220, 55, 245 * Math.PI / 180,5));
+wrecks.push(new wreck(1270, 35, 267 * Math.PI / 180,6));
+wrecks.push(new wreck(1290, 1005, 98 * Math.PI / 180,5));
+wrecks.push(new wreck(1270, 1035, 67 * Math.PI / 180,6));
+wrecks.push(new wreck(1400, 1340, 301 * Math.PI / 180,4));
+wrecks.push(new wreck(1530, 1260, 53 * Math.PI / 180,2));
+
+  /*
+  wrecks.push(new wreck(0, 0, 0 * Math.PI / 180,1));
+  wrecks.push(new wreck(50, 50, 0 * Math.PI / 180,2));
+  wrecks.push(new wreck(100, 100, 0 * Math.PI / 180,3));
+  wrecks.push(new wreck(150, 150, 0 * Math.PI / 180,4));
+  wrecks.push(new wreck(200, 200, 0 * Math.PI / 180,5));
+  wrecks.push(new wreck(250, 250, 0 * Math.PI / 180,6));
+  wrecks.push(new wreck(300, 300, 0 * Math.PI / 180,7));
+  wrecks.push(new wreck(350, 350, 0 * Math.PI / 180,8));
+  wrecks.push(new wreck(400, 400, 0 * Math.PI / 180,9));
+  */
+}
+
+
 // fullscreen
 function toggleFullScreen() {
   if ((document.fullScreenElement && document.fullScreenElement !== null) ||

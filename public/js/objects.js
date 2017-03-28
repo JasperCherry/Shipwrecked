@@ -596,3 +596,48 @@ function aiShip(x, y, a, newHp, newId) {
       this.timer--;
     }
 }
+
+function wreck( x, y, a, newType) {
+
+    this.type=newType;
+    this.angle = a;
+    this.x = x;
+    this.y = y;
+    if(this.type<7){
+      this.scale=0.22;
+    }else{
+      this.scale=0.5;
+    }
+
+    this.show = function() {
+      ctx = myGameArea.context;
+      ctx.save();
+      ctx.translate(window.innerWidth/2-myGamePiece.x*bottomFactor+this.x,window.innerHeight/2-myGamePiece.y*bottomFactor+this.y);
+      ctx.rotate(this.angle);
+
+      if(this.type==1){
+        ctx.drawImage(wreck1, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.type==2){
+        ctx.drawImage(wreck2, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.type==3){
+        ctx.drawImage(wreck3, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.type==4){
+        ctx.drawImage(wreck4, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.type==5){
+        ctx.drawImage(wreck5, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.type==6){
+        ctx.drawImage(wreck6, -100*this.scale, -250*this.scale -13 , 200*this.scale, 500*this.scale);
+      }else if(this.type==7){
+        ctx.drawImage(stone1, 0, 0 , 84*this.scale, 70*this.scale);
+      }else if(this.type==8){
+        ctx.drawImage(stone2, 0, 0 , 100*this.scale, 60*this.scale);
+      }else if(this.type==9){
+        ctx.drawImage(stone3, 0, 0 , 84*this.scale, 55*this.scale);
+      }
+
+
+
+      ctx.restore();
+
+    }
+}

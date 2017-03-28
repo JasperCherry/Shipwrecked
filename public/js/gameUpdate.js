@@ -71,8 +71,15 @@ function updateGameArea() {
     ctx.drawImage(water, window.innerWidth/2-myGamePiece.x*bottomFactor+3072, window.innerHeight/2-myGamePiece.y*bottomFactor+2048);
     */
 
+    // drawing objects on the bottom
+    if(wrecks.length>0){
+      for(var x=0; x<wrecks.length; x++){
+          wrecks[x].show();
+      }
+    }
 
 
+    // drawing red borders
     ctx.fillStyle = "red";
     ctx.globalAlpha = 0.2;
     ctx.fillRect(window.innerWidth/2-myGamePiece.x-5, window.innerHeight/2-myGamePiece.y, 3072+10, -5);
