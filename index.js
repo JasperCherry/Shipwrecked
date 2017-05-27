@@ -271,8 +271,8 @@ io.on('connection', function(socket){
   var aiShip1 = new aiShip("Flying Dutchman",81);
   var aiShip2 = new aiShip("Aurora",82);
   var aiShip3 = new aiShip("Valklyrie",83);
-  var aiShip4 = new aiShip("Octavius",84);
-  var aiShip5 = new aiShip("Avenger",85);
+  //var aiShip4 = new aiShip("Octavius",84);
+  //var aiShip5 = new aiShip("Avenger",85);
 
 
 
@@ -287,9 +287,6 @@ io.on('connection', function(socket){
       aiShip1.update();
       aiShip2.update();
       aiShip3.update();
-      aiShip4.update();
-      aiShip5.update();
-
 
 
       // updating balls
@@ -373,21 +370,24 @@ function aiShip(newName, newId) {
     // upgrades variables - hp,hp limit,  damage, selfrepair,
     // 3 levels of difficulty for ai ships
     if(this.id==81){
-      this.ballDamage=5;
-      this.selfRepair=100;
-      this.hp=200;
+      this.ballDamage=3;
+      this.selfRepair=200;
+      this.hp=150;
       this.hpLimit=this.hp;
     }else if(this.id==82){
-      this.ballDamage=4;
-      this.selfRepair=150;
-      this.hp=150;
+      this.ballDamage=2;
+      this.selfRepair=300;
+      this.hp=100;
       this.hpLimit=this.hp;
     }else if(this.id==83){
-      this.ballDamage=4;
-      this.selfRepair=150;
-      this.hp=150;
+      this.ballDamage=2;
+      this.selfRepair=300;
+      this.hp=100;
       this.hpLimit=this.hp;
-    }else if(this.id==84){
+    }
+
+
+    else if(this.id==84){
       this.ballDamage=3;
       this.selfRepair=200;
       this.hp=100;
@@ -658,8 +658,8 @@ function aiShip(newName, newId) {
       }
 
       // sending data
-      // n times per second  / 25
-      if(this.emitTimer==2){
+      // n times per second  / 50 -> if emitTimer = 1
+      if(this.emitTimer==10){
 
         this.emitTimer=0;
         if(this.hp==0&&this.lastInfo){

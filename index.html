@@ -722,8 +722,6 @@ socket.on('data10', function(ball10){
 var ai1 = new aiShip(0,0,0,0,"ai1");
 var ai2 = new aiShip(0,0,0,0,"ai2");
 var ai3 = new aiShip(0,0,0,0,"ai3");
-var ai4 = new aiShip(0,0,0,0,"ai4");
-var ai5 = new aiShip(0,0,0,0,"ai5");
 
 
 // sockets for 1st ai ship
@@ -797,55 +795,6 @@ socket.on('ship3aibl', function(aib){
   balls.push(new ball(aib.x, aib.y, aib.a, ai3.id, aib.d));
   exps.push(new exp(aib.x, aib.y, aib.a));
 });
-
-// sockets for 4th ai ship
-socket.on('ship4ai', function(ai){
-  if(ai.hp.toString().substring(0, 1)=="D"){
-    if(ai.hp.substring(1, ai.hp.length)==myGamePiece.id){
-      kills++;
-      var txt={"p":"","t":ai4.name+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
-      socket.emit('chat', txt);
-    }
-    ai4.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, 0);
-  }else{
-    ai4.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, ai.hp);
-  }
-});
-// for its bullets from right side
-socket.on('ship4aibr', function(aib){
-  balls.push(new ball(aib.x, aib.y, aib.a, ai4.id, aib.d));
-  exps.push(new exp(aib.x, aib.y, aib.a));
-});
-// for its bullets from left side
-socket.on('ship4aibl', function(aib){
-  balls.push(new ball(aib.x, aib.y, aib.a, ai4.id, aib.d));
-  exps.push(new exp(aib.x, aib.y, aib.a));
-});
-
-// sockets for 5th ai ship
-socket.on('ship5ai', function(ai){
-  if(ai.hp.toString().substring(0, 1)=="D"){
-    if(ai.hp.substring(1, ai.hp.length)==myGamePiece.id){
-      kills++;
-      var txt={"p":"","t":ai5.name+" has been killed by "+person+" which has now "+kills+" kills", "c":1};
-      socket.emit('chat', txt);
-    }
-    ai5.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, 0);
-  }else{
-    ai5.update(ai.n, ai.x, ai.y, ai.a, ai.t1, ai.t2, ai.hp);
-  }
-});
-// for its bullets from right side
-socket.on('ship5aibr', function(aib){
-  balls.push(new ball(aib.x, aib.y, aib.a, ai5.id, aib.d));
-  exps.push(new exp(aib.x, aib.y, aib.a));
-});
-// for its bullets from left side
-socket.on('ship5aibl', function(aib){
-  balls.push(new ball(aib.x, aib.y, aib.a, ai5.id, aib.d));
-  exps.push(new exp(aib.x, aib.y, aib.a));
-});
-
 
 
 
@@ -998,7 +947,7 @@ dataS1();
 
 /////////////// END OF SHIP POSITION SENDING
 
-var voiceControl = false;
+var voiceControl = true;
 
 var shipForward = false;
 var shipLeft = false;
@@ -1017,7 +966,6 @@ var collide=false;
 
 // voice steering
 if (annyang) {
-
 
   var com = {
 
@@ -1099,11 +1047,11 @@ if (annyang) {
     },
 
     // combat
-    'fire left': function() {
+    'fire left (side)': function() {
       shootingDir=1;
       shootingOrder=true;
     },
-    'fire right': function() {
+    'fire right (side)': function() {
       shootingDir=2;
       shootingOrder=true;
     },
@@ -1111,13 +1059,7 @@ if (annyang) {
       shootingDir=0;
       shootingOrder=true;
     },
-    'stop firing': function() {
-      shootingOrder=false;
-    },
-    'stop shooting': function() {
-      shootingOrder=false;
-    },
-    'cease fire': function() {
+    'hold (your) fire': function() {
       shootingOrder=false;
     },
     'collide': function() { // collide relfects only to follow and aiming functions
@@ -1157,16 +1099,6 @@ if (annyang) {
         dist=lev(ai3.name, name);
       }
 
-      if(lev(ai4.name, name)<dist){
-        sName=ai4.id;
-        dist=lev(ai4.name, name);
-      }
-
-      if(lev(ai5.name, name)<dist){
-        sName=ai5.id;
-        dist=lev(ai5.name, name);
-      }
-
       if(otherShips.length>0){
         for(var z=0; z<otherShips.length;z++){
           if(lev(otherShips[z].name, name)<dist){
@@ -1199,16 +1131,6 @@ if (annyang) {
       if(lev(ai3.name, name)<dist){
         sName=ai3.id;
         dist=lev(ai3.name, name);
-      }
-
-      if(lev(ai4.name, name)<dist){
-        sName=ai4.id;
-        dist=lev(ai4.name, name);
-      }
-
-      if(lev(ai5.name, name)<dist){
-        sName=ai5.id;
-        dist=lev(ai5.name, name);
       }
 
       if(otherShips.length>0){

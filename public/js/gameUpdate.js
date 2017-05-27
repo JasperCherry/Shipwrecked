@@ -103,8 +103,6 @@ function updateGameArea() {
     ai1.show();
     ai2.show();
     ai3.show();
-    ai4.show();
-    ai5.show();
 
     // showing other ships
     if(otherShips.length>0){
@@ -124,8 +122,6 @@ function updateGameArea() {
     ai1.info();
     ai2.info();
     ai3.info();
-    ai4.info();
-    ai5.info();
 
     // showing other ships
     if(otherShips.length>0){
@@ -245,22 +241,6 @@ function updateGameArea() {
       window.innerHeight/2 - 300 + (ai3.y/3072*600) -5,
       10, 10);
 
-      ctx.fillStyle = "red";
-      if(ai4.hp==0){
-        ctx.fillStyle = "black";
-      }
-      ctx.fillRect(window.innerWidth/2 - 300 + (ai4.x/3072*600) -5,
-      window.innerHeight/2 - 300 + (ai4.y/3072*600) -5,
-      10, 10);
-
-      ctx.fillStyle = "red";
-      if(ai5.hp==0){
-        ctx.fillStyle = "black";
-      }
-      ctx.fillRect(window.innerWidth/2 - 300 + (ai5.x/3072*600) -5,
-      window.innerHeight/2 - 300 + (ai5.y/3072*600) -5,
-      10, 10);
-
       // showing other ships position
       if(otherShips.length>0){
         for(var x=0; x<otherShips.length; x++){
@@ -290,34 +270,25 @@ function updateGameArea() {
       window.innerHeight/2 - 300 + (myGamePiece.y/3072*600) -5,
        10, 10);
 
-
-
-
       // displaying names on minimap
       ctx.font = "bold 12px Courier New";
       ctx.fillStyle = "white";
 
       // ai
-      ctx.fillText(ai1.name,
+      ctx.fillText(ai1.name+" "+ai1.hp,
         window.innerWidth/2 - 300 + (ai1.x/3072*600) -5,
         window.innerHeight/2 - 300 + (ai1.y/3072*600) -5-5);
-      ctx.fillText(ai2.name,
+      ctx.fillText(ai2.name+" "+ai2.hp,
         window.innerWidth/2 - 300 + (ai2.x/3072*600) -5,
         window.innerHeight/2 - 300 + (ai2.y/3072*600) -5-5);
-      ctx.fillText(ai3.name,
+      ctx.fillText(ai3.name+" "+ai3.hp,
         window.innerWidth/2 - 300 + (ai3.x/3072*600) -5,
         window.innerHeight/2 - 300 + (ai3.y/3072*600) -5-5);
-      ctx.fillText(ai4.name,
-        window.innerWidth/2 - 300 + (ai4.x/3072*600) -5,
-        window.innerHeight/2 - 300 + (ai4.y/3072*600) -5-5);
-      ctx.fillText(ai5.name,
-        window.innerWidth/2 - 300 + (ai5.x/3072*600) -5,
-        window.innerHeight/2 - 300 + (ai5.y/3072*600) -5-5);
 
       // other players
       if(otherShips.length>0){
         for(var x=0; x<otherShips.length; x++){
-          ctx.fillText(otherShips[x].name,
+          ctx.fillText(otherShips[x].name+" "+otherShips[x].hp,
             window.innerWidth/2 - 300 + (otherShips[x].x/3072*600) -5,
             window.innerHeight/2 - 300 + (otherShips[x].y/3072*600) -5-5);
           }
@@ -370,22 +341,6 @@ function updateGameArea() {
       }
       ctx.fillRect(window.innerWidth - 160 + (ai3.x/3072*150) -3,
       window.innerHeight - 160 + (ai3.y/3072*150) -3,
-      6, 6);
-
-      ctx.fillStyle = "red";
-      if(ai4.hp==0){
-        ctx.fillStyle = "black";
-      }
-      ctx.fillRect(window.innerWidth - 160 + (ai4.x/3072*150) -3,
-      window.innerHeight - 160 + (ai4.y/3072*150) -3,
-      6, 6);
-
-      ctx.fillStyle = "red";
-      if(ai5.hp==0){
-        ctx.fillStyle = "black";
-      }
-      ctx.fillRect(window.innerWidth - 160 + (ai5.x/3072*150) -3,
-      window.innerHeight - 160 + (ai5.y/3072*150) -3,
       6, 6);
 
       // showing other ships position
@@ -520,23 +475,14 @@ function updateGameArea() {
         socket.emit('chat', txt);
       }
 
-      if(myGamePiece.lastHit.toString()=="ai4"&&myGamePiece.lastInfo==true){
-        myGamePiece.lastInfo=false;
-        var txt={"p":"","t":person+" has been killed by "+ai4.name, "c":1};
-        socket.emit('chat', txt);
-      }
-
-      if(myGamePiece.lastHit.toString()=="ai5"&&myGamePiece.lastInfo==true){
-        myGamePiece.lastInfo=false;
-        var txt={"p":"","t":person+" has been killed by "+ai5.name, "c":1};
-        socket.emit('chat', txt);
-      }
-
-
       myGamePiece.hp=0;
       myGamePiece.deadTimer--;
       if(myGamePiece.deadTimer==0){
         // respawn
+        shipForward=false;
+        follow=false;
+        aimLeft=false;
+        aimRight=false;
         var newPosX=Math.floor(Math.random()*3072+1)
         var newPosY=Math.floor(Math.random()*3072+1);
         myGamePiece = new myShip(newPosX, newPosY, person, tempId, 1);

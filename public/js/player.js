@@ -27,113 +27,14 @@ function myShip( x, y, name, id, shipType) {
     this.x = x;
     this.y = y;
 
-    // level
-    if(kills<1){
-      this.level=1;
-      this.ballDamage=3;
-      this.selfRepair=200;
-      this.numCannons=10;
-      this.hp=100;
-      this.hpLimit=100;
-    }else if(kills<3){
-      this.level=2;
-      this.ballDamage=3;
-      this.selfRepair=190;
-      this.numCannons=10;
-      this.hp=110;
-      this.hpLimit=110;
-    }else if(kills<5){
-      this.level=3;
-      this.ballDamage=3;
-      this.selfRepair=180;
-      this.numCannons=12;
-      this.hp=120;
-      this.hpLimit=120;
-    }else if(kills<8){
-      this.level=4;
-      this.ballDamage=4;
-      this.selfRepair=170;
-      this.numCannons=12;
-      this.hp=120;
-      this.hpLimit=120;
-    }else if(kills<12){
-      this.level=5;
-      this.ballDamage=4;
-      this.selfRepair=160;
-      this.numCannons=14;
-      this.hp=130;
-      this.hpLimit=130;
-    }else if(kills<16){
-      this.level=6;
-      this.ballDamage=5;
-      this.selfRepair=150;
-      this.numCannons=14;
-      this.hp=140;
-      this.hpLimit=140;
-    }else if(kills<20){
-      this.level=7;
-      this.ballDamage=5;
-      this.selfRepair=140;
-      this.numCannons=14;
-      this.hp=140;
-      this.hpLimit=140;
-    }else  if(kills<24){
-      this.level=8;
-      this.ballDamage=5;
-      this.selfRepair=130;
-      this.numCannons=16;
-      this.hp=150;
-      this.hpLimit=150;
-    }else if(kills<30){
-      this.level=9;
-      this.ballDamage=6;
-      this.selfRepair=120;
-      this.numCannons=18;
-      this.hp=160;
-      this.hpLimit=160;
-    }else if(kills<36){
-      this.level=10;
-      this.ballDamage=6;
-      this.selfRepair=110;
-      this.numCannons=20;
-      this.hp=160;
-      this.hpLimit=160;
-    }else if(kills<42){
-      this.level=11;
-      this.ballDamage=6;
-      this.selfRepair=110;
-      this.numCannons=22;
-      this.hp=170;
-      this.hpLimit=170;
-    }else if(kills<48){
-      this.level=12;
-      this.ballDamage=6;
-      this.selfRepair=100;
-      this.numCannons=24;
-      this.hp=180;
-      this.hpLimit=180;
-    }else if(kills<54){
-      this.level=13;
-      this.ballDamage=6;
-      this.selfRepair=100;
-      this.numCannons=26;
-      this.hp=200;
-      this.hpLimit=200;
-    }else if(kills<60){
-      this.level=14;
-      this.ballDamage=7;
-      this.selfRepair=100;
-      this.numCannons=28;
-      this.hp=200;
-      this.hpLimit=200;
-    }else if(kills>=60){
-      this.level=15;
-      this.ballDamage=7;
-      this.selfRepair=100;
-      this.numCannons=30;
-      this.hp=200;
-      this.hpLimit=200;
-    }
+    // players power / levels coded off
+    this.level=1;
+    this.ballDamage=10;
+    this.selfRepair=200;
+    this.numCannons=20;
+    this.hpLimit=100;
+    this.hp=100;
+
 
     // those will remain constant
     this.loadGap=150;
@@ -163,113 +64,11 @@ function myShip( x, y, name, id, shipType) {
     // main ship behaviour function
     this.update = function() {
 
-      // level
-      if(kills<1){
-        this.level=1;
-        this.ballDamage=3;
-        this.selfRepair=200;
-        this.numCannons=10;
-        //this.hp=100;
-        this.hpLimit=100;
-      }else if(kills<3){
-        this.level=2;
-        this.ballDamage=3;
-        this.selfRepair=190;
-        this.numCannons=10;
-        //this.hp=110;
-        this.hpLimit=110;
-      }else if(kills<5){
-        this.level=3;
-        this.ballDamage=3;
-        this.selfRepair=180;
-        this.numCannons=12;
-        //this.hp=120;
-        this.hpLimit=120;
-      }else if(kills<8){
-        this.level=4;
-        this.ballDamage=4;
-        this.selfRepair=170;
-        this.numCannons=12;
-        //this.hp=120;
-        this.hpLimit=120;
-      }else if(kills<12){
-        this.level=5;
-        this.ballDamage=4;
-        this.selfRepair=160;
-        this.numCannons=14;
-        //this.hp=130;
-        this.hpLimit=130;
-      }else if(kills<16){
-        this.level=6;
-        this.ballDamage=5;
-        this.selfRepair=150;
-        this.numCannons=14;
-        //this.hp=140;
-        this.hpLimit=140;
-      }else if(kills<20){
-        this.level=7;
-        this.ballDamage=5;
-        this.selfRepair=140;
-        this.numCannons=14;
-        //this.hp=140;
-        this.hpLimit=140;
-      }else  if(kills<24){
-        this.level=8;
-        this.ballDamage=5;
-        this.selfRepair=130;
-        this.numCannons=16;
-        //this.hp=150;
-        this.hpLimit=150;
-      }else if(kills<30){
-        this.level=9;
-        this.ballDamage=6;
-        this.selfRepair=120;
-        this.numCannons=18;
-        //this.hp=160;
-        this.hpLimit=160;
-      }else if(kills<36){
-        this.level=10;
-        this.ballDamage=6;
-        this.selfRepair=110;
-        this.numCannons=20;
-        //this.hp=160;
-        this.hpLimit=160;
-      }else if(kills<42){
-        this.level=11;
-        this.ballDamage=6;
-        this.selfRepair=110;
-        this.numCannons=22;
-        //this.hp=170;
-        this.hpLimit=170;
-      }else if(kills<48){
-        this.level=12;
-        this.ballDamage=6;
-        this.selfRepair=100;
-        this.numCannons=24;
-        //this.hp=180;
-        this.hpLimit=180;
-      }else if(kills<54){
-        this.level=13;
-        this.ballDamage=6;
-        this.selfRepair=100;
-        this.numCannons=26;
-        //this.hp=200;
-        this.hpLimit=200;
-      }else if(kills<60){
-        this.level=14;
-        this.ballDamage=7;
-        this.selfRepair=100;
-        this.numCannons=28;
-        //this.hp=200;
-        this.hpLimit=200;
-      }else if(kills>=60){
-        this.level=15;
-        this.ballDamage=7;
-        this.selfRepair=100;
-        this.numCannons=30;
-        //this.hp=200;
-        this.hpLimit=200;
-      }
+      this.level=1;
+      this.ballDamage=10;
+      this.selfRepair=200;
+      this.numCannons=20;
+      this.hpLimit=100;
 
         // checking if ship should be able to take part in action
         if(this.id!=100){
@@ -300,8 +99,6 @@ function myShip( x, y, name, id, shipType) {
         this.ifCollide(ai1);
         this.ifCollide(ai2);
         this.ifCollide(ai3);
-        this.ifCollide(ai4);
-        this.ifCollide(ai5);
 
         // trrigering the sound
         if(this.hp>0 && this.cracking && soundState!=2){
@@ -351,10 +148,23 @@ function myShip( x, y, name, id, shipType) {
         }
 
 
+        // stop shooting if run out of ammo
+        if(shootingDir==0&&this.rightAmmo==0||this.leftAmmo==0){
+          shootingOrder=false;
+        }
+
+        if(shootingDir==1&&this.leftAmmo==0){
+          shootingOrder=false;
+        }
+
+        if(shootingDir==2&&this.rightAmmo==0){
+          shootingOrder=false;
+        }
+
+
         // shooting both sides
         if( (!writingMode && myGameArea.keys && myGameArea.keys[79] && !voiceControl && this.timerS==0)
         || (voiceControl && this.timerS==0 && shootingDir==0 && shootingOrder) ){
-
           if(this.shootBoth && this.rightAmmo>0){
             this.shootBoth=false;
             this.rightAmmo--;
@@ -712,14 +522,6 @@ function myShip( x, y, name, id, shipType) {
               this.targetX=ai3.x;
               this.targetY=ai3.y;
             }
-            if(sName==ai4.id){
-              this.targetX=ai4.x;
-              this.targetY=ai4.y;
-            }
-            if(sName==ai5.id){
-              this.targetX=ai5.x;
-              this.targetY=ai5.y;
-            }
 
             if(otherShips.length>0){
               console.log("yey theres someone in the game");
@@ -755,7 +557,7 @@ function myShip( x, y, name, id, shipType) {
 
 
             // controling collision
-              if(Math.abs(this.x-this.targetX)<100 && Math.abs(this.y-this.targetY)<100 && !collide){
+              if(Math.abs(this.x-this.targetX)<120 && Math.abs(this.y-this.targetY)<120 && !collide){
                 shipForward=false;
               }else{
                 shipForward=true;
@@ -864,8 +666,8 @@ function myShip( x, y, name, id, shipType) {
           }
           ctx.fillText("press V to see voice commands",window.innerWidth/2 + 100,340);
           ctx.fillText("Destroy other ships",window.innerWidth/2 - 350,420);
-          ctx.fillText("to earn levels and upgrades",window.innerWidth/2 - 350,450);
-          ctx.fillText("Level : "+this.level+" / 15",window.innerWidth/2 - 350,100);
+          //ctx.fillText("to earn levels and upgrades",window.innerWidth/2 - 350,450);
+          //ctx.fillText("Level : "+this.level+" / 15",window.innerWidth/2 - 350,100);
           ctx.fillText("Kills : "+kills,window.innerWidth/2 - 350,130);
           ctx.fillText("HP : "+this.hpLimit,window.innerWidth/2 - 350,170);
           ctx.fillText("Selfrepair : "+round(this.selfRepair/50, 2)+" sec",window.innerWidth/2 - 350,200);
@@ -888,7 +690,7 @@ function myShip( x, y, name, id, shipType) {
 
           ctx.fillText("Combat:",window.innerWidth/2 + 150,380);
           ctx.fillText("Fire left / right / both sides",window.innerWidth/2 + 150,410);
-          ctx.fillText("Stop shooitng",window.innerWidth/2 + 150,440);
+          ctx.fillText("Hold fire",window.innerWidth/2 + 150,440);
           ctx.fillText("Target left / right",window.innerWidth/2 + 150,470);
           ctx.fillText("Collide",window.innerWidth/2 + 150,500);
 
@@ -1010,8 +812,8 @@ function myShip( x, y, name, id, shipType) {
         ctx.font = "bold 18px Courier New";
         ctx.fillStyle = "white";
         ctx.fillText("HP:"+this.hp,window.innerWidth/2-30,window.innerHeight/2-90);
-        ctx.fillText("Level:"+this.level,window.innerWidth/2-30,window.innerHeight/2-120);
-        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-150);
+        //ctx.fillText("Level:"+this.level,window.innerWidth/2-30,window.innerHeight/2-120);
+        ctx.fillText(this.name,window.innerWidth/2-30,window.innerHeight/2-120);
         // hide in game
         //ctx.fillText("ID:"+this.id,window.innerWidth/2-30,window.innerHeight/2-180);
         //ctx.fillText("Type:"+this.type,window.innerWidth/2-30,window.innerHeight/2-210);
